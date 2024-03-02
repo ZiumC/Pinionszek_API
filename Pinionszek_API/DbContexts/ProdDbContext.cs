@@ -56,10 +56,19 @@ namespace Pinionszek_API.DbContexts
                 generalCategory.Property(gc => gc.Name).IsRequired().HasMaxLength(80);
                 generalCategory.Property(gc => gc.IsDefault).IsRequired();
             });
+
+            modelBuilder.Entity<DetailedCategory>(detailedCategory =>
+            {
+                detailedCategory.HasKey(gc => gc.IdDetailedCategory);
+                detailedCategory.Property(gc => gc.Name).IsRequired().HasMaxLength(80);
+            });
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<UserSettings> UserSettings { get; set; }
+        public DbSet<GeneralCategory> GeneralCategories { get; set; }
+        public DbSet<DetailedCategory> DetailedCategories { get; set; }
+
     }
 }
