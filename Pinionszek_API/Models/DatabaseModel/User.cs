@@ -14,5 +14,6 @@
         public DateTime? BlockedTo { get; set; }
 
         public virtual ICollection<Friend> Friends { get; set; }
+        public virtual UserSettings UserSettings { get; set; }
     }
 }

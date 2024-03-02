@@ -39,9 +39,20 @@ namespace Pinionszek_API.DbContexts
                 friend.Property(f => f.DateAdded).IsRequired().HasColumnType("date");
                 friend.Property(f => f.FriendTag).IsRequired();
             });
+
+            modelBuilder.Entity<UserSettings>(userSettings =>
+            {
+                userSettings.HasKey(us => us.IdUserSetting);
+                userSettings.Property(us => us.UseBudgetRules).IsRequired();
+                userSettings.Property(us => us.DisplayBudgetRules).IsRequired();
+                userSettings.Property(us => us.Needs).IsRequired().HasColumnType("money");
+                userSettings.Property(us => us.Wants).IsRequired().HasColumnType("money");
+                userSettings.Property(us => us.Savings).IsRequired().HasColumnType("money");
+            });
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
     }
 }
