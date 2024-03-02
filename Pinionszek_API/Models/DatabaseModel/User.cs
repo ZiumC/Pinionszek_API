@@ -12,5 +12,7 @@
         public string? RefreshToken { get; set; }
         public int LoginAttempts { get; set; }
         public DateTime? BlockedTo { get; set; }
+
+        public virtual ICollection<Friend> Friends { get; set; }
     }
 }

@@ -32,8 +32,16 @@ namespace Pinionszek_API.DbContexts
                 user.Property(u => u.RegisteredAt).IsRequired();
                 user.Property(u => u.RefreshToken).HasMaxLength(255);
             });
+
+            modelBuilder.Entity<Friend>(friend =>
+            {
+                friend.HasKey(f => f.IdFriend);
+                friend.Property(f => f.DateAdded).IsRequired().HasColumnType("date");
+                friend.Property(f => f.FriendTag).IsRequired();
+            });
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Friend> Friends { get; set; }
     }
 }
