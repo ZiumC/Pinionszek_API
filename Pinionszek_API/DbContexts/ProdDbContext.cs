@@ -62,6 +62,12 @@ namespace Pinionszek_API.DbContexts
                 detailedCategory.HasKey(gc => gc.IdDetailedCategory);
                 detailedCategory.Property(gc => gc.Name).IsRequired().HasMaxLength(80);
             });
+
+            modelBuilder.Entity<PaymentStatus>(paymentStatus =>
+            {
+                paymentStatus.HasKey(ps => ps.IdPaymentStatus);
+                paymentStatus.Property(ps => ps.Name).IsRequired().HasMaxLength(50);
+            });
         }
 
         public DbSet<User> Users { get; set; }
@@ -69,6 +75,7 @@ namespace Pinionszek_API.DbContexts
         public DbSet<UserSettings> UserSettings { get; set; }
         public DbSet<GeneralCategory> GeneralCategories { get; set; }
         public DbSet<DetailedCategory> DetailedCategories { get; set; }
+        public DbSet<PaymentStatus> PaymentStatuses { get; set; }
 
     }
 }
