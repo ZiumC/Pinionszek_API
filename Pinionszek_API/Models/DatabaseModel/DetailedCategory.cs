@@ -10,5 +10,9 @@ namespace Pinionszek_API.Models.DatabaseModel
         public int IdGeneralCategory { get; set; }
         [ForeignKey(nameof(IdGeneralCategory))]
         public virtual GeneralCategory GeneralCategory { get; set; }
+
+        public int IdUser { get; set; }
+        [ForeignKey(nameof(IdUser))]
+        public virtual User User { get; set; }
     }
 }
