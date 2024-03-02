@@ -38,7 +38,7 @@ namespace Pinionszek_API.Migrations
                         column: x => x.IdGeneralCategory,
                         principalTable: "GeneralCategories",
                         principalColumn: "IdGeneralCategory",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
