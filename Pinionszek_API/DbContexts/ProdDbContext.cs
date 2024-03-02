@@ -49,6 +49,13 @@ namespace Pinionszek_API.DbContexts
                 userSettings.Property(us => us.Wants).IsRequired().HasColumnType("money");
                 userSettings.Property(us => us.Savings).IsRequired().HasColumnType("money");
             });
+
+            modelBuilder.Entity<GeneralCategory>(generalCategory =>
+            {
+                generalCategory.HasKey(gc => gc.IdGeneralCategory);
+                generalCategory.Property(gc => gc.Name).IsRequired().HasMaxLength(80);
+                generalCategory.Property(gc => gc.IsDefault).IsRequired();
+            });
         }
 
         public DbSet<User> Users { get; set; }
