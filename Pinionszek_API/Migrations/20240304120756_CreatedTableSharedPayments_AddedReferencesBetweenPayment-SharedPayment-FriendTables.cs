@@ -25,13 +25,13 @@ namespace Pinionszek_API.Migrations
                         column: x => x.IdFriend,
                         principalTable: "Friends",
                         principalColumn: "IdFriend",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_SharedPayments_Payments_IdPayment",
                         column: x => x.IdPayment,
                         principalTable: "Payments",
                         principalColumn: "IdPayment",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
