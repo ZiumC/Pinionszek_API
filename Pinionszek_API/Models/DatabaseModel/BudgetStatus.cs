@@ -4,6 +4,6 @@
     {
         public int IdBudgetStatus { get; set; }
         public string Name { get; set; }
-        public virtual Budget Budget { get; set; }
+        public virtual ICollection<Budget> Budget { get; set; }
     }
 }
