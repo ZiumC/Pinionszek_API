@@ -31,7 +31,7 @@ namespace Pinionszek_API.Migrations
                         column: x => x.IdBudgetStatus,
                         principalTable: "BudgetStatuses",
                         principalColumn: "IdBudgetStatus",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Budgets_Users_IdUser",
                         column: x => x.IdUser,
