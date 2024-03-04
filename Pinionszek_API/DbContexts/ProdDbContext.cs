@@ -246,6 +246,28 @@ namespace Pinionszek_API.DbContexts
                     IdUser = 2
                 });
             });
+
+            modelBuilder.Entity<GeneralCategory>(generalCategory =>
+            {
+                generalCategory.HasData(new GeneralCategory
+                {
+                    IdGeneralCategory = 1,
+                    Name = "Needs",
+                    IsDefault = true
+                });
+                generalCategory.HasData(new GeneralCategory
+                {
+                    IdGeneralCategory = 2,
+                    Name = "Wants",
+                    IsDefault = true
+                });
+                generalCategory.HasData(new GeneralCategory
+                {
+                    IdGeneralCategory = 3,
+                    Name = "Savings",
+                    IsDefault = true
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
