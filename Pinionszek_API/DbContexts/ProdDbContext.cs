@@ -268,6 +268,101 @@ namespace Pinionszek_API.DbContexts
                     IsDefault = true
                 });
             });
+
+            modelBuilder.Entity<DetailedCategory>(detailedCategory =>
+            {
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 1,
+                    Name = "Rents",
+                    IdGeneralCategory = 1,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 2,
+                    Name = "Bills",
+                    IdGeneralCategory = 1,
+                    IdUser = 2
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 3,
+                    Name = "Health",
+                    IdGeneralCategory = 1,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 4,
+                    Name = "Fixed fee",
+                    IdGeneralCategory = 1,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 5,
+                    Name = "Pets",
+                    IdGeneralCategory = 2,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 6,
+                    Name = "Digital tools",
+                    IdGeneralCategory = 2,
+                    IdUser = 2
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 7,
+                    Name = "Phisical tools",
+                    IdGeneralCategory = 2,
+                    IdUser = 3
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 8,
+                    Name = "Food",
+                    IdGeneralCategory = 2,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 9,
+                    Name = "Future",
+                    IdGeneralCategory = 3,
+                    IdUser = 1
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 10,
+                    Name = "Future",
+                    IdGeneralCategory = 3,
+                    IdUser = 2
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 11,
+                    Name = "Future",
+                    IdGeneralCategory = 3,
+                    IdUser = 3
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 12,
+                    Name = "Food",
+                    IdGeneralCategory = 2,
+                    IdUser = 2
+                });
+                detailedCategory.HasData(new DetailedCategory
+                {
+                    IdDetailedCategory = 13,
+                    Name = "Food",
+                    IdGeneralCategory = 2,
+                    IdUser = 3
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
