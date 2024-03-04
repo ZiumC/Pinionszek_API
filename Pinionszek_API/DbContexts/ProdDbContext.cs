@@ -84,6 +84,16 @@ namespace Pinionszek_API.DbContexts
                 budget.Property(b => b.Revenue).IsRequired().HasColumnType("money");
                 budget.Property(b => b.Surplus).IsRequired().HasColumnType("money");
             });
+
+            modelBuilder.Entity<Payment>(payment =>
+            {
+                payment.HasKey(p => p.IdPayment);
+                payment.Property(p => p.Name).IsRequired().HasMaxLength(80);
+                payment.Property(p => p.Charge).IsRequired().HasColumnType("money");
+                payment.Property(p => p.Refund).IsRequired().HasColumnType("money");
+                payment.Property(p => p.PaymentDate).HasColumnType("date");
+                payment.Property(p => p.Message).HasMaxLength(350);
+            });
         }
 
         public DbSet<User> Users { get; set; }
@@ -94,6 +104,6 @@ namespace Pinionszek_API.DbContexts
         public DbSet<PaymentStatus> PaymentStatuses { get; set; }
         public DbSet<BudgetStatus> BudgetStatuses { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-
+        public DbSet<Payment> Payments { get; set; }
     }
 }
