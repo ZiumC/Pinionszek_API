@@ -74,6 +74,16 @@ namespace Pinionszek_API.DbContexts
                 budgetStatus.HasKey(bs => bs.IdBudgetStatus);
                 budgetStatus.Property(bs => bs.Name).IsRequired().HasMaxLength(50);
             });
+
+            modelBuilder.Entity<Budget>(budget =>
+            {
+                budget.HasKey(b => b.IdBudget);
+                budget.Property(b => b.IsCompleted).IsRequired();
+                budget.Property(b => b.OpendDate).HasColumnType("date");
+                budget.Property(b => b.BudgetYear).IsRequired().HasColumnType("date");
+                budget.Property(b => b.Revenue).IsRequired().HasColumnType("money");
+                budget.Property(b => b.Surplus).IsRequired().HasColumnType("money");
+            });
         }
 
         public DbSet<User> Users { get; set; }
