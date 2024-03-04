@@ -99,6 +99,63 @@ namespace Pinionszek_API.DbContexts
             {
                 sharedPayment.HasKey(sp => sp.IdSharedPayment);
             });
+
+            modelBuilder.Entity<User>(user =>
+            {
+                user.HasData(new User
+                {
+                    IdUser = 1,
+                    UserTag = 1001,
+                    Email = "test1@test.pl",
+                    Login = "test1",
+                    Password = "password1",
+                    PasswordSalt = "passsalt",
+                    RegisteredAt = DateTime.Now,
+                    RefreshToken = null,
+                    LoginAttempts = 0,
+                    BlockedTo = null
+                });
+                user.HasData(new User
+                {
+                    IdUser = 2,
+                    UserTag = 1002,
+                    Email = "test2@test.pl",
+                    Login = "test2",
+                    Password = "password2",
+                    PasswordSalt = "passsalt",
+                    RegisteredAt = DateTime.Parse("2023-02-09"),
+                    RefreshToken = null,
+                    LoginAttempts = 0,
+                    BlockedTo = null
+                });
+                user.HasData(new User
+                {
+                    IdUser = 3,
+                    UserTag = 1003,
+                    Email = "test3@test.pl",
+                    Login = "test3",
+                    Password = "password3",
+                    PasswordSalt = "passsalt",
+                    RegisteredAt = DateTime.Parse("2023-11-01"),
+                    RefreshToken = null,
+                    LoginAttempts = 0,
+                    BlockedTo = null
+                });
+                user.HasData(new User
+                {
+                    IdUser = 4,
+                    UserTag = 1004,
+                    Email = "test4@test.pl",
+                    Login = "test4",
+                    Password = "password4",
+                    PasswordSalt = "passsalt",
+                    RegisteredAt = DateTime.Parse("2023-12-12"),
+                    RefreshToken = null,
+                    LoginAttempts = 0,
+                    BlockedTo = null
+                });
+            });
+
         }
 
         public DbSet<User> Users { get; set; }
