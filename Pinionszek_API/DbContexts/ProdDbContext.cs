@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pinionszek_API.Models.DatabaseModel;
+using System;
 
 namespace Pinionszek_API.DbContexts
 {
@@ -110,7 +111,7 @@ namespace Pinionszek_API.DbContexts
                     Login = "test1",
                     Password = "password1",
                     PasswordSalt = "passsalt",
-                    RegisteredAt = DateTime.Now,
+                    RegisteredAt = DateTime.Parse("2024-03-04"),
                     RefreshToken = null,
                     LoginAttempts = 0,
                     BlockedTo = null
