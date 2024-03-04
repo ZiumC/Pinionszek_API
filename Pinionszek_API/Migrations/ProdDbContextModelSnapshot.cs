@@ -37,7 +37,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdBudgetStatus");
 
-                    b.ToTable("BudgetStatuses", (string)null);
+                    b.ToTable("BudgetStatuses");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
@@ -65,7 +65,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("DetailedCategories", (string)null);
+                    b.ToTable("DetailedCategories");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Friend", b =>
@@ -89,7 +89,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Friends", (string)null);
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.GeneralCategory", b =>
@@ -110,7 +110,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdGeneralCategory");
 
-                    b.ToTable("GeneralCategories", (string)null);
+                    b.ToTable("GeneralCategories");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.PaymentStatus", b =>
@@ -128,7 +128,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdPaymentStatus");
 
-                    b.ToTable("PaymentStatuses", (string)null);
+                    b.ToTable("PaymentStatuses");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>
@@ -177,7 +177,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdUser");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.UserSettings", b =>
@@ -211,7 +211,7 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdUser")
                         .IsUnique();
 
-                    b.ToTable("UserSettings", (string)null);
+                    b.ToTable("UserSettings");
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
