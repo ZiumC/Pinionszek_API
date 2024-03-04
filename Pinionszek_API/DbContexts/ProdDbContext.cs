@@ -382,6 +382,407 @@ namespace Pinionszek_API.DbContexts
                     Name = "NOT OPEND YET"
                 });
             });
+
+            modelBuilder.Entity<Budget>(budget =>
+            {
+                budget.HasData(new Budget
+                {
+                    IdBudget = 1,
+                    IsCompleted = false,
+                    OpendDate = DateTime.Parse("2024-01-01"),
+                    Revenue = new decimal(2213.00),
+                    Surplus = new decimal(12.00),
+                    BudgetYear = DateTime.Parse("2024-01-01"),
+                    IdBudgetStatus = 1,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 2,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-02-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 3,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-03-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 4,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-04-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 5,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-05-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 6,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-06-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 7,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-07-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 8,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-08-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 9,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-09-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 10,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-10-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 11,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-11-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 12,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-12-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 1
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 13,
+                    IsCompleted = false,
+                    OpendDate = DateTime.Parse("2023-12-29"),
+                    Revenue = new decimal(3250.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-01-01"),
+                    IdBudgetStatus = 1,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 14,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-02-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 15,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-03-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 16,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-04-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 17,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-05-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 18,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-06-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 19,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-07-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 20,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-08-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 21,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-09-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 22,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-10-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 23,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-11-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 24,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-12-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 2
+                });
+
+                budget.HasData(new Budget
+                {
+                    IdBudget = 25,
+                    IsCompleted = false,
+                    OpendDate = DateTime.Parse("2024-01-11"),
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(120.00),
+                    BudgetYear = DateTime.Parse("2024-01-01"),
+                    IdBudgetStatus = 1,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 26,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-02-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 27,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-03-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 28,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-04-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 29,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-05-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 30,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-06-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 31,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-07-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 32,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-08-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 33,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-09-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 34,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-10-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 35,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-11-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+                budget.HasData(new Budget
+                {
+                    IdBudget = 36,
+                    IsCompleted = false,
+                    OpendDate = null,
+                    Revenue = new decimal(0.00),
+                    Surplus = new decimal(0.00),
+                    BudgetYear = DateTime.Parse("2024-12-01"),
+                    IdBudgetStatus = 3,
+                    IdUser = 3
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
