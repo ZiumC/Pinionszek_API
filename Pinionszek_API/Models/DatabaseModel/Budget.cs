@@ -1,4 +1,6 @@
-﻿namespace Pinionszek_API.Models.DatabaseModel
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Pinionszek_API.Models.DatabaseModel
 {
     public class Budget
     {
@@ -8,5 +10,9 @@
         public decimal Revenue { get; set; }
         public decimal Surplus { get; set; }
         public DateTime BudgetYear { get; set; }
+
+        public int IdBudgetStatus { get; set; }
+        [ForeignKey(nameof(IdBudgetStatus))]
+        public virtual BudgetStatus BudgetStatus { get; set; }
     }
 }
