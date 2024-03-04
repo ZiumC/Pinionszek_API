@@ -22,34 +22,6 @@ namespace Pinionszek_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Budget", b =>
-                {
-                    b.Property<int>("IdBudget")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdBudget"), 1L, 1);
-
-                    b.Property<DateTime>("BudgetYear")
-                        .HasColumnType("date");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("OpendDate")
-                        .HasColumnType("date");
-
-                    b.Property<decimal>("Revenue")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("Surplus")
-                        .HasColumnType("money");
-
-                    b.HasKey("IdBudget");
-
-                    b.ToTable("Budget", (string)null);
-                });
-
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.BudgetStatus", b =>
                 {
                     b.Property<int>("IdBudgetStatus")
