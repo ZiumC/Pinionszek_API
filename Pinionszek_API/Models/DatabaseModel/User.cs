@@ -16,5 +16,6 @@
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual UserSettings UserSettings { get; set; }
         public virtual ICollection<DetailedCategory> UserCategories { get; set; }
+        public virtual ICollection<Budget> Budgets { get; set; }
     }
 }

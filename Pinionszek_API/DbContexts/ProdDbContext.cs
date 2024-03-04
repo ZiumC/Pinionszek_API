@@ -93,6 +93,7 @@ namespace Pinionszek_API.DbContexts
         public DbSet<DetailedCategory> DetailedCategories { get; set; }
         public DbSet<PaymentStatus> PaymentStatuses { get; set; }
         public DbSet<BudgetStatus> BudgetStatuses { get; set; }
+        public DbSet<Budget> Budgets { get; set; }
 
     }
 }

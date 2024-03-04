@@ -33,9 +33,6 @@ namespace Pinionszek_API.Migrations
                     b.Property<DateTime>("BudgetYear")
                         .HasColumnType("date");
 
-                    b.Property<int>("IdBudgetStatus")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
@@ -50,10 +47,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdBudget");
 
-                    b.HasIndex("IdBudgetStatus")
-                        .IsUnique();
-
-                    b.ToTable("Budget");
+                    b.ToTable("Budget", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.BudgetStatus", b =>
@@ -71,7 +65,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdBudgetStatus");
 
-                    b.ToTable("BudgetStatuses");
+                    b.ToTable("BudgetStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
@@ -99,7 +93,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("DetailedCategories");
+                    b.ToTable("DetailedCategories", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Friend", b =>
@@ -123,7 +117,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.GeneralCategory", b =>
@@ -144,7 +138,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdGeneralCategory");
 
-                    b.ToTable("GeneralCategories");
+                    b.ToTable("GeneralCategories", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.PaymentStatus", b =>
@@ -162,7 +156,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdPaymentStatus");
 
-                    b.ToTable("PaymentStatuses");
+                    b.ToTable("PaymentStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>
@@ -211,7 +205,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdUser");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.UserSettings", b =>
@@ -245,18 +239,7 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdUser")
                         .IsUnique();
 
-                    b.ToTable("UserSettings");
-                });
-
-            modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Budget", b =>
-                {
-                    b.HasOne("Pinionszek_API.Models.DatabaseModel.BudgetStatus", "BudgetStatus")
-                        .WithOne("Budget")
-                        .HasForeignKey("Pinionszek_API.Models.DatabaseModel.Budget", "IdBudgetStatus")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BudgetStatus");
+                    b.ToTable("UserSettings", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
@@ -298,12 +281,6 @@ namespace Pinionszek_API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.BudgetStatus", b =>
-                {
-                    b.Navigation("Budget")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>

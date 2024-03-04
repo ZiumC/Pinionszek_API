@@ -14,5 +14,9 @@ namespace Pinionszek_API.Models.DatabaseModel
         public int IdBudgetStatus { get; set; }
         [ForeignKey(nameof(IdBudgetStatus))]
         public virtual BudgetStatus BudgetStatus { get; set; }
+
+        public int IdUser { get; set; }
+        [ForeignKey(nameof(IdUser))]
+        public virtual User User { get; set; }
     }
 }
