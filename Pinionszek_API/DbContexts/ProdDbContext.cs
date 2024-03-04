@@ -363,6 +363,25 @@ namespace Pinionszek_API.DbContexts
                     IdUser = 3
                 });
             });
+
+            modelBuilder.Entity<BudgetStatus>(budgetstatus =>
+            {
+                budgetstatus.HasData(new BudgetStatus
+                {
+                    IdBudgetStatus = 1,
+                    Name = "OPEND"
+                });
+                budgetstatus.HasData(new BudgetStatus
+                {
+                    IdBudgetStatus = 2,
+                    Name = "COMPLETED"
+                });
+                budgetstatus.HasData(new BudgetStatus
+                {
+                    IdBudgetStatus = 3,
+                    Name = "NOT OPEND YET"
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
