@@ -14,5 +14,7 @@ namespace Pinionszek_API.Models.DatabaseModel
         public int IdUser { get; set; }
         [ForeignKey(nameof(IdUser))]
         public virtual User User { get; set; }
+
+        public virtual ICollection<Payment> Payments { get; set; }
     }
 }
