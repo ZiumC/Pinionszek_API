@@ -201,6 +201,51 @@ namespace Pinionszek_API.DbContexts
                 });
             });
 
+            modelBuilder.Entity<Friend>(friend =>
+            {
+                friend.HasData(new Friend
+                {
+                    IdFriend = 1,
+                    FriendTag = 1002,
+                    DateAdded = DateTime.Parse("2024-03-04"),
+                    IdUser = 1
+                });
+                friend.HasData(new Friend
+                {
+                    IdFriend = 2,
+                    FriendTag = 1004,
+                    DateAdded = DateTime.Parse("2024-03-04"),
+                    IdUser = 1
+                });
+                friend.HasData(new Friend
+                {
+                    IdFriend = 3,
+                    FriendTag = 1001,
+                    DateAdded = DateTime.Parse("2024-03-04"),
+                    IdUser = 2
+                });
+                friend.HasData(new Friend
+                {
+                    IdFriend = 4,
+                    FriendTag = 1002,
+                    DateAdded = DateTime.Parse("2023-11-01"),
+                    IdUser = 3
+                });
+                friend.HasData(new Friend
+                {
+                    IdFriend = 5,
+                    FriendTag = 1004,
+                    DateAdded = DateTime.Parse("2024-03-04"),
+                    IdUser = 1
+                });
+                friend.HasData(new Friend
+                {
+                    IdFriend = 6,
+                    FriendTag = 1003,
+                    DateAdded = DateTime.Parse("2023-11-01"),
+                    IdUser = 2
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
