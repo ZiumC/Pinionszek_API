@@ -157,6 +157,50 @@ namespace Pinionszek_API.DbContexts
                 });
             });
 
+            modelBuilder.Entity<UserSettings>(userSettings =>
+            {
+                userSettings.HasData(new UserSettings
+                {
+                    IdUserSetting = 1,
+                    UseBudgetRules = false,
+                    DisplayBudgetRules = false,
+                    IdUser = 2,
+                    Needs = 0,
+                    Savings = 0,
+                    Wants = 0,
+                });
+                userSettings.HasData(new UserSettings
+                {
+                    IdUserSetting = 2,
+                    UseBudgetRules = true,
+                    DisplayBudgetRules = false,
+                    IdUser = 1,
+                    Needs = new decimal(60.00),
+                    Wants = new decimal(30.00),
+                    Savings = new decimal(10.00),
+                });
+                userSettings.HasData(new UserSettings
+                {
+                    IdUserSetting = 3,
+                    UseBudgetRules = true,
+                    DisplayBudgetRules = true,
+                    IdUser = 4,
+                    Needs = new decimal(70.00),
+                    Wants = new decimal(25.00),
+                    Savings = new decimal(5.00),
+                });
+                userSettings.HasData(new UserSettings
+                {
+                    IdUserSetting = 4,
+                    UseBudgetRules = true,
+                    DisplayBudgetRules = true,
+                    IdUser = 3,
+                    Needs = new decimal(55.00),
+                    Wants = new decimal(40.00),
+                    Savings = new decimal(15.00),
+                });
+            });
+
         }
 
         public DbSet<User> Users { get; set; }
