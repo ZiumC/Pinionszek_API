@@ -27,7 +27,7 @@ namespace Pinionszek_API.Migrations
                 column: "IdBudgetStatus",
                 principalTable: "BudgetStatuses",
                 principalColumn: "IdBudgetStatus",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
