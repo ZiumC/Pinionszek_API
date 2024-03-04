@@ -22,37 +22,6 @@ namespace Pinionszek_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Budget", b =>
-                {
-                    b.Property<int>("IdBudget")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdBudget"), 1L, 1);
-
-                    b.Property<DateTime>("BudgetYear")
-                        .HasColumnType("date");
-
-                    b.Property<int>("IdBudgetStatus")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("OpendDate")
-                        .HasColumnType("date");
-
-                    b.Property<decimal>("Revenue")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("Surplus")
-                        .HasColumnType("money");
-
-                    b.HasKey("IdBudget");
-
-                    b.ToTable("Budget");
-                });
-
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.BudgetStatus", b =>
                 {
                     b.Property<int>("IdBudgetStatus")
@@ -68,7 +37,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdBudgetStatus");
 
-                    b.ToTable("BudgetStatuses");
+                    b.ToTable("BudgetStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
@@ -96,7 +65,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("DetailedCategories");
+                    b.ToTable("DetailedCategories", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Friend", b =>
@@ -120,7 +89,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.GeneralCategory", b =>
@@ -141,7 +110,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdGeneralCategory");
 
-                    b.ToTable("GeneralCategories");
+                    b.ToTable("GeneralCategories", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.PaymentStatus", b =>
@@ -159,7 +128,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdPaymentStatus");
 
-                    b.ToTable("PaymentStatuses");
+                    b.ToTable("PaymentStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>
@@ -208,7 +177,7 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdUser");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.UserSettings", b =>
@@ -242,7 +211,7 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdUser")
                         .IsUnique();
 
-                    b.ToTable("UserSettings");
+                    b.ToTable("UserSettings", (string)null);
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.DetailedCategory", b =>
