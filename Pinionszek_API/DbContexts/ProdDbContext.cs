@@ -94,6 +94,11 @@ namespace Pinionszek_API.DbContexts
                 payment.Property(p => p.PaymentDate).HasColumnType("date");
                 payment.Property(p => p.Message).HasMaxLength(350);
             });
+
+            modelBuilder.Entity<SharedPayment>(sharedPayment =>
+            {
+                sharedPayment.HasKey(sp => sp.IdSharedPayment);
+            });
         }
 
         public DbSet<User> Users { get; set; }
@@ -105,5 +110,6 @@ namespace Pinionszek_API.DbContexts
         public DbSet<BudgetStatus> BudgetStatuses { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<SharedPayment> SharedPayments { get; set; }
     }
 }

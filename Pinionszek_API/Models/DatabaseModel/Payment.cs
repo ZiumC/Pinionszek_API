@@ -23,5 +23,6 @@ namespace Pinionszek_API.Models.DatabaseModel
         public int IdDetailedCategory { get; set; }
         public virtual DetailedCategory DetailedCategory { get; set; }
 
+        public virtual ICollection<SharedPayment> SharedPayments { get; set; }
     }
 }
