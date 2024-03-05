@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Pinionszek_API.DbContexts;
+using Pinionszek_API.Services.DatabaseServices.BudgetService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IBudgetApiService, BudgetApiService>();
 builder.Services.AddDbContext<ProdDbContext>(opt => opt.UseSqlServer("name=ConnectionStrings:Default"));
 
 builder.Services.AddControllers();
