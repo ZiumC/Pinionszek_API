@@ -19,8 +19,8 @@ namespace Pinionszek_API.Models.DatabaseModel
         [ForeignKey(nameof(IdBudget))]
         public virtual Budget Budget { get; set; }
 
-        [ForeignKey(nameof(IdDetailedCategory))]
         public int IdDetailedCategory { get; set; }
+        [ForeignKey(nameof(IdDetailedCategory))]
         public virtual DetailedCategory DetailedCategory { get; set; }
 
         public virtual ICollection<SharedPayment> SharedPayments { get; set; }
