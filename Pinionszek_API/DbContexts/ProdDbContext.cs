@@ -93,6 +93,8 @@ namespace Pinionszek_API.DbContexts
                 payment.Property(p => p.Charge).IsRequired().HasColumnType("money");
                 payment.Property(p => p.Refund).IsRequired().HasColumnType("money");
                 payment.Property(p => p.PaymentDate).HasColumnType("date");
+                payment.Property(p => p.PaidOn).HasColumnType("date");
+                payment.Property(p => p.PaymentAddedOn).IsRequired().HasColumnType("date");
                 payment.Property(p => p.Message).HasMaxLength(350);
             });
 
