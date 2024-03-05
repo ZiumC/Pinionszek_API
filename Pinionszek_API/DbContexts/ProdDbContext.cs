@@ -236,7 +236,7 @@ namespace Pinionszek_API.DbContexts
                 friend.HasData(new Friend
                 {
                     IdFriend = 5,
-                    FriendTag = 1004,
+                    FriendTag = 1003,
                     DateAdded = DateTime.Parse("2024-03-04"),
                     IdUser = 1
                 });
