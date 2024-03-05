@@ -985,6 +985,28 @@ namespace Pinionszek_API.DbContexts
                     IdDetailedCategory = 12,
                 });
             });
+
+            modelBuilder.Entity<SharedPayment>(sharedPayment =>
+            {
+                sharedPayment.HasData(new SharedPayment
+                {
+                    IdSharedPayment = 1,
+                    IdPayment = 1,
+                    IdFriend = 1
+                });
+                sharedPayment.HasData(new SharedPayment
+                {
+                    IdSharedPayment = 2,
+                    IdPayment = 4,
+                    IdFriend = 1
+                });
+                sharedPayment.HasData(new SharedPayment
+                {
+                    IdSharedPayment = 3,
+                    IdPayment = 10,
+                    IdFriend = 3
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
