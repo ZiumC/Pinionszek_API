@@ -783,6 +783,20 @@ namespace Pinionszek_API.DbContexts
                     IdUser = 3
                 });
             });
+
+            modelBuilder.Entity<PaymentStatus>(paymentStatus =>
+            {
+                paymentStatus.HasData(new PaymentStatus
+                {
+                    IdPaymentStatus = 1,
+                    Name = "PAYED"
+                });
+                paymentStatus.HasData(new PaymentStatus
+                {
+                    IdPaymentStatus = 2,
+                    Name = "NOT PAYED YET"
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
