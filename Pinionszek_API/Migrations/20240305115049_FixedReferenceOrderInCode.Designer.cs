@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pinionszek_API.DbContexts;
 
@@ -11,9 +12,10 @@ using Pinionszek_API.DbContexts;
 namespace Pinionszek_API.Migrations
 {
     [DbContext(typeof(ProdDbContext))]
-    partial class ProdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305115049_FixedReferenceOrderInCode")]
+    partial class FixedReferenceOrderInCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -637,7 +639,7 @@ namespace Pinionszek_API.Migrations
                         {
                             IdFriend = 5,
                             DateAdded = new DateTime(2024, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FriendTag = 1003,
+                            FriendTag = 1004,
                             IdUser = 1
                         },
                         new
@@ -720,12 +722,6 @@ namespace Pinionszek_API.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<DateTime?>("PaidOn")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("PaymentAddedOn")
-                        .HasColumnType("date");
-
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("date");
 
@@ -741,177 +737,6 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdPaymentStatus");
 
                     b.ToTable("Payments");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPayment = 1,
-                            Charge = 180m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 5,
-                            IdPaymentStatus = 2,
-                            Message = "Fryzjer małego pieska domowego",
-                            Name = "Fryzjer dla psa",
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 75m
-                        },
-                        new
-                        {
-                            IdPayment = 2,
-                            Charge = 670m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 1,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Mieszkanie",
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 3,
-                            Charge = 570m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 3,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Prywatne ubezpieczenie zdrowotne",
-                            PaidOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 4,
-                            Charge = 35.99m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 4,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Platforma Netflix",
-                            PaymentAddedOn = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 11m
-                        },
-                        new
-                        {
-                            IdPayment = 12,
-                            Charge = 53.12m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 8,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Biedronka",
-                            PaidOn = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 5,
-                            Charge = 11.23m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 8,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Kaufland",
-                            PaidOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 6,
-                            Charge = 100m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 9,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Savings",
-                            PaidOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 7,
-                            Charge = 861m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 2,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Czynsz",
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 13,
-                            Charge = 305m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 2,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Opieka zdrowotna",
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 8,
-                            Charge = 425m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 6,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Oprogramowanie do montowania dysków",
-                            PaidOn = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 9,
-                            Charge = 200m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 10,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Savings",
-                            PaidOn = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 10,
-                            Charge = 99.12m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 12,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Lidl",
-                            PaidOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 40m
-                        },
-                        new
-                        {
-                            IdPayment = 11,
-                            Charge = 7.89m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 12,
-                            IdPaymentStatus = 1,
-                            Message = "Podroby dla piesków",
-                            Name = "Biedronka",
-                            PaidOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.PaymentStatus", b =>
@@ -965,26 +790,6 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdPayment");
 
                     b.ToTable("SharedPayments");
-
-                    b.HasData(
-                        new
-                        {
-                            IdSharedPayment = 1,
-                            IdFriend = 1,
-                            IdPayment = 1
-                        },
-                        new
-                        {
-                            IdSharedPayment = 2,
-                            IdFriend = 1,
-                            IdPayment = 4
-                        },
-                        new
-                        {
-                            IdSharedPayment = 3,
-                            IdFriend = 3,
-                            IdPayment = 10
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>

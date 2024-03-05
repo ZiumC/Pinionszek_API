@@ -10,6 +10,8 @@ namespace Pinionszek_API.Models.DatabaseModel
         public decimal Refund { get; set; }
         public string Message { get; set; }
         public DateTime? PaymentDate { get; set; }
+        public DateTime? PaidOn { get; set; }
+        public DateTime PaymentAddedOn { get; set; }
 
         public int IdPaymentStatus { get; set; }
         [ForeignKey(nameof(IdPaymentStatus))]
@@ -19,8 +21,8 @@ namespace Pinionszek_API.Models.DatabaseModel
         [ForeignKey(nameof(IdBudget))]
         public virtual Budget Budget { get; set; }
 
-        [ForeignKey(nameof(IdDetailedCategory))]
         public int IdDetailedCategory { get; set; }
+        [ForeignKey(nameof(IdDetailedCategory))]
         public virtual DetailedCategory DetailedCategory { get; set; }
 
         public virtual ICollection<SharedPayment> SharedPayments { get; set; }

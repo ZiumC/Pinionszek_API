@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pinionszek_API.DbContexts;
 
@@ -11,9 +12,10 @@ using Pinionszek_API.DbContexts;
 namespace Pinionszek_API.Migrations
 {
     [DbContext(typeof(ProdDbContext))]
-    partial class ProdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305144238_MockupSharedPaymentTable")]
+    partial class MockupSharedPaymentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -637,7 +639,7 @@ namespace Pinionszek_API.Migrations
                         {
                             IdFriend = 5,
                             DateAdded = new DateTime(2024, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FriendTag = 1003,
+                            FriendTag = 1004,
                             IdUser = 1
                         },
                         new

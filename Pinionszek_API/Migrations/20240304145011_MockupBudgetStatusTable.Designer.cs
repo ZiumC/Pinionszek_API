@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pinionszek_API.DbContexts;
 
@@ -11,9 +12,10 @@ using Pinionszek_API.DbContexts;
 namespace Pinionszek_API.Migrations
 {
     [DbContext(typeof(ProdDbContext))]
-    partial class ProdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304145011_MockupBudgetStatusTable")]
+    partial class MockupBudgetStatusTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,371 +60,6 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdUser");
 
                     b.ToTable("Budgets");
-
-                    b.HasData(
-                        new
-                        {
-                            IdBudget = 1,
-                            BudgetYear = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 1,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            OpendDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Revenue = 2213m,
-                            Surplus = 12m
-                        },
-                        new
-                        {
-                            IdBudget = 2,
-                            BudgetYear = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 3,
-                            BudgetYear = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 4,
-                            BudgetYear = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 5,
-                            BudgetYear = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 6,
-                            BudgetYear = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 7,
-                            BudgetYear = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 8,
-                            BudgetYear = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 9,
-                            BudgetYear = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 10,
-                            BudgetYear = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 11,
-                            BudgetYear = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 12,
-                            BudgetYear = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 1,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 13,
-                            BudgetYear = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 1,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            OpendDate = new DateTime(2023, 12, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Revenue = 3250m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 14,
-                            BudgetYear = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 15,
-                            BudgetYear = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 16,
-                            BudgetYear = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 17,
-                            BudgetYear = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 18,
-                            BudgetYear = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 19,
-                            BudgetYear = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 20,
-                            BudgetYear = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 21,
-                            BudgetYear = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 22,
-                            BudgetYear = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 23,
-                            BudgetYear = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 24,
-                            BudgetYear = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 2,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 25,
-                            BudgetYear = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 1,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            OpendDate = new DateTime(2024, 1, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Revenue = 0m,
-                            Surplus = 120m
-                        },
-                        new
-                        {
-                            IdBudget = 26,
-                            BudgetYear = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 27,
-                            BudgetYear = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 28,
-                            BudgetYear = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 29,
-                            BudgetYear = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 30,
-                            BudgetYear = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 31,
-                            BudgetYear = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 32,
-                            BudgetYear = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 33,
-                            BudgetYear = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 34,
-                            BudgetYear = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 35,
-                            BudgetYear = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        },
-                        new
-                        {
-                            IdBudget = 36,
-                            BudgetYear = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdBudgetStatus = 3,
-                            IdUser = 3,
-                            IsCompleted = false,
-                            Revenue = 0m,
-                            Surplus = 0m
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.BudgetStatus", b =>
@@ -637,7 +274,7 @@ namespace Pinionszek_API.Migrations
                         {
                             IdFriend = 5,
                             DateAdded = new DateTime(2024, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FriendTag = 1003,
+                            FriendTag = 1004,
                             IdUser = 1
                         },
                         new
@@ -701,6 +338,9 @@ namespace Pinionszek_API.Migrations
                     b.Property<decimal>("Charge")
                         .HasColumnType("money");
 
+                    b.Property<int>("DetailedCategoryIdDetailedCategory")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdBudget")
                         .HasColumnType("int");
 
@@ -720,12 +360,6 @@ namespace Pinionszek_API.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<DateTime?>("PaidOn")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("PaymentAddedOn")
-                        .HasColumnType("date");
-
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("date");
 
@@ -734,184 +368,13 @@ namespace Pinionszek_API.Migrations
 
                     b.HasKey("IdPayment");
 
-                    b.HasIndex("IdBudget");
+                    b.HasIndex("DetailedCategoryIdDetailedCategory");
 
-                    b.HasIndex("IdDetailedCategory");
+                    b.HasIndex("IdBudget");
 
                     b.HasIndex("IdPaymentStatus");
 
                     b.ToTable("Payments");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPayment = 1,
-                            Charge = 180m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 5,
-                            IdPaymentStatus = 2,
-                            Message = "Fryzjer małego pieska domowego",
-                            Name = "Fryzjer dla psa",
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 75m
-                        },
-                        new
-                        {
-                            IdPayment = 2,
-                            Charge = 670m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 1,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Mieszkanie",
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 3,
-                            Charge = 570m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 3,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Prywatne ubezpieczenie zdrowotne",
-                            PaidOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 4,
-                            Charge = 35.99m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 4,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Platforma Netflix",
-                            PaymentAddedOn = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 11m
-                        },
-                        new
-                        {
-                            IdPayment = 12,
-                            Charge = 53.12m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 8,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Biedronka",
-                            PaidOn = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 5,
-                            Charge = 11.23m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 8,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Kaufland",
-                            PaidOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 6,
-                            Charge = 100m,
-                            IdBudget = 1,
-                            IdDetailedCategory = 9,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Savings",
-                            PaidOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 7,
-                            Charge = 861m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 2,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Czynsz",
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 13,
-                            Charge = 305m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 2,
-                            IdPaymentStatus = 2,
-                            Message = "",
-                            Name = "Opieka zdrowotna",
-                            PaymentAddedOn = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentDate = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 8,
-                            Charge = 425m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 6,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Oprogramowanie do montowania dysków",
-                            PaidOn = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 9,
-                            Charge = 200m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 10,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Savings",
-                            PaidOn = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        },
-                        new
-                        {
-                            IdPayment = 10,
-                            Charge = 99.12m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 12,
-                            IdPaymentStatus = 1,
-                            Message = "",
-                            Name = "Lidl",
-                            PaidOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 40m
-                        },
-                        new
-                        {
-                            IdPayment = 11,
-                            Charge = 7.89m,
-                            IdBudget = 13,
-                            IdDetailedCategory = 12,
-                            IdPaymentStatus = 1,
-                            Message = "Podroby dla piesków",
-                            Name = "Biedronka",
-                            PaidOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentAddedOn = new DateTime(2024, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Refund = 0m
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.PaymentStatus", b =>
@@ -930,18 +393,6 @@ namespace Pinionszek_API.Migrations
                     b.HasKey("IdPaymentStatus");
 
                     b.ToTable("PaymentStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPaymentStatus = 1,
-                            Name = "PAYED"
-                        },
-                        new
-                        {
-                            IdPaymentStatus = 2,
-                            Name = "NOT PAYED YET"
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.SharedPayment", b =>
@@ -965,26 +416,6 @@ namespace Pinionszek_API.Migrations
                     b.HasIndex("IdPayment");
 
                     b.ToTable("SharedPayments");
-
-                    b.HasData(
-                        new
-                        {
-                            IdSharedPayment = 1,
-                            IdFriend = 1,
-                            IdPayment = 1
-                        },
-                        new
-                        {
-                            IdSharedPayment = 2,
-                            IdFriend = 1,
-                            IdPayment = 4
-                        },
-                        new
-                        {
-                            IdSharedPayment = 3,
-                            IdFriend = 3,
-                            IdPayment = 10
-                        });
                 });
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.User", b =>
@@ -1209,15 +640,15 @@ namespace Pinionszek_API.Migrations
 
             modelBuilder.Entity("Pinionszek_API.Models.DatabaseModel.Payment", b =>
                 {
-                    b.HasOne("Pinionszek_API.Models.DatabaseModel.Budget", "Budget")
+                    b.HasOne("Pinionszek_API.Models.DatabaseModel.DetailedCategory", "DetailedCategory")
                         .WithMany("Payments")
-                        .HasForeignKey("IdBudget")
+                        .HasForeignKey("DetailedCategoryIdDetailedCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Pinionszek_API.Models.DatabaseModel.DetailedCategory", "DetailedCategory")
+                    b.HasOne("Pinionszek_API.Models.DatabaseModel.Budget", "Budget")
                         .WithMany("Payments")
-                        .HasForeignKey("IdDetailedCategory")
+                        .HasForeignKey("IdBudget")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
