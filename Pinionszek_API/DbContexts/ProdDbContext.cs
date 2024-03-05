@@ -799,6 +799,192 @@ namespace Pinionszek_API.DbContexts
                     Name = "NOT PAYED YET"
                 });
             });
+
+            modelBuilder.Entity<Payment>(payment =>
+            {
+                payment.HasData(new Payment
+                {
+                    IdPayment = 1,
+                    Name = "Fryzjer dla psa",
+                    Charge = new decimal(180.00),
+                    Refund = new decimal(75.00),
+                    Message = "Fryzjer małego pieska domowego",
+                    PaymentDate = DateTime.Parse("2024-01-29"),
+                    PaidOn = null,
+                    PaymentAddedOn = DateTime.Parse("2024-01-01"),
+                    IdPaymentStatus = 2,
+                    IdBudget = 1,
+                    IdDetailedCategory = 5,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 2,
+                    Name = "Mieszkanie",
+                    Charge = new decimal(670.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = DateTime.Parse("2024-01-15"),
+                    PaidOn = null,
+                    PaymentAddedOn = DateTime.Parse("2024-01-01"),
+                    IdPaymentStatus = 2,
+                    IdBudget = 1,
+                    IdDetailedCategory = 1,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 3,
+                    Name = "Prywatne ubezpieczenie zdrowotne",
+                    Charge = new decimal(570.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-02"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-02"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 1,
+                    IdDetailedCategory = 3,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 4,
+                    Name = "Platforma Netflix",
+                    Charge = new decimal(35.99),
+                    Refund = new decimal(11.00),
+                    Message = "",
+                    PaymentDate = DateTime.Parse("2024-01-12"),
+                    PaidOn = null,
+                    PaymentAddedOn = DateTime.Parse("2024-01-05"),
+                    IdPaymentStatus = 2,
+                    IdBudget = 1,
+                    IdDetailedCategory = 4,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 12,
+                    Name = "Biedronka",
+                    Charge = new decimal(53.12),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-06"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-06"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 1,
+                    IdDetailedCategory = 8,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 5,
+                    Name = "Kaufland",
+                    Charge = new decimal(11.23),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-02"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-02"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 1,
+                    IdDetailedCategory = 8,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 6,
+                    Name = "Savings",
+                    Charge = new decimal(100.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-01"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-01"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 1,
+                    IdDetailedCategory = 9,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 7,
+                    Name = "Czynsz",
+                    Charge = new decimal(861.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = DateTime.Parse("2024-01-20"),
+                    PaidOn = null,
+                    PaymentAddedOn = DateTime.Parse("2024-01-02"),
+                    IdPaymentStatus = 2,
+                    IdBudget = 13,
+                    IdDetailedCategory = 2,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 13,
+                    Name = "Opieka zdrowotna",
+                    Charge = new decimal(305.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = DateTime.Parse("2024-01-20"),
+                    PaidOn = null,
+                    PaymentAddedOn = DateTime.Parse("2024-01-02"),
+                    IdPaymentStatus = 2,
+                    IdBudget = 13,
+                    IdDetailedCategory = 2,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 8,
+                    Name = "Oprogramowanie do montowania dysków",
+                    Charge = new decimal(425.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-10"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-10"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 13,
+                    IdDetailedCategory = 6,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 9,
+                    Name = "Savings",
+                    Charge = new decimal(200.00),
+                    Refund = new decimal(0.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-12"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-12"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 13,
+                    IdDetailedCategory = 10,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 10,
+                    Name = "Lidl",
+                    Charge = new decimal(99.12),
+                    Refund = new decimal(40.00),
+                    Message = "",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-19"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-19"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 13,
+                    IdDetailedCategory = 12,
+                });
+                payment.HasData(new Payment
+                {
+                    IdPayment = 11,
+                    Name = "Biedronka",
+                    Charge = new decimal(7.89),
+                    Refund = new decimal(0.00),
+                    Message = "Podroby dla piesków",
+                    PaymentDate = null,
+                    PaidOn = DateTime.Parse("2024-01-19"),
+                    PaymentAddedOn = DateTime.Parse("2024-01-19"),
+                    IdPaymentStatus = 1,
+                    IdBudget = 13,
+                    IdDetailedCategory = 12,
+                });
+            });
         }
 
         public DbSet<User> Users { get; set; }
