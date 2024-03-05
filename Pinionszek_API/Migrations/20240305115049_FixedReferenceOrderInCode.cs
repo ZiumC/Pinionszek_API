@@ -31,7 +31,7 @@ namespace Pinionszek_API.Migrations
                 column: "IdDetailedCategory",
                 principalTable: "DetailedCategories",
                 principalColumn: "IdDetailedCategory",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -62,7 +62,7 @@ namespace Pinionszek_API.Migrations
                 column: "DetailedCategoryIdDetailedCategory",
                 principalTable: "DetailedCategories",
                 principalColumn: "IdDetailedCategory",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
     }
 }
