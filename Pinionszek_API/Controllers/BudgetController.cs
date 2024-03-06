@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pinionszek_API.DbContexts;
+using Pinionszek_API.Models.DatabaseModel;
+using Pinionszek_API.Services.DatabaseServices.BudgetService;
 
 namespace Pinionszek_API.Controllers
 {
@@ -8,18 +10,23 @@ namespace Pinionszek_API.Controllers
     [ApiController]
     public class BudgetController : ControllerBase
     {
-        private readonly ProdDbContext _dbContext;
+        private readonly IBudgetApiService _budgetService;
 
-        public BudgetController(ProdDbContext dbContext)
+        public BudgetController(IBudgetApiService budgetService)
         {
-            _dbContext = dbContext;
+            _budgetService = budgetService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync(int idBudget, int idUser) 
+        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync(int id, DateTime date) 
         {
+            var budget = await _budgetService.BudgetDataAsync(date, id);
+            if (budget == null)
+            {
+                return NotFound();
+            }
 
-            return Ok("AA");
+            return Ok(budget);
         }
 
     }
