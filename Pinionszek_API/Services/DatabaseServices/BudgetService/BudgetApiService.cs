@@ -12,18 +12,58 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
             _dbContext = dbContext;
         }
 
-        public async Task<Budget?> BudgetDataAsync(DateTime budgetYear, int idUser)
+        public async Task<Budget?> GetBudgetAsync(int idUser, DateTime budgetYear)
         {
             int month = budgetYear.Month;
             int year = budgetYear.Year;
 
-            return await
+            var budget = await
                 _dbContext.Budgets
                     .Where(
                             b => b.IdUser == idUser &&
                             b.BudgetYear.Month == month &&
                             b.BudgetYear.Year == year
                     ).FirstOrDefaultAsync();
+
+            if (budget != null)
+            {
+                var payments = await
+                    (
+                        from p in _dbContext.Payments
+                        where p.IdBudget == budget.IdBudget
+
+                        join ps in _dbContext.PaymentStatuses
+                        on p.IdPaymentStatus equals ps.IdPaymentStatus
+
+                        join dc in _dbContext.DetailedCategories
+                        on p.IdDetailedCategory equals dc.IdDetailedCategory
+
+                        join gc in _dbContext.GeneralCategories
+                        on dc.IdGeneralCategory equals gc.IdGeneralCategory
+
+                        select new Payment
+                        {
+                            IdPayment = p.IdPayment,
+                            Name = p.Name,
+                            Charge = p.Charge,
+                            Refund = p.Refund,
+                            Message = p.Message,
+                            PaymentDate = p.PaymentDate,
+                            PaidOn = p.PaidOn,
+                            PaymentAddedOn = p.PaymentAddedOn,
+                            PaymentStatus = ps,
+                            DetailedCategory = new DetailedCategory
+                            {
+                                Name = dc.Name,
+                                GeneralCategory = gc,
+                            }
+                        }
+                    ).ToListAsync();
+
+                budget.Payments = payments;
+            }
+
+            return budget;
         }
     }
 }

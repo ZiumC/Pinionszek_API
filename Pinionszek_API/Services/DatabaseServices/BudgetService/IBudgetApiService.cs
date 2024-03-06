@@ -1,9 +1,10 @@
 ﻿using Pinionszek_API.Models.DatabaseModel;
+using Pinionszek_API.Models.DTOs.GetDTO;
 
 namespace Pinionszek_API.Services.DatabaseServices.BudgetService
 {
     public interface IBudgetApiService
     {
-        public Task<Budget?> BudgetDataAsync(DateTime budgetYear, int idUser);
+        public Task<Budget?> GetBudgetAsync(int idUser, DateTime budgetYear);
     }
 }

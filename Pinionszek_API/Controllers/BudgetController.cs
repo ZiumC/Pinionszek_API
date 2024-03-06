@@ -20,7 +20,12 @@ namespace Pinionszek_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync(int id, DateTime date) 
         {
-            var budget = await _budgetService.BudgetDataAsync(date, id);
+            if (id < 0) 
+            {
+                return BadRequest();
+            }
+
+            Budget? budget = await _budgetService.GetBudgetAsync(id, date);
             if (budget == null)
             {
                 return NotFound();
