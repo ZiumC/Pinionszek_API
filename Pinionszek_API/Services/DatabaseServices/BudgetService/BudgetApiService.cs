@@ -41,6 +41,7 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                         join gc in _dbContext.GeneralCategories
                         on dc.IdGeneralCategory equals gc.IdGeneralCategory
 
+
                         select new Payment
                         {
                             IdPayment = p.IdPayment,
@@ -56,7 +57,10 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                             {
                                 Name = dc.Name,
                                 GeneralCategory = gc,
-                            }
+                            },
+                            SharedPayments = (from s in _dbContext.SharedPayments
+                                             where s.IdPayment == p.IdPayment
+                                             select s).ToList(),
                         }
                     ).ToListAsync();
 

@@ -14,5 +14,6 @@ namespace Pinionszek_API.Models.DTOs.GetDTO
         public CategoryDTO Category { get; set; }
         public DateTime? PaidOn { get; set; }
         public DateTime PaymentAddedOn { get; set; }
+        public int? IdSharedPayment { get; set; }
     }
 }
