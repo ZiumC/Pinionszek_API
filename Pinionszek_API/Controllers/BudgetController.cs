@@ -35,7 +35,7 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<GetPaymentDTO>>(budget.Payments));
+            return Ok(_mapper.Map<IEnumerable<PaymentDTO>>(budget.Payments));
         }
 
     }

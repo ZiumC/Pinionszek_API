@@ -8,13 +8,9 @@ namespace Pinionszek_API.Profiles
     {
         public PaymentProfile() 
         {
-            CreateMap<GetPaymentDTO, Payment>()
-                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.DetailedCategory, opt => opt.MapFrom(src => src.DetailedCategory));
-
-            CreateMap<Payment, GetPaymentDTO>()
+            CreateMap<Payment, PaymentDTO>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.PaymentStatus.Name))
-                .ForMember(dest => dest.DetailedCategory, opt => opt.MapFrom(src => src.DetailedCategory.Name));
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.DetailedCategory));
         }
     }
 }
