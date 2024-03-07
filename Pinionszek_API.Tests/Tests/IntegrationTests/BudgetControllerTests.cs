@@ -2,7 +2,9 @@
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
+using Pinionszek_API.Models.DTOs.GetDTO;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Tests.DbContexts;
 using System;
@@ -31,27 +33,18 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(budgetApiService, _mapper);
 
             //Act
-            var result1 = await budgetController.GetUpcomingPaymentsAsync(1, DateTime.Parse("2024-01-01"));
-            var result2 = await budgetController.GetUpcomingPaymentsAsync(2, DateTime.Parse("2024-01-01"));
-            var result3 = await budgetController.GetUpcomingPaymentsAsync(3, DateTime.Parse("2024-01-01"));
-            var result4 = await budgetController.GetUpcomingPaymentsAsync(4, DateTime.Parse("2024-01-01"));
+            var ok_request_1 = await budgetController.GetUpcomingPaymentsAsync(1, DateTime.Parse("2024-01-01"));
+            var ok_request_2 = await budgetController.GetUpcomingPaymentsAsync(2, DateTime.Parse("2024-01-01"));
+            var notfound_request_1 = await budgetController.GetUpcomingPaymentsAsync(3, DateTime.Parse("2024-01-01"));
+            var notfound_request_2 = await budgetController.GetUpcomingPaymentsAsync(4, DateTime.Parse("2024-01-01"));
+            var badrequest_request_1 = await budgetController.GetUpcomingPaymentsAsync(-10, DateTime.Parse("2024-01-01"));
 
             //Assert
-            result1.Should().NotBeNull();
-            result1.Should().BeOfType<OkObjectResult>();
-
-            result2.Should().NotBeNull();
-            result2.Should().BeOfType<OkObjectResult>();
-
-
-            result3.Should().NotBeNull();
-            result3.Should().BeOfType<NotFoundResult>();
-
-            result4.Should().NotBeNull();
-            result4.Should().BeOfType<NotFoundResult>();
-
-            result1.Equals(result2).Should().Be(false);
-
+            ok_request_1.Should().BeOfType<OkObjectResult>();
+            ok_request_2.Should().BeOfType<OkObjectResult>();
+            notfound_request_1.Should().BeOfType<NotFoundResult>();
+            notfound_request_2.Should().BeOfType<NotFoundResult>();
+            badrequest_request_1.Should().BeOfType<BadRequestObjectResult>();
         }
     }
 }
