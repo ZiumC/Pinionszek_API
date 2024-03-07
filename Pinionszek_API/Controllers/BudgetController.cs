@@ -23,14 +23,14 @@ namespace Pinionszek_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentDTO>))]
-        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync(int id, DateTime date) 
+        public async Task<IActionResult> GetUpcomingPaymentsAsync(int idUser, DateTime date) 
         {
-            if (id <= 0) 
+            if (idUser <= 0) 
             {
                 return BadRequest(ModelState);
             }
 
-            var budget = await _budgetService.GetBudgetAsync(id, date);
+            var budget = await _budgetService.GetBudgetAsync(idUser, date);
             if (budget == null)
             {
                 return NotFound();
