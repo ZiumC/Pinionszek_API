@@ -30,18 +30,19 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            Budget? budget = await _budgetService.GetBudgetAsync(id, date);
+            var budget = await _budgetService.GetBudgetAsync(id, date);
             if (budget == null)
             {
                 return NotFound();
             }
 
-            if (budget.Payments == null || budget.Payments.Count() == 0)
+            var payments = budget.Payments;
+            if (payments == null || payments.Count() == 0)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<PaymentDTO>>(budget.Payments));
+            return Ok(_mapper.Map<IEnumerable<PaymentDTO>>(payments));
         }
 
     }
