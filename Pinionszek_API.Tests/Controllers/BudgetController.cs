@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using FakeItEasy;
+﻿using FluentAssertions;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Tests.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,25 @@ namespace Pinionszek_API.Tests.Controller
 {
     public class BudgetController
     {
-        private readonly IBudgetApiService _budgetService;
-        private readonly IMapper _mapper;
 
         public BudgetController()
         {
-            _budgetService = A.Fake<IBudgetApiService>();
-            _mapper = A.Fake<IMapper>();
+        }
+
+        [Fact]
+        public async void BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsPayments()
+        {
+            //Arrange
+            var dbContext = new InMemContext();
+            var inMemDbContext = await dbContext.GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(inMemDbContext);
+
+            //Act
+            var result = await budgetApiService.GetBudgetAsync(1, DateTime.Parse("2024-01-01"));
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<Budget>();
         }
     }
 }
