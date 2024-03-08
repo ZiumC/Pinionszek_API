@@ -20,7 +20,11 @@ namespace Pinionszek_API.Controllers
             _budgetService = budgetService;
             _mapper = mapper;
         }
-
+        /// <summary>
+        /// Find payments by user ID and budget date 
+        /// </summary>
+        /// <param name="idUser">ID of user</param>
+        /// <param name="date">Budget date </param>
         [HttpGet("payments/{idUser}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentDTO>))]
         public async Task<IActionResult> GetUpcomingPaymentsAsync(int idUser, DateTime date) 
