@@ -60,9 +60,19 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payments_of_idUser_1.Count().Should().Be(7);
             payments_of_idUser_1
                 .Where(
-                p => p.Category == null ||
-                string.IsNullOrEmpty(p.Category.DetailedName) ||
-                string.IsNullOrEmpty(p.Category.GeneralName)
+                    p => p.Category == null ||
+                    string.IsNullOrEmpty(p.Category.DetailedName) ||
+                    string.IsNullOrEmpty(p.Category.GeneralName)
+                )
+                .ToList().Count().Should().Be(0);
+            payments_of_idUser_1
+                .Where(
+                    p => p.IdSharedPayment > 0
+                )
+                .ToList().Count().Should().Be(2);
+            payments_of_idUser_1
+                .Where(
+                    p => string.IsNullOrEmpty(p.Status)
                 )
                 .ToList().Count().Should().Be(0);
 
@@ -73,6 +83,16 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
                 p => p.Category == null ||
                 string.IsNullOrEmpty(p.Category.DetailedName) ||
                 string.IsNullOrEmpty(p.Category.GeneralName)
+                )
+                .ToList().Count().Should().Be(0);
+            payments_of_idUser_2
+                .Where(
+                p => p.IdSharedPayment > 0
+                )
+                .ToList().Count().Should().Be(1);
+            payments_of_idUser_2
+                .Where(
+                    p => string.IsNullOrEmpty(p.Status)
                 )
                 .ToList().Count().Should().Be(0);
 
