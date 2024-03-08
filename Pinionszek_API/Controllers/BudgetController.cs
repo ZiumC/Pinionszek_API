@@ -40,19 +40,17 @@ namespace Pinionszek_API.Controllers
             var budget = await _budgetService.GetBudgetAsync(idUser, date);
             if (budget == null)
             {
-                //ModelState.AddModelError("error", "User's budget not found");
                 return NotFound();
             }
 
-            var payments = budget.Payments
+            var privatePayments = budget.Payments
                 .Where(p => p.PaymentDate != null && p.SharedPayments.All(s => s.IdPayment == 0));
-            if (payments == null || payments.Count() == 0)
+            if (privatePayments == null || privatePayments.Count() == 0)
             {
-                //ModelState.AddModelError("error", "User's payments not found in budget");
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<PrivatePaymentDTO>>(payments));
+            return Ok(_mapper.Map<IEnumerable<PrivatePaymentDTO>>(privatePayments));
         }
 
         /// <summary>
@@ -66,8 +64,24 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
+                ModelState.AddModelError("error", "User ID is invalid");
                 return BadRequest(ModelState);
             }
+
+            var budget = await _budgetService.GetBudgetAsync(idUser, date);
+            if (budget == null)
+            {
+                return NotFound();
+            }
+
+            var sharedPayments = budget.Payments
+                .Where(p => p.PaymentDate != null && p.SharedPayments.All(s => s.IdPayment > 0));
+            if (sharedPayments == null || sharedPayments.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            //...
 
 
             return Ok();

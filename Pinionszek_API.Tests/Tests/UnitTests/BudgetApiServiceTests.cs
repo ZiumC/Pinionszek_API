@@ -102,5 +102,31 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payments_of_idUser_3.Should().NotBeNull();
             payments_of_idUser_3.Count().Should().Be(0);
         }
+
+        [Fact]
+        public async Task BudgetApiService_GetFriendNameAsync_ReturnsString()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var result_of_idSharedPayment_1 = await budgetApiService.GetFriendNameAsync(1);
+            var result_of_idSharedPayment_2 = await budgetApiService.GetFriendNameAsync(2);
+            var result_of_idSharedPayment_3 = await budgetApiService.GetFriendNameAsync(3);
+            var result_empty = await budgetApiService.GetFriendNameAsync(1001);
+
+            //Assert
+            result_of_idSharedPayment_1.Should().NotBeNull();
+            result_of_idSharedPayment_1.Should().BeOfType<string>();
+
+            result_of_idSharedPayment_2.Should().NotBeNull();
+            result_of_idSharedPayment_2.Should().BeOfType<string>();
+
+            result_of_idSharedPayment_3.Should().NotBeNull();
+            result_of_idSharedPayment_3.Should().BeOfType<string>();
+
+            result_empty.Should().BeNull();
+        }
     }
 }
