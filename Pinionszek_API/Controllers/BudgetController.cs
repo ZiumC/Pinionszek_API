@@ -21,7 +21,7 @@ namespace Pinionszek_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("payments/{idUser}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentDTO>))]
         public async Task<IActionResult> GetUpcomingPaymentsAsync(int idUser, DateTime date) 
         {
