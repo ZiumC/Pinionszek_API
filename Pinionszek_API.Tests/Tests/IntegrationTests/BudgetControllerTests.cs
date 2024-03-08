@@ -42,8 +42,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Assert
             ok_request_1.Should().BeOfType<OkObjectResult>();
             ok_request_2.Should().BeOfType<OkObjectResult>();
-            notfound_request_1.Should().BeOfType<NotFoundResult>();
-            notfound_request_2.Should().BeOfType<NotFoundResult>();
+            notfound_request_1.Should().BeOfType<NotFoundObjectResult>();
+            notfound_request_2.Should().BeOfType<NotFoundObjectResult>();
             badrequest_request_1.Should().BeOfType<BadRequestObjectResult>();
         }
     }

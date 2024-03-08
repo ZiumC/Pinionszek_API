@@ -2,7 +2,7 @@
 
 namespace Pinionszek_API.Models.DTOs.GetDTO
 {
-    public class PaymentDTO
+    public class PrivatePaymentDTO
     {
         public int IdPayment { get; set; }
         public string Name { get; set; }
