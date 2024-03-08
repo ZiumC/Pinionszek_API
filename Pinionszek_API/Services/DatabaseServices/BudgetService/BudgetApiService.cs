@@ -71,18 +71,20 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
             return budget;
         }
 
-        public async Task<string?> GetFriendNameAsync(int idSharedPayment)
+        public async Task<(string?, int?)> GetFriendNameAndTagAsync(int idSharedPayment)
         {
-            return await (from sp in _dbContext.SharedPayments
-                          where sp.IdSharedPayment == idSharedPayment
+            var friendQuery = await (from sp in _dbContext.SharedPayments
+                                     where sp.IdSharedPayment == idSharedPayment
 
-                          join f in _dbContext.Friends
-                          on sp.IdFriend equals f.IdFriend
+                                     join f in _dbContext.Friends
+                                     on sp.IdFriend equals f.IdFriend
 
-                          join u in _dbContext.Users
-                          on f.FriendTag equals u.UserTag
+                                     join u in _dbContext.Users
+                                     on f.FriendTag equals u.UserTag
 
-                          select u.Login).FirstOrDefaultAsync();
+                                     select new { Login = u.Login, FriendTag = f.FriendTag }).FirstOrDefaultAsync();
+
+            return (friendQuery?.Login, friendQuery?.FriendTag);
         }
     }
 }

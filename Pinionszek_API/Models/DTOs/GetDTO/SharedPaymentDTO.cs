@@ -13,5 +13,6 @@
         public DateTime? PaidOn { get; set; }
         public DateTime PaymentAddedOn { get; set; }
         public string SharredTo { get; set; }
+        public int  FriendTag { get; set; }
     }
 }

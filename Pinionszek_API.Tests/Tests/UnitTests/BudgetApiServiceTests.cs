@@ -104,29 +104,36 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
         }
 
         [Fact]
-        public async Task BudgetApiService_GetFriendNameAsync_ReturnsString()
+        public async Task BudgetApiService_GetFriendNameAndTagAsync_ReturnsString()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var result_of_idSharedPayment_1 = await budgetApiService.GetFriendNameAsync(1);
-            var result_of_idSharedPayment_2 = await budgetApiService.GetFriendNameAsync(2);
-            var result_of_idSharedPayment_3 = await budgetApiService.GetFriendNameAsync(3);
-            var result_empty = await budgetApiService.GetFriendNameAsync(1001);
+            var result_of_idSharedPayment_1 = await budgetApiService.GetFriendNameAndTagAsync(1);
+            var result_of_idSharedPayment_2 = await budgetApiService.GetFriendNameAndTagAsync(2);
+            var result_of_idSharedPayment_3 = await budgetApiService.GetFriendNameAndTagAsync(3);
+            var result_empty = await budgetApiService.GetFriendNameAndTagAsync(1001);
 
             //Assert
             result_of_idSharedPayment_1.Should().NotBeNull();
-            result_of_idSharedPayment_1.Should().BeOfType<string>();
+            result_of_idSharedPayment_1.Should().BeOfType<(string?, int?)>();
+            result_of_idSharedPayment_1.Item1.Should().Be("test1");
+            result_of_idSharedPayment_1.Item2.Should().Be(1002);
 
             result_of_idSharedPayment_2.Should().NotBeNull();
-            result_of_idSharedPayment_2.Should().BeOfType<string>();
+            result_of_idSharedPayment_2.Should().BeOfType<(string?, int?)>();
+            result_of_idSharedPayment_1.Item1.Should().Be("test1");
+            result_of_idSharedPayment_1.Item2.Should().Be(1002);
 
             result_of_idSharedPayment_3.Should().NotBeNull();
-            result_of_idSharedPayment_3.Should().BeOfType<string>();
+            result_of_idSharedPayment_3.Should().BeOfType<(string?, int?)>();
+            result_of_idSharedPayment_1.Item1.Should().Be("test2");
+            result_of_idSharedPayment_1.Item2.Should().Be(1001);
 
-            result_empty.Should().BeNull();
+            result_empty.Item1.Should().BeNull();
+            result_empty.Item2.Should().BeNull();
         }
     }
 }
