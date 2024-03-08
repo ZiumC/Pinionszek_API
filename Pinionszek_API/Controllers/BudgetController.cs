@@ -20,6 +20,7 @@ namespace Pinionszek_API.Controllers
             _budgetService = budgetService;
             _mapper = mapper;
         }
+
         /// <summary>
         /// Find payments by user ID and budget date 
         /// </summary>
@@ -40,7 +41,7 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            var payments = budget.Payments;
+            var payments = budget.Payments.Where(p => p.PaymentDate != null);
             if (payments == null || payments.Count() == 0)
             {
                 return NotFound();
