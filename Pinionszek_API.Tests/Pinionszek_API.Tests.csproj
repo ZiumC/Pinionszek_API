@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Pinionszek_API\Pinionszek_API.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tests\UnitTests\" />
-  </ItemGroup>
-
 </Project>
