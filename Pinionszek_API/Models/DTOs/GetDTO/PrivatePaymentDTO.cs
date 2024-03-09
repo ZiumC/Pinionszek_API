@@ -1,6 +1,4 @@
-﻿using Pinionszek_API.Models.DatabaseModel;
-
-namespace Pinionszek_API.Models.DTOs.GetDTO
+﻿namespace Pinionszek_API.Models.DTOs.GetDTO
 {
     public class PrivatePaymentDTO
     {

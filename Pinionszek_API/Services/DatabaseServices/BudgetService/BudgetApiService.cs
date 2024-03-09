@@ -82,9 +82,9 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                                      join u in _dbContext.Users
                                      on f.FriendTag equals u.UserTag
 
-                                     select new { Login = u.Login, FriendTag = f.FriendTag}).FirstOrDefaultAsync();
+                                     select new { Login = u.Login, UserTag = u.UserTag}).FirstOrDefaultAsync();
 
-            return (friendQuery?.Login, friendQuery?.FriendTag);
+            return (friendQuery?.Login, friendQuery?.UserTag);
         }
     }
 }

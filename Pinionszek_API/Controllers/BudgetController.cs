@@ -6,6 +6,7 @@ using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDTO;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using System.Collections.Generic;
 
 namespace Pinionszek_API.Controllers
 {
@@ -59,7 +60,7 @@ namespace Pinionszek_API.Controllers
         /// <param name="idUser">ID of user</param>
         /// <param name="date">Budget date </param>
         [HttpGet("upcoming-payments/{idUser}/shared")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<PrivatePaymentDTO>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<SharedPaymentDTO>))]
         public async Task<IActionResult> GetUpcomingSharedPaymentsAsync(int idUser, DateTime date)
         {
             if (idUser <= 0)
@@ -74,16 +75,26 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            var sharedBudgetPayments = budget.Payments
-                .Where(p => p.PaymentDate != null && p.SharedPayment.IdPayment > 0);
-            if (sharedBudgetPayments == null || sharedBudgetPayments.Count() == 0)
+            var privatePayments = budget.Payments
+                .Where(p => p.PaymentDate != null && p.SharedPayment.IdPayment > 0).ToList();
+            if (privatePayments == null || privatePayments.Count() == 0)
             {
                 return NotFound();
             }
 
-            
+            var ppdto = _mapper.Map<PrivatePaymentDTO>(privatePayments.ElementAt(0));
 
-            return Ok();
+            int idSharedPayment = privatePayments.ElementAt(0).SharedPayment.IdSharedPayment;
+            var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(idSharedPayment);
+
+            var sharedPayment = _mapper.Map<SharedPaymentDTO>(ppdto);
+            _mapper.Map(new FriendDto
+            {
+                SharredTo = friendNameAndTag.Item1,
+                UserTag = friendNameAndTag.Item2,
+            }, sharedPayment);
+
+            return Ok(sharedPayment);
         }
 
         /// <summary>
