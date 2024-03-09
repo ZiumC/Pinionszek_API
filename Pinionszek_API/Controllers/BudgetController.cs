@@ -44,7 +44,7 @@ namespace Pinionszek_API.Controllers
             }
 
             var privatePayments = budget.Payments
-                .Where(p => p.PaymentDate != null && p.SharedPayments.All(s => s.IdPayment == 0));
+                .Where(p => p.PaymentDate != null && p.SharedPayment.IdPayment == 0);
             if (privatePayments == null || privatePayments.Count() == 0)
             {
                 return NotFound();
@@ -74,15 +74,14 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            var sharedPayments = budget.Payments
-                .Where(p => p.PaymentDate != null && p.SharedPayments.All(s => s.IdPayment > 0));
-            if (sharedPayments == null || sharedPayments.Count() == 0)
+            var sharedBudgetPayments = budget.Payments
+                .Where(p => p.PaymentDate != null && p.SharedPayment.IdPayment > 0);
+            if (sharedBudgetPayments == null || sharedBudgetPayments.Count() == 0)
             {
                 return NotFound();
             }
 
-            //...
-
+            
 
             return Ok();
         }
