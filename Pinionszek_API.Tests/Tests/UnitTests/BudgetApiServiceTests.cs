@@ -119,18 +119,18 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             //Assert
             result_of_idSharedPayment_1.Should().NotBeNull();
             result_of_idSharedPayment_1.Should().BeOfType<(string?, int?)>();
-            result_of_idSharedPayment_1.Item1.Should().Be("test1");
+            result_of_idSharedPayment_1.Item1.Should().Be("test2");
             result_of_idSharedPayment_1.Item2.Should().Be(1002);
 
             result_of_idSharedPayment_2.Should().NotBeNull();
             result_of_idSharedPayment_2.Should().BeOfType<(string?, int?)>();
-            result_of_idSharedPayment_1.Item1.Should().Be("test1");
-            result_of_idSharedPayment_1.Item2.Should().Be(1002);
+            result_of_idSharedPayment_2.Item1.Should().Be("test2");
+            result_of_idSharedPayment_2.Item2.Should().Be(1002);
 
             result_of_idSharedPayment_3.Should().NotBeNull();
             result_of_idSharedPayment_3.Should().BeOfType<(string?, int?)>();
-            result_of_idSharedPayment_1.Item1.Should().Be("test2");
-            result_of_idSharedPayment_1.Item2.Should().Be(1001);
+            result_of_idSharedPayment_3.Item1.Should().Be("test1");
+            result_of_idSharedPayment_3.Item2.Should().Be(1001);
 
             result_empty.Item1.Should().BeNull();
             result_empty.Item2.Should().BeNull();
