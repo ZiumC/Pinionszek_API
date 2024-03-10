@@ -33,7 +33,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsOk()
+        public async Task BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsPayments()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -54,6 +54,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-10, DateTime.Parse("2024-01-01"));
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -73,8 +74,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 .Should().BeNullOrEmpty();
             paymentsResult_1?
                 .Where(
-                    pr => pr.IdSharedPayment == null ||
-                          pr.IdSharedPayment == 0
+                    pr => pr.IdSharedPayment != null ||
+                          pr.IdSharedPayment > 0
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
@@ -96,8 +97,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 .Should().BeNullOrEmpty();
             paymentsResult_2?
                 .Where(
-                    pr => pr.IdSharedPayment == null ||
-                          pr.IdSharedPayment == 0
+                    pr => pr.IdSharedPayment != null ||
+                          pr.IdSharedPayment > 0
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
@@ -107,8 +108,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_1?.Value.Should().NotBeNull();
-            badRequestActionResult_1?.Value?.ToString().Should().Contain("User ID is invalid");
+            badRequestActionResult_1.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
         }
     }
 }

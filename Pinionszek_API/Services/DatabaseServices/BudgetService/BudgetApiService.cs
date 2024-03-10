@@ -67,6 +67,7 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                      PaidOn = p.PaidOn,
                      PaymentAddedOn = p.PaymentAddedOn,
                      IdPaymentStatus = p.IdPaymentStatus,
+                     PaymentStatus = p.PaymentStatus,
                      IdDetailedCategory = p.IdDetailedCategory,
                      DetailedCategory = new DetailedCategory
                      {
