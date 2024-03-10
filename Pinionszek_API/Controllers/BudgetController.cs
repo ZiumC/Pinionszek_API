@@ -47,21 +47,34 @@ namespace Pinionszek_API.Controllers
 
             var budgetPaymentsData = await _budgetService
                 .GetPaymentsAsync(budgetData.IdBudget);
+            if (budgetPaymentsData == null || budgetPaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
 
             var upcomingPaymentsData = budgetPaymentsData
-                .Where(bpd => bpd.PaymentDate != null);
+                .Where(bpd => bpd.PaymentDate != null)
+                .ToList();
+            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
 
-            foreach (var payment in upcomingPaymentsData) 
+            upcomingPaymentsData.ForEach(async upd =>
             {
                 var sharedPaymentData = await _budgetService
-                    .GetSharedPaymentDataAsync(payment.IdPayment);
+                    .GetSharedPaymentDataAsync(upd.IdPayment);
 
-                payment.SharedPayment = sharedPaymentData;
-            }
+                upd.SharedPayment = sharedPaymentData;
+            });
 
             var upcomingPrivatePaymentsData = upcomingPaymentsData
                 .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
 
+            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
 
             return Ok(_mapper.Map<IEnumerable<GetPrivatePaymentDto>>(upcomingPrivatePaymentsData));
         }
