@@ -60,13 +60,13 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            upcomingPaymentsData.ForEach(async upd =>
+            foreach (var payment in upcomingPaymentsData)
             {
                 var sharedPaymentData = await _budgetService
-                    .GetSharedPaymentDataAsync(upd.IdPayment);
+                    .GetSharedPaymentDataAsync(payment.IdPayment);
 
-                upd.SharedPayment = sharedPaymentData;
-            });
+                payment.SharedPayment = sharedPaymentData;
+            }
 
             var upcomingPrivatePaymentsData = upcomingPaymentsData
                 .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);

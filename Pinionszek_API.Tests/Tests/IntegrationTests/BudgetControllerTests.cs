@@ -25,7 +25,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task BudgetController_GetUpcomingPaymentsAsync_ReturnsOk()
+        public async Task BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsOk()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -42,8 +42,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Assert
             ok_request_1.Should().BeOfType<OkObjectResult>();
             ok_request_2.Should().BeOfType<OkObjectResult>();
-            notfound_request_1.Should().BeOfType<NotFoundObjectResult>();
-            notfound_request_2.Should().BeOfType<NotFoundObjectResult>();
+            notfound_request_1.Should().BeOfType<NotFoundResult>();
+            notfound_request_2.Should().BeOfType<NotFoundResult>();
             badrequest_request_1.Should().BeOfType<BadRequestObjectResult>();
         }
     }

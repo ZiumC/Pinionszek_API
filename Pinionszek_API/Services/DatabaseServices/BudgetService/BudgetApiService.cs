@@ -71,6 +71,7 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                      DetailedCategory = new DetailedCategory
                      {
                          IdDetailedCategory = dc.IdDetailedCategory,
+                         IdGeneralCategory = dc.IdGeneralCategory,
                          Name = dc.Name,
                          GeneralCategory = new GeneralCategory
                          {

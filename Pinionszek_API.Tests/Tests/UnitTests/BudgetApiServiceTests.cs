@@ -24,8 +24,9 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             });
             _mapper = mockMapper.CreateMapper();
         }
+
         [Fact]
-        public async Task BudgetApiService_GetBudgetAsync_ReturnsBudgets()
+        public async Task BudgetApiService_GetBudgetDataAsync_ReturnsBudget()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -33,74 +34,111 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
             //Act
             var budget_of_idUser_1 = await budgetApiService.GetBudgetDataAsync(1, DateTime.Parse("2024-01-01"));
-            var payments_of_idUser_1 =
-                _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_1?.Payments);
-
             var budget_of_idUser_2 = await budgetApiService.GetBudgetDataAsync(2, DateTime.Parse("2024-01-01"));
-            var payments_of_idUser_2 =
-                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
-                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_2?.Payments)
-                );
-
             var budget_of_idUser_3 = await budgetApiService.GetBudgetDataAsync(3, DateTime.Parse("2024-01-01"));
-            var payments_of_idUser_3 =
-                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
-                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_3?.Payments)
-                );
-
             var budget_of_idUser_4 = await budgetApiService.GetBudgetDataAsync(4, DateTime.Parse("2024-01-01"));
-            var payments_of_idUser_4 =
-                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
-                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_4?.Payments)
-                );
-
+            var budget_of_invalid_user = await budgetApiService.GetBudgetDataAsync(1000, DateTime.Parse("2024-01-01"));
 
             //Assert
-            payments_of_idUser_1.Should().NotBeNull();
+            budget_of_idUser_1.Should().NotBeNull();
+            budget_of_idUser_1?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_of_idUser_1?.IsCompleted.Should().BeFalse();
+            budget_of_idUser_1?.OpendDate.Should().Be(DateTime.Parse("2024-01-01"));
+
+            budget_of_idUser_2.Should().NotBeNull();
+            budget_of_idUser_2?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_of_idUser_2?.IsCompleted.Should().BeFalse();
+            budget_of_idUser_2?.OpendDate.Should().Be(DateTime.Parse("2023-12-29"));
+
+            budget_of_idUser_3.Should().NotBeNull();
+            budget_of_idUser_3?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_of_idUser_3?.IsCompleted.Should().BeFalse();
+            budget_of_idUser_3?.OpendDate.Should().Be(DateTime.Parse("2024-01-11"));
+
+            budget_of_idUser_4.Should().BeNull();
+            budget_of_invalid_user.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPayments() 
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var payments_of_idUser_1 = await budgetApiService.GetPaymentsAsync(1);
+            var payments_of_idUser_2 = await budgetApiService.GetPaymentsAsync(13);
+            var payments_of_non_existing_budget = await budgetApiService.GetPaymentsAsync(37);
+
+            //Assert
+            payments_of_idUser_1.Should().NotBeEmpty();
             payments_of_idUser_1.Count().Should().Be(7);
             payments_of_idUser_1
-                .Where(
-                    p => p.Category == null ||
-                    string.IsNullOrEmpty(p.Category.DetailedName) ||
-                    string.IsNullOrEmpty(p.Category.GeneralName)
-                )
-                .ToList().Count().Should().Be(0);
+                .Where(p => p.DetailedCategory == null ||
+                    string.IsNullOrEmpty(p.DetailedCategory.Name) ||
+                    p.DetailedCategory.IdGeneralCategory == 0 ||
+                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0||
+                    string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
+                .ToList().Count()
+                .Should().Be(0);
             payments_of_idUser_1
-                .Where(
-                    p => p.IdSharedPayment > 0
-                )
-                .ToList().Count().Should().Be(2);
+                .Where(p => p.IdPaymentStatus == 0)
+                .ToList().Count()
+                .Should().Be(0);
             payments_of_idUser_1
-                .Where(
-                    p => string.IsNullOrEmpty(p.Status)
-                )
+                .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
-            payments_of_idUser_2.Should().NotBeNull();
+            payments_of_idUser_2.Should().NotBeEmpty();
             payments_of_idUser_2.Count().Should().Be(6);
             payments_of_idUser_2
-                .Where(
-                p => p.Category == null ||
-                string.IsNullOrEmpty(p.Category.DetailedName) ||
-                string.IsNullOrEmpty(p.Category.GeneralName)
-                )
-                .ToList().Count().Should().Be(0);
+                .Where(p => p.DetailedCategory == null ||
+                    string.IsNullOrEmpty(p.DetailedCategory.Name) ||
+                    p.DetailedCategory.IdGeneralCategory == 0 ||
+                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
+                    string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
+                .ToList().Count()
+                .Should().Be(0);
             payments_of_idUser_2
-                .Where(
-                p => p.IdSharedPayment > 0
-                )
-                .ToList().Count().Should().Be(1);
+                .Where(p => p.IdPaymentStatus == 0)
+                .ToList().Count()
+                .Should().Be(0);
             payments_of_idUser_2
-                .Where(
-                    p => string.IsNullOrEmpty(p.Status)
-                )
+                .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
-            payments_of_idUser_3.Should().NotBeNull();
-            payments_of_idUser_3.Count().Should().Be(0);
 
-            payments_of_idUser_3.Should().NotBeNull();
-            payments_of_idUser_3.Count().Should().Be(0);
+            payments_of_non_existing_budget.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task BudgetApiService_GetSharedPaymentDataAsync_ReturnsSharedPaymentOrNull()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var shared_idPayment_1 = await budgetApiService.GetSharedPaymentDataAsync(1);
+            var shared_idPayment_4 = await budgetApiService.GetSharedPaymentDataAsync(4);
+            var shared_idPayment_10 = await budgetApiService.GetSharedPaymentDataAsync(10);
+            var shared_non_existing_payment = await budgetApiService.GetSharedPaymentDataAsync(100);
+
+            //Assert
+            shared_idPayment_1.Should().NotBeNull();
+            shared_idPayment_1?.IdPayment.Should().Be(1);
+            shared_idPayment_1?.IdFriend.Should().Be(1);
+
+            shared_idPayment_4.Should().NotBeNull();
+            shared_idPayment_4?.IdPayment.Should().Be(4);
+            shared_idPayment_4?.IdFriend.Should().Be(1);
+
+            shared_idPayment_10.Should().NotBeNull();
+            shared_idPayment_10?.IdPayment.Should().Be(10);
+            shared_idPayment_10?.IdFriend.Should().Be(3);
+
+            shared_non_existing_payment.Should().BeNull();
         }
 
         [Fact]
