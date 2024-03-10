@@ -33,11 +33,11 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(budgetApiService, _mapper);
 
             //Act
-            var ok_request_1 = await budgetController.GetUpcomingPaymentsAsync(1, DateTime.Parse("2024-01-01"));
-            var ok_request_2 = await budgetController.GetUpcomingPaymentsAsync(2, DateTime.Parse("2024-01-01"));
-            var notfound_request_1 = await budgetController.GetUpcomingPaymentsAsync(3, DateTime.Parse("2024-01-01"));
-            var notfound_request_2 = await budgetController.GetUpcomingPaymentsAsync(4, DateTime.Parse("2024-01-01"));
-            var badrequest_request_1 = await budgetController.GetUpcomingPaymentsAsync(-10, DateTime.Parse("2024-01-01"));
+            var ok_request_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(1, DateTime.Parse("2024-01-01"));
+            var ok_request_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(2, DateTime.Parse("2024-01-01"));
+            var notfound_request_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(3, DateTime.Parse("2024-01-01"));
+            var notfound_request_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(4, DateTime.Parse("2024-01-01"));
+            var badrequest_request_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-10, DateTime.Parse("2024-01-01"));
 
             //Assert
             ok_request_1.Should().BeOfType<OkObjectResult>();

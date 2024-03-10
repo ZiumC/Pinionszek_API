@@ -8,7 +8,7 @@ namespace Pinionszek_API.Profiles
     {
         public CategoryProfile() 
         {
-            CreateMap<DetailedCategory, CategoryDTO>()
+            CreateMap<DetailedCategory, GetCategoryDto>()
                 .ForMember(dest => dest.DetailedName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.GeneralName, opt => opt.MapFrom(src => src.GeneralCategory.Name));
         }

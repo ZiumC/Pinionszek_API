@@ -32,26 +32,26 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var budget_of_idUser_1 = await budgetApiService.GetBudgetAsync(1, DateTime.Parse("2024-01-01"));
+            var budget_of_idUser_1 = await budgetApiService.GetBudgetDataAsync(1, DateTime.Parse("2024-01-01"));
             var payments_of_idUser_1 =
-                _mapper.Map<List<PrivatePaymentDTO>>(budget_of_idUser_1?.Payments);
+                _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_1?.Payments);
 
-            var budget_of_idUser_2 = await budgetApiService.GetBudgetAsync(2, DateTime.Parse("2024-01-01"));
+            var budget_of_idUser_2 = await budgetApiService.GetBudgetDataAsync(2, DateTime.Parse("2024-01-01"));
             var payments_of_idUser_2 =
-                _mapper.Map<IEnumerable<PrivatePaymentDTO>>(
-                    _mapper.Map<List<PrivatePaymentDTO>>(budget_of_idUser_2?.Payments)
+                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
+                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_2?.Payments)
                 );
 
-            var budget_of_idUser_3 = await budgetApiService.GetBudgetAsync(3, DateTime.Parse("2024-01-01"));
+            var budget_of_idUser_3 = await budgetApiService.GetBudgetDataAsync(3, DateTime.Parse("2024-01-01"));
             var payments_of_idUser_3 =
-                _mapper.Map<IEnumerable<PrivatePaymentDTO>>(
-                    _mapper.Map<List<PrivatePaymentDTO>>(budget_of_idUser_3?.Payments)
+                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
+                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_3?.Payments)
                 );
 
-            var budget_of_idUser_4 = await budgetApiService.GetBudgetAsync(4, DateTime.Parse("2024-01-01"));
+            var budget_of_idUser_4 = await budgetApiService.GetBudgetDataAsync(4, DateTime.Parse("2024-01-01"));
             var payments_of_idUser_4 =
-                _mapper.Map<IEnumerable<PrivatePaymentDTO>>(
-                    _mapper.Map<List<PrivatePaymentDTO>>(budget_of_idUser_4?.Payments)
+                _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(
+                    _mapper.Map<List<GetPrivatePaymentDto>>(budget_of_idUser_4?.Payments)
                 );
 
 

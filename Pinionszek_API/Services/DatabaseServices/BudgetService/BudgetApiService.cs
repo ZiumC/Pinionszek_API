@@ -13,62 +13,81 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
             _dbContext = dbContext;
         }
 
-        public async Task<Budget?> GetBudgetAsync(int idUser, DateTime budgetYear)
+        public async Task<Budget?> GetBudgetDataAsync(int idUser, DateTime budgetYear)
         {
             int month = budgetYear.Month;
             int year = budgetYear.Year;
 
-            var budget = await
-                _dbContext.Budgets
-                    .Where(
-                            b => b.IdUser == idUser &&
+            var budget =
+                await (from b in _dbContext.Budgets
+                       where b.IdUser == idUser &&
                             b.BudgetYear.Month == month &&
                             b.BudgetYear.Year == year
-                    ).FirstOrDefaultAsync();
 
-            if (budget != null)
-            {
-                var payments = await
-                    (
-                        from p in _dbContext.Payments
-                        where p.IdBudget == budget.IdBudget
+                       join bs in _dbContext.BudgetStatuses
+                       on b.IdBudgetStatus equals bs.IdBudgetStatus
 
-                        join ps in _dbContext.PaymentStatuses
-                        on p.IdPaymentStatus equals ps.IdPaymentStatus
-
-                        join dc in _dbContext.DetailedCategories
-                        on p.IdDetailedCategory equals dc.IdDetailedCategory
-
-                        join gc in _dbContext.GeneralCategories
-                        on dc.IdGeneralCategory equals gc.IdGeneralCategory
-
-                        join sp in _dbContext.SharedPayments
-                        on p.IdPayment equals sp.IdPayment
-
-                        select new Payment
-                        {
-                            IdPayment = p.IdPayment,
-                            Name = p.Name,
-                            Charge = p.Charge,
-                            Refund = p.Refund,
-                            Message = p.Message,
-                            PaymentDate = p.PaymentDate,
-                            PaidOn = p.PaidOn,
-                            PaymentAddedOn = p.PaymentAddedOn,
-                            PaymentStatus = ps,
-                            DetailedCategory = new DetailedCategory
-                            {
-                                Name = dc.Name,
-                                GeneralCategory = gc,
-                            },
-                            SharedPayment = sp
-                        }
-                    ).ToListAsync();
-
-                budget.Payments = payments;
-            }
+                       select new Budget
+                       {
+                           IdBudget = b.IdBudget,
+                           IsCompleted = b.IsCompleted,
+                           OpendDate = b.OpendDate,
+                           Revenue = b.Revenue,
+                           Surplus = b.Surplus,
+                           BudgetYear = b.BudgetYear,
+                           BudgetStatus = bs,
+                       }).FirstOrDefaultAsync();
 
             return budget;
+        }
+
+        public async Task<IEnumerable<Payment>> GetPaymentsAsync(int idBudget)
+        {
+            return await
+                (from p in _dbContext.Payments
+                 where p.IdBudget == idBudget
+
+                 join ps in _dbContext.PaymentStatuses
+                 on p.IdPaymentStatus equals ps.IdPaymentStatus
+
+                 join dc in _dbContext.DetailedCategories
+                 on p.IdDetailedCategory equals dc.IdDetailedCategory
+
+                 join gc in _dbContext.GeneralCategories
+                 on dc.IdGeneralCategory equals gc.IdGeneralCategory
+
+                 select new Payment
+                 {
+                     IdPayment = p.IdPayment,
+                     Name = p.Name,
+                     Charge = p.Charge,
+                     Refund = p.Refund,
+                     Message = p.Message,
+                     PaymentDate = p.PaymentDate,
+                     PaidOn = p.PaidOn,
+                     PaymentAddedOn = p.PaymentAddedOn,
+                     IdPaymentStatus = p.IdPaymentStatus,
+                     IdDetailedCategory = p.IdDetailedCategory,
+                     DetailedCategory = new DetailedCategory
+                     {
+                         IdDetailedCategory = dc.IdDetailedCategory,
+                         Name = dc.Name,
+                         GeneralCategory = new GeneralCategory
+                         {
+                             IdGeneralCategory = gc.IdGeneralCategory,
+                             Name = gc.Name,
+                             IsDefault = gc.IsDefault
+                         }
+                     }
+                 }).ToListAsync();
+        }
+
+        public async Task<SharedPayment?> GetSharedPaymentDataAsync(int idPayment)
+        {
+            return await _dbContext.SharedPayments
+                .Where(sp => sp.IdPayment == idPayment)
+                .FirstOrDefaultAsync();
+
         }
 
         public async Task<(string?, int?)> GetFriendNameAndTagAsync(int idSharedPayment)
@@ -82,7 +101,7 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                                      join u in _dbContext.Users
                                      on f.FriendTag equals u.UserTag
 
-                                     select new { Login = u.Login, UserTag = u.UserTag}).FirstOrDefaultAsync();
+                                     select new { Login = u.Login, UserTag = u.UserTag }).FirstOrDefaultAsync();
 
             return (friendQuery?.Login, friendQuery?.UserTag);
         }

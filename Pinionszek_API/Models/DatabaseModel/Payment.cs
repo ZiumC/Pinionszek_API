@@ -25,6 +25,6 @@ namespace Pinionszek_API.Models.DatabaseModel
         [ForeignKey(nameof(IdDetailedCategory))]
         public virtual DetailedCategory DetailedCategory { get; set; }
 
-        public virtual SharedPayment SharedPayment { get; set; }
+        public virtual SharedPayment? SharedPayment { get; set; }
     }
 }
