@@ -33,7 +33,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsPayments()
+        public async Task BudgetController_GetUpcomingPrivatePaymentsAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -108,8 +108,15 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_1.Value.Should().NotBeNull();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
+        }
+
+
+        [Fact]
+        public async Task BudgetController_GetUpcomingPaymentsSharedWithFriendAsync_ReturnsPayments()
+        {
+
         }
     }
 }
