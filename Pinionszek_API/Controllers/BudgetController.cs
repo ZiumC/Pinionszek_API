@@ -86,7 +86,7 @@ namespace Pinionszek_API.Controllers
         /// <param name="date">Budget date </param>
         [HttpGet("upcoming-payments/{idUser}/shared")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentDto>))]
-        public async Task<IActionResult> GetUpcomingSharedPaymentsAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync(int idUser, DateTime date)
         {
             if (idUser <= 0)
             {
@@ -94,26 +94,39 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var budget = await _budgetService.GetBudgetDataAsync(idUser, date);
-            if (budget == null)
+            var budgetData = await _budgetService
+                .GetBudgetDataAsync(idUser, date);
+            if (budgetData == null)
             {
                 return NotFound();
             }
 
-            var privatePayments = budget.Payments
-                .Where(p => p.PaymentDate != null && p.SharedPayment.IdPayment > 0).ToList();
-            if (privatePayments == null || privatePayments.Count() == 0)
+            var budgetPaymentsData = await _budgetService
+                .GetPaymentsAsync(budgetData.IdBudget);
+            if (budgetPaymentsData == null)
+            {
+                return NotFound();
+            }
+
+            var upcomingPrivatePaymentsData = budgetPaymentsData
+                .Where(p => p.PaymentDate != null)
+                .ToList();
+            if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
                 return NotFound();
             }
 
             List<GetSharedPaymentDto> sharedPaymentsDto = new List<GetSharedPaymentDto>();
-            foreach (var privatePayment in privatePayments)
+            foreach (var privatePaymentData in upcomingPrivatePaymentsData)
             {
-                int idSharedPayment = privatePayment.SharedPayment.IdSharedPayment;
-                var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(idSharedPayment);
+                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(privatePaymentData.IdPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+                var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(sharedPaymentData.IdSharedPayment);
 
-                var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePayment);
+                var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
                 var sharedPaymentDto = _mapper.Map<GetSharedPaymentDto>(privatePaymentDto);
                 _mapper.Map(new GetFriendDto
                 {
