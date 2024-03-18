@@ -150,7 +150,7 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">ID of user</param>
         /// <param name="date">Payment of year and month</param>
-        [HttpGet("upcoming-payments/{idUser}/sharing")]
+        [HttpGet("upcoming-payments/{idUser}/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
         public async Task<IActionResult> GetUpcomingPaymentsSharedWithMeAsync(int idUser, DateTime date)
         {

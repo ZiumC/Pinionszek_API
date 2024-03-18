@@ -60,7 +60,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
         }
 
         [Fact]
-        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPayments() 
+        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPayments()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -78,7 +78,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
                 .Where(p => p.DetailedCategory == null ||
                     string.IsNullOrEmpty(p.DetailedCategory.Name) ||
                     p.DetailedCategory.IdGeneralCategory == 0 ||
-                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0||
+                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count()
                 .Should().Be(0);
@@ -172,6 +172,20 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
             result_empty.Item1.Should().BeNull();
             result_empty.Item2.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task BudgetApiService_GetAssignedPayments_ReturnsPaymentsOrNotfoundOrBadRequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var assigned_payments_for_idUser_1 = await budgetApiService.GetAssignedPaymentsAsync(1);
+
+            //Assert
+
         }
     }
 }

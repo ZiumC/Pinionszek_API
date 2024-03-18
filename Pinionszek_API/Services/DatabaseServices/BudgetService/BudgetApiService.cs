@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
+using System;
 using System.Linq;
 
 namespace Pinionszek_API.Services.DatabaseServices.BudgetService
@@ -109,6 +110,57 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                                      select new { Login = u.Login, UserTag = u.UserTag }).FirstOrDefaultAsync();
 
             return (friendQuery?.Login, friendQuery?.UserTag);
+        }
+
+        public async Task<IEnumerable<Payment>> GetAssignedPaymentsAsync(int idUser)
+        {
+            return await (from sh in _dbContext.SharedPayments
+                          join f in _dbContext.Friends
+                          on sh.IdFriend equals f.IdFriend
+
+                          where f.IdUser == idUser
+
+                          join p in _dbContext.Payments
+                          on sh.IdPayment equals p.IdPayment
+
+                          join ps in _dbContext.PaymentStatuses
+                          on p.IdPaymentStatus equals ps.IdPaymentStatus
+
+                          join dc in _dbContext.DetailedCategories
+                          on p.IdDetailedCategory equals dc.IdDetailedCategory
+
+                          join gc in _dbContext.GeneralCategories
+                          on dc.IdGeneralCategory equals gc.IdGeneralCategory
+
+                          select new Payment
+                          {
+                              IdPayment = p.IdPayment,
+                              Name = p.Name,
+                              Charge = p.Charge,
+                              Refund = p.Refund,
+                              Message = p.Message,
+                              PaymentDate = p.PaymentDate,
+                              PaidOn = p.PaidOn,
+                              PaymentAddedOn = p.PaymentAddedOn,
+                              IdPaymentStatus = p.IdPaymentStatus,
+                              PaymentStatus = p.PaymentStatus,
+                              IdDetailedCategory = p.IdDetailedCategory,
+                              SharedPayment = (from sp in _dbContext.SharedPayments
+                                               where sp.IdPayment == p.IdPayment
+                                               select sp).FirstOrDefault(),
+                              DetailedCategory = new DetailedCategory
+                              {
+                                  IdDetailedCategory = dc.IdDetailedCategory,
+                                  IdGeneralCategory = dc.IdGeneralCategory,
+                                  Name = dc.Name,
+                                  GeneralCategory = new GeneralCategory
+                                  {
+                                      IdGeneralCategory = gc.IdGeneralCategory,
+                                      Name = gc.Name,
+                                      IsDefault = gc.IsDefault
+                                  }
+                              }
+                          }).ToListAsync();
         }
     }
 }
