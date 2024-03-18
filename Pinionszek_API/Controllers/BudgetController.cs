@@ -146,14 +146,20 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming sharing payments with user by user ID and budget date 
+        /// Find upcoming sharing payments that are shared for user 
         /// </summary>
         /// <param name="idUser">ID of user</param>
-        /// <param name="date">Budget date </param>
+        /// <param name="date">Payment of year and month</param>
         [HttpGet("upcoming-payments/{idUser}/sharing")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetUpcomingSharingPaymentsAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithMeAsync(int idUser, DateTime date)
         {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
             return Ok();
         }
     }

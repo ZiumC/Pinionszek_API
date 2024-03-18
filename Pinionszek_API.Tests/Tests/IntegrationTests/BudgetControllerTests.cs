@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
+using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDTO;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
@@ -113,7 +114,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
 
-
         [Fact]
         public async Task BudgetController_GetUpcomingPaymentsSharedWithFriendAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
         {
@@ -163,6 +163,64 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
             notFoundRequest_3.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task BudgetController_GetUpcomingPaymentsSharedWithMeAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetController(budgetApiService, _mapper);
+
+            //Act
+            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithMeAsync(1, DateTime.Parse("2024-01-01"));
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentWithMeDto>;
+
+            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(2, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(3, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(4, DateTime.Parse("2024-01-01"));
+
+            var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-10, DateTime.Parse("2024-01-01"));
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            paymentsResult_1.Should().NotBeNullOrEmpty();
+            paymentsResult_1?.Count().Should().Be(2);
+            paymentsResult_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.IdSharedPayment <= 0
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.PaymentDate != null &&
+                    (pr.PaymentDate <= DateTime.Parse("2024-01-01") && pr.PaymentDate >= DateTime.Parse("2024-01-31"))
+                ).ToList()
+                .Should().BeNullOrEmpty();
+
+            notFoundRequest_1.Should().BeOfType<NotFoundResult>();
+            notFoundRequest_2.Should().BeOfType<NotFoundResult>();
+            notFoundRequest_3.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
         }
     }
 }
