@@ -10,6 +10,7 @@ namespace Pinionszek_API.Profiles
         {
             CreateMap<Payment, GetPrivatePaymentDto>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.PaymentStatus.Name))
+                .ForMember(dest => dest.IdSharedPayment, opt => opt.MapFrom(src => src.SharedPayment.IdSharedPayment))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.DetailedCategory));
 
             CreateMap<GetPrivatePaymentDto, GetSharedPaymentDto>()

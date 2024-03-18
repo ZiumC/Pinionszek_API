@@ -69,6 +69,9 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                      IdPaymentStatus = p.IdPaymentStatus,
                      PaymentStatus = p.PaymentStatus,
                      IdDetailedCategory = p.IdDetailedCategory,
+                     SharedPayment = (from sp in _dbContext.SharedPayments
+                                      where sp.IdPayment == p.IdPayment
+                                      select sp).FirstOrDefault(),
                      DetailedCategory = new DetailedCategory
                      {
                          IdDetailedCategory = dc.IdDetailedCategory,
