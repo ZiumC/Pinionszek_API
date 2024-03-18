@@ -135,7 +135,11 @@ namespace Pinionszek_API.Controllers
                 }, sharedPaymentDto);
 
                 sharedPaymentsDto.Add(sharedPaymentDto);
+            }
 
+            if (sharedPaymentsDto.Count() == 0)
+            {
+                return NotFound();
             }
 
             return Ok(sharedPaymentsDto);
