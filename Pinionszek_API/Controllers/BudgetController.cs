@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDto;
+using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using System.Collections.Generic;
 
@@ -85,7 +85,7 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">ID of user</param>
         /// <param name="date">Budget date </param>
-        [HttpGet("upcoming-payments/{idUser}/shared")]
+        [HttpGet("upcoming-payments/{idUser}/share")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
         public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync(int idUser, DateTime date)
         {
@@ -214,6 +214,18 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(assignedPaymentsToUserDto);
+        }
+
+        /// <summary>
+        /// Get budget spendings, status, rules and revenue
+        /// </summary>
+        /// <param name="idUser">ID of use</param>
+        /// <param name="date">Budget date</param>
+        [HttpGet("stats/{idUser}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
+        public async Task<IActionResult> GetBudgetSummaryAsync(int idUser, DateTime date)
+        {
+            return Ok();
         }
     }
 }
