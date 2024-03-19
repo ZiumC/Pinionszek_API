@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDTO;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
@@ -183,9 +184,55 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
             //Act
             var assigned_payments_for_idUser_1 = await budgetApiService.GetAssignedPaymentsAsync(1);
+            var assigned_payments_for_idUser_2 = await budgetApiService.GetAssignedPaymentsAsync(2);
+            var assigned_payments_for_idUser_3 = await budgetApiService.GetAssignedPaymentsAsync(3);
+            var assigned_payments_for_idUser_4 = await budgetApiService.GetAssignedPaymentsAsync(4);
 
             //Assert
+            assigned_payments_for_idUser_1.Should().NotBeNullOrEmpty();
+            assigned_payments_for_idUser_1.Should().BeOfType<List<Payment>>();
+            assigned_payments_for_idUser_1.Count().Should().Be(2);
+            assigned_payments_for_idUser_1
+                .Where(ap => ap.SharedPayment == null)
+                .ToList().Count().Should().Be(0);
+            assigned_payments_for_idUser_1
+                .Where(ap => ap.DetailedCategory == null ||
+                    string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
+                    ap.DetailedCategory.IdGeneralCategory == 0 ||
+                    ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
+                    string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
+                .ToList().Count().Should().Be(0);
+            assigned_payments_for_idUser_1
+                .Where(ap => ap.IdPaymentStatus == 0)
+                .ToList().Count()
+                .Should().Be(0);
+            assigned_payments_for_idUser_1
+                .Where(ap => string.IsNullOrEmpty(ap.Name))
+                .ToList().Count().Should().Be(0);
 
+            assigned_payments_for_idUser_2.Should().NotBeNullOrEmpty();
+            assigned_payments_for_idUser_2.Should().BeOfType<List<Payment>>();
+            assigned_payments_for_idUser_2.Count().Should().Be(1);
+            assigned_payments_for_idUser_2
+                .Where(ap => ap.SharedPayment == null)
+                .ToList().Count().Should().Be(0);
+            assigned_payments_for_idUser_2
+                .Where(ap => ap.DetailedCategory == null ||
+                    string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
+                    ap.DetailedCategory.IdGeneralCategory == 0 ||
+                    ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
+                    string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
+                .ToList().Count().Should().Be(0);
+            assigned_payments_for_idUser_2
+                .Where(ap => ap.IdPaymentStatus == 0)
+                .ToList().Count()
+                .Should().Be(0);
+            assigned_payments_for_idUser_2
+                .Where(ap => string.IsNullOrEmpty(ap.Name))
+                .ToList().Count().Should().Be(0);
+
+            assigned_payments_for_idUser_3.Should().BeNullOrEmpty();
+            assigned_payments_for_idUser_4.Should().BeNullOrEmpty();
         }
     }
 }
