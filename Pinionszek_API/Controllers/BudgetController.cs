@@ -125,7 +125,7 @@ namespace Pinionszek_API.Controllers
                 {
                     continue;
                 }
-                var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(sharedPaymentData.IdSharedPayment);
+                var friendNameAndTag = await _budgetService.GetFriendReceiveNameAndTagAsync(sharedPaymentData.IdSharedPayment);
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
                 var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
@@ -147,21 +147,21 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming payments that are shared for user by user ID and date
+        /// Find upcoming payments that are shared for user by user tag and date
         /// </summary>
-        /// <param name="idUser">ID of user</param>
+        /// <param name="userTag">user tag</param>
         /// <param name="date">Payment of year and month</param>
-        [HttpGet("upcoming-payments/{idUser}/assigement")]
+        [HttpGet("upcoming-payments/{userTag}/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync(int userTag, DateTime date)
         {
-            if (idUser <= 0)
+            if (userTag <= 0)
             {
                 ModelState.AddModelError("error", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
-            var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(idUser);
+            var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
             if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
             {
                 return NotFound();
@@ -195,7 +195,7 @@ namespace Pinionszek_API.Controllers
                 }
 
                 int idSharedPayment = sharedPaymentData.IdSharedPayment;
-                var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(idSharedPayment);
+                var friendNameAndTag = await _budgetService.GetFriendSenderNameAndTagAsync(idSharedPayment);
 
                 var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
                 var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);

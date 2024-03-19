@@ -150,10 +150,10 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var result_of_idSharedPayment_1 = await budgetApiService.GetFriendNameAndTagAsync(1);
-            var result_of_idSharedPayment_2 = await budgetApiService.GetFriendNameAndTagAsync(2);
-            var result_of_idSharedPayment_3 = await budgetApiService.GetFriendNameAndTagAsync(3);
-            var result_empty = await budgetApiService.GetFriendNameAndTagAsync(1001);
+            var result_of_idSharedPayment_1 = await budgetApiService.GetFriendReceiveNameAndTagAsync(1);
+            var result_of_idSharedPayment_2 = await budgetApiService.GetFriendReceiveNameAndTagAsync(2);
+            var result_of_idSharedPayment_3 = await budgetApiService.GetFriendReceiveNameAndTagAsync(3);
+            var result_empty = await budgetApiService.GetFriendReceiveNameAndTagAsync(1001);
 
             //Assert
             result_of_idSharedPayment_1.Should().NotBeNull();
@@ -183,56 +183,56 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var assigned_payments_for_idUser_1 = await budgetApiService.GetAssignedPaymentsAsync(1);
-            var assigned_payments_for_idUser_2 = await budgetApiService.GetAssignedPaymentsAsync(2);
-            var assigned_payments_for_idUser_3 = await budgetApiService.GetAssignedPaymentsAsync(3);
-            var assigned_payments_for_idUser_4 = await budgetApiService.GetAssignedPaymentsAsync(4);
+            var assignedPaymentsFriendTag_1001 = await budgetApiService.GetAssignedPaymentsAsync(1001);
+            var assignedPaymentsFriendTag_1002 = await budgetApiService.GetAssignedPaymentsAsync(1002);
+            var assignedPaymentsFriendTag_1003 = await budgetApiService.GetAssignedPaymentsAsync(1003);
+            var assignedPaymentsFriendTag_1004 = await budgetApiService.GetAssignedPaymentsAsync(1004);
 
             //Assert
-            assigned_payments_for_idUser_1.Should().NotBeNullOrEmpty();
-            assigned_payments_for_idUser_1.Should().BeOfType<List<Payment>>();
-            assigned_payments_for_idUser_1.Count().Should().Be(2);
-            assigned_payments_for_idUser_1
+            assignedPaymentsFriendTag_1001.Should().NotBeNullOrEmpty();
+            assignedPaymentsFriendTag_1001.Should().BeOfType<List<Payment>>();
+            assignedPaymentsFriendTag_1001.Count().Should().Be(1);
+            assignedPaymentsFriendTag_1001
                 .Where(ap => ap.SharedPayment == null)
                 .ToList().Count().Should().Be(0);
-            assigned_payments_for_idUser_1
+            assignedPaymentsFriendTag_1001
                 .Where(ap => ap.DetailedCategory == null ||
                     string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
                     ap.DetailedCategory.IdGeneralCategory == 0 ||
                     ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count().Should().Be(0);
-            assigned_payments_for_idUser_1
+            assignedPaymentsFriendTag_1001
                 .Where(ap => ap.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            assigned_payments_for_idUser_1
+            assignedPaymentsFriendTag_1001
                 .Where(ap => string.IsNullOrEmpty(ap.Name))
                 .ToList().Count().Should().Be(0);
 
-            assigned_payments_for_idUser_2.Should().NotBeNullOrEmpty();
-            assigned_payments_for_idUser_2.Should().BeOfType<List<Payment>>();
-            assigned_payments_for_idUser_2.Count().Should().Be(1);
-            assigned_payments_for_idUser_2
+            assignedPaymentsFriendTag_1002.Should().NotBeNullOrEmpty();
+            assignedPaymentsFriendTag_1002.Should().BeOfType<List<Payment>>();
+            assignedPaymentsFriendTag_1002.Count().Should().Be(2);
+            assignedPaymentsFriendTag_1002
                 .Where(ap => ap.SharedPayment == null)
                 .ToList().Count().Should().Be(0);
-            assigned_payments_for_idUser_2
+            assignedPaymentsFriendTag_1002
                 .Where(ap => ap.DetailedCategory == null ||
                     string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
                     ap.DetailedCategory.IdGeneralCategory == 0 ||
                     ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count().Should().Be(0);
-            assigned_payments_for_idUser_2
+            assignedPaymentsFriendTag_1002
                 .Where(ap => ap.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            assigned_payments_for_idUser_2
+            assignedPaymentsFriendTag_1002
                 .Where(ap => string.IsNullOrEmpty(ap.Name))
                 .ToList().Count().Should().Be(0);
 
-            assigned_payments_for_idUser_3.Should().BeNullOrEmpty();
-            assigned_payments_for_idUser_4.Should().BeNullOrEmpty();
+            assignedPaymentsFriendTag_1003.Should().BeNullOrEmpty();
+            assignedPaymentsFriendTag_1004.Should().BeNullOrEmpty();
         }
     }
 }

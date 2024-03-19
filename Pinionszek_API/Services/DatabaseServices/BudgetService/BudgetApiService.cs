@@ -96,29 +96,47 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
 
         }
 
-        public async Task<(string?, int?)> GetFriendNameAndTagAsync(int idSharedPayment)
+        public async Task<(string?, int?)> GetFriendReceiveNameAndTagAsync(int idSharedPayment)
         {
-            var friendQuery = await (from sp in _dbContext.SharedPayments
-                                     where sp.IdSharedPayment == idSharedPayment
+            var friendReceiverQuery = await (from sp in _dbContext.SharedPayments
+                                             where sp.IdSharedPayment == idSharedPayment
 
-                                     join f in _dbContext.Friends
-                                     on sp.IdFriend equals f.IdFriend
+                                             join f in _dbContext.Friends
+                                             on sp.IdFriend equals f.IdFriend
 
-                                     join u in _dbContext.Users
-                                     on f.FriendTag equals u.UserTag
+                                             join u in _dbContext.Users
+                                             on f.FriendTag equals u.UserTag
 
-                                     select new { Login = u.Login, UserTag = u.UserTag }).FirstOrDefaultAsync();
+                                             select new { Login = u.Login, UserTag = u.UserTag }
+                                     ).FirstOrDefaultAsync();
 
-            return (friendQuery?.Login, friendQuery?.UserTag);
+            return (friendReceiverQuery?.Login, friendReceiverQuery?.UserTag);
         }
 
-        public async Task<IEnumerable<Payment>> GetAssignedPaymentsAsync(int idUser)
+        public async Task<(string?, int?)> GetFriendSenderNameAndTagAsync(int idSharedPayment)
+        {
+            var friendSenderQuery = await (from sp in _dbContext.SharedPayments
+                                           where sp.IdSharedPayment == idSharedPayment
+
+                                           join f in _dbContext.Friends
+                                           on sp.IdFriend equals f.IdFriend
+
+                                           join u in _dbContext.Users
+                                           on f.IdUser equals u.IdUser
+
+                                           select new { Login = u.Login, UserTag = u.UserTag }
+                                           ).FirstOrDefaultAsync();
+
+            return (friendSenderQuery?.Login, friendSenderQuery?.UserTag);
+        }
+
+        public async Task<IEnumerable<Payment>> GetAssignedPaymentsAsync(int friendTag)
         {
             return await (from sh in _dbContext.SharedPayments
                           join f in _dbContext.Friends
                           on sh.IdFriend equals f.IdFriend
 
-                          where f.IdUser == idUser
+                          where f.FriendTag == friendTag
 
                           join p in _dbContext.Payments
                           on sh.IdPayment equals p.IdPayment
