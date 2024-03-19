@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
+using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDTO;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace Pinionszek_API.Controllers
         /// <param name="idUser">ID of user</param>
         /// <param name="date">Budget date </param>
         [HttpGet("upcoming-payments/{idUser}/shared")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentDto>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
         public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync(int idUser, DateTime date)
         {
             if (idUser <= 0)
@@ -116,7 +117,7 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            List<GetSharedPaymentDto> sharedPaymentsDto = new List<GetSharedPaymentDto>();
+            List<GetSharedPaymentToFriendDto> sharedPaymentsDto = new List<GetSharedPaymentToFriendDto>();
             foreach (var privatePaymentData in upcomingPrivatePaymentsData)
             {
                 var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(privatePaymentData.IdPayment);
@@ -127,14 +128,14 @@ namespace Pinionszek_API.Controllers
                 var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(sharedPaymentData.IdSharedPayment);
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
-                var sharedPaymentDto = _mapper.Map<GetSharedPaymentDto>(privatePaymentDto);
+                var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
                 _mapper.Map(new GetFriendDto
                 {
-                    SharredTo = friendNameAndTag.Item1,
+                    Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
-                }, sharedPaymentDto);
+                }, sharedPaymentToFriendDto);
 
-                sharedPaymentsDto.Add(sharedPaymentDto);
+                sharedPaymentsDto.Add(sharedPaymentToFriendDto);
             }
 
             if (sharedPaymentsDto.Count() == 0)
@@ -146,13 +147,13 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming sharing payments that are shared for user 
+        /// Find upcoming payments that are shared for user by user ID and date
         /// </summary>
         /// <param name="idUser">ID of user</param>
         /// <param name="date">Payment of year and month</param>
         [HttpGet("upcoming-payments/{idUser}/assigement")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithMeAsync(int idUser, DateTime date)
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync(int idUser, DateTime date)
         {
             if (idUser <= 0)
             {
@@ -160,7 +161,59 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok();
+            var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(idUser);
+            if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
+
+            var upcomingAssignedPaymentsData = assignedPaymentsToUserData
+                .Where(
+                    apd => apd.PaymentDate != null &&
+                    (apd.PaymentDate >= firstDayOfMonth &&
+                    apd.PaymentDate <= lastDayOfMonth)
+                ).ToList();
+            if (
+                    upcomingAssignedPaymentsData == null ||
+                    upcomingAssignedPaymentsData.Count() == 0
+                )
+            {
+                return NotFound();
+            }
+
+            var assignedPaymentsToUserDto = new List<GetAssignedPaymentToUserDto>();
+            foreach (var assignedPaymentData in upcomingAssignedPaymentsData)
+            {
+                int idAssignedPayment = assignedPaymentData.IdPayment;
+                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(idAssignedPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+
+                int idSharedPayment = sharedPaymentData.IdSharedPayment;
+                var friendNameAndTag = await _budgetService.GetFriendNameAndTagAsync(idSharedPayment);
+
+                var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
+                var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
+                _mapper.Map(new GetFriendDto
+                {
+                    Name = friendNameAndTag.Item1,
+                    FriendTag = friendNameAndTag.Item2,
+                }, assignedPaymentToUserDto);
+
+                assignedPaymentsToUserDto.Add(assignedPaymentToUserDto);
+            }
+
+            if (assignedPaymentsToUserDto.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(assignedPaymentsToUserDto);
         }
     }
 }

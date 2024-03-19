@@ -125,7 +125,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Act
             var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1, DateTime.Parse("2024-01-01"));
             var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentDto>;
+            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
 
             var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(2, DateTime.Parse("2024-01-01"));
             var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(3, DateTime.Parse("2024-01-01"));
@@ -155,7 +155,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 .Should().NotBeNullOrEmpty();
             paymentsResult_1?
                 .Where(
-                    pr => pr.Friend == null
+                    pr => pr.TargetFriend == null
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
@@ -166,7 +166,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task BudgetController_GetUpcomingPaymentsSharedWithMeAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        public async Task BudgetController_GetUpcomingPaymentsSharedWithUserAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -174,9 +174,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithMeAsync(1, DateTime.Parse("2024-01-01"));
+            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1, DateTime.Parse("2024-01-01"));
             var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentWithMeDto>;
+            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetAssignedPaymentToUserDto>;
 
             var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(2, DateTime.Parse("2024-01-01"));
             var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(3, DateTime.Parse("2024-01-01"));
@@ -193,24 +193,30 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             paymentsResult_1?.Count().Should().Be(2);
             paymentsResult_1?
                 .Where(
-                    pr => string.IsNullOrEmpty(pr.Status)
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
                 ).ToList()
                 .Should().BeNullOrEmpty();
             paymentsResult_1?
                 .Where(
-                    pr => string.IsNullOrEmpty(pr.Category.DetailedName) ||
-                          string.IsNullOrEmpty(pr.Category.GeneralName)
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
                 ).ToList()
                 .Should().BeNullOrEmpty();
             paymentsResult_1?
                 .Where(
-                    pr => pr.IdSharedPayment <= 0
+                    pr => pr.Payment.IdSharedPayment <= 0
                 ).ToList()
                 .Should().BeNullOrEmpty();
             paymentsResult_1?
                 .Where(
-                    pr => pr.PaymentDate != null &&
-                    (pr.PaymentDate <= DateTime.Parse("2024-01-01") && pr.PaymentDate >= DateTime.Parse("2024-01-31"))
+                    pr => pr.Payment.PaymentDate != null &&
+                    (pr.Payment.PaymentDate <= DateTime.Parse("2024-01-01") 
+                    && pr.Payment.PaymentDate >= DateTime.Parse("2024-01-31"))
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.SourceFriend == null
                 ).ToList()
                 .Should().BeNullOrEmpty();
 

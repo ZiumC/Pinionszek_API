@@ -2,7 +2,7 @@
 {
     public class GetFriendDto
     {
-        public string? SharredTo { get; set; }
+        public string? Name { get; set; }
         public int? FriendTag { get; set; }
     }
 }
