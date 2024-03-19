@@ -225,6 +225,7 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
         public async Task<IActionResult> GetBudgetSummaryAsync(int idUser, DateTime date)
         {
+
             return Ok();
         }
     }
