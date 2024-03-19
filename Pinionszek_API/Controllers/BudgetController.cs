@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDTO;
+using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using System.Collections.Generic;
 

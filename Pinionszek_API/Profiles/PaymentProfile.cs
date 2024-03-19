@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDTO;
+using Pinionszek_API.Models.DTOs.GetDto;
 
 namespace Pinionszek_API.Profiles
 {

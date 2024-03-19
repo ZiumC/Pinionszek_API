@@ -7,7 +7,7 @@ using Moq;
 using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDTO;
+using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Tests.DbContexts;

@@ -1,4 +1,4 @@
-﻿namespace Pinionszek_API.Models.DTOs.GetDTO
+﻿namespace Pinionszek_API.Models.DTOs.GetDto
 {
     public class GetCategoryDto
     {
