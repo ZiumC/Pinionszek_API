@@ -257,5 +257,28 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             assignedPaymentsFriendTag_1003.Should().BeNullOrEmpty();
             assignedPaymentsFriendTag_1004.Should().BeNullOrEmpty();
         }
+
+        [Fact]
+        public async Task BudgetApiService_GetUserSettingsAsync_ReturnsPaymentsOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var userSettingsOfIdUser_1 = await budgetApiService.GetUserSettingsAsync(1);
+            var userSettingsOfIdUser_2 = await budgetApiService.GetUserSettingsAsync(2);
+            var userSettingsOfIdUser_3 = await budgetApiService.GetUserSettingsAsync(3);
+            var userSettingsOfIdUser_4 = await budgetApiService.GetUserSettingsAsync(4);
+            var userSettingsOfNonExistingUser = await budgetApiService.GetUserSettingsAsync(10001);
+
+            //Assert
+            userSettingsOfIdUser_1.Should().NotBeNull();
+            userSettingsOfIdUser_2.Should().NotBeNull();
+            userSettingsOfIdUser_3.Should().NotBeNull();
+            userSettingsOfIdUser_4.Should().NotBeNull();
+            userSettingsOfNonExistingUser.Should().BeNull();
+
+        }
     }
 }
