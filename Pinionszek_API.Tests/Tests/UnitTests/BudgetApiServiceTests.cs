@@ -209,7 +209,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
         }
 
         [Fact]
-        public async Task BudgetApiService_GetAssignedPayments_ReturnsPaymentsOrNotfoundOrBadRequest()
+        public async Task BudgetApiService_GetAssignedPaymentsAsync_ReturnsPaymentsOrNotfoundOrBadRequest()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();

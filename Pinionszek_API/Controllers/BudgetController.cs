@@ -262,6 +262,13 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
+            var userSettingsData = await _budgetService
+                .GetUserSettingsAsync(idUser);
+            if (userSettingsData == null)
+            {
+                return NotFound();
+            }
+
             int idNeedGeneralCategory = 1;
             var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
             decimal needs = budgetPaymentsData
@@ -287,11 +294,11 @@ namespace Pinionszek_API.Controllers
             decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
 
             var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
-            //var userSettingsDto = _mapper.Map<GetUserSettingsDto>();
+            var userSettingsDto = _mapper.Map<GetUserSettingsDto>(userSettingsData);
             var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
             {
                 Budget = budgetDto,
-                UserSettings = new GetUserSettingsDto(),
+                UserSettings = userSettingsDto,
                 Needs = needs,
                 Wants = wants,
                 Savings = savings,

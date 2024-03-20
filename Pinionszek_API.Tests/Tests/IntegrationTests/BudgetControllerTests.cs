@@ -30,6 +30,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new PaymentProfile());
                 cfg.AddProfile(new CategoryProfile());
                 cfg.AddProfile(new BudgetProfile());
+                cfg.AddProfile(new UserSettingsProfile());
             });
             _mapper = mockMapper.CreateMapper();
         }
@@ -296,6 +297,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_1.Should().NotBeNull();
             budgetResult_1.Should().NotBeNull();
             budgetResult_1?.Budget.Should().NotBeNull();
+            budgetResult_1?.UserSettings.Should().NotBeNull();
+            budgetResult_1?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_1?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_1?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And
@@ -311,6 +314,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_2.Should().NotBeNull();
             budgetResult_2.Should().NotBeNull();
             budgetResult_2?.Budget.Should().NotBeNull();
+            budgetResult_2?.UserSettings.Should().NotBeNull();
+            budgetResult_2?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_2?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_2?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And
@@ -325,6 +330,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_3.Should().NotBeNull();
             budgetResult_3.Should().NotBeNull();
             budgetResult_3?.Budget.Should().NotBeNull();
+            budgetResult_3?.UserSettings.Should().NotBeNull();
+            budgetResult_3?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_3?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_3?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And

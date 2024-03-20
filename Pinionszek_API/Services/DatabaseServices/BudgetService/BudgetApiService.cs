@@ -180,5 +180,12 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                               }
                           }).ToListAsync();
         }
+
+        public async Task<UserSettings?> GetUserSettingsAsync(int idUser)
+        {
+            return await _dbContext.UserSettings
+                .Where(us => us.IdUser == idUser)
+                .FirstOrDefaultAsync();
+        }
     }
 }
