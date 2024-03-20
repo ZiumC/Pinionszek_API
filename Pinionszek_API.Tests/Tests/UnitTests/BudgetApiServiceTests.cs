@@ -15,67 +15,57 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 {
     public class BudgetApiServiceTests
     {
-        private readonly IMapper _mapper;
-        public BudgetApiServiceTests()
-        {
-            var mockMapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new PaymentProfile());
-                cfg.AddProfile(new CategoryProfile());
-            });
-            _mapper = mockMapper.CreateMapper();
-        }
 
         [Fact]
-        public async Task BudgetApiService_GetBudgetDataAsync_ReturnsBudget()
+        public async Task BudgetApiService_GetBudgetDataAsync_ReturnsBudgetOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var budget_of_idUser_1 = await budgetApiService.GetBudgetDataAsync(1, DateTime.Parse("2024-01-01"));
-            var budget_of_idUser_2 = await budgetApiService.GetBudgetDataAsync(2, DateTime.Parse("2024-01-01"));
-            var budget_of_idUser_3 = await budgetApiService.GetBudgetDataAsync(3, DateTime.Parse("2024-01-01"));
-            var budget_of_idUser_4 = await budgetApiService.GetBudgetDataAsync(4, DateTime.Parse("2024-01-01"));
-            var budget_of_invalid_user = await budgetApiService.GetBudgetDataAsync(1000, DateTime.Parse("2024-01-01"));
+            var budgetOfIdUser_1 = await budgetApiService.GetBudgetDataAsync(1, DateTime.Parse("2024-01-01"));
+            var budgetOfIdUser_2 = await budgetApiService.GetBudgetDataAsync(2, DateTime.Parse("2024-01-01"));
+            var budgetOfIdUser_3 = await budgetApiService.GetBudgetDataAsync(3, DateTime.Parse("2024-01-01"));
+            var budgetOfIdUser_4 = await budgetApiService.GetBudgetDataAsync(4, DateTime.Parse("2024-01-01"));
+            var budgetOfInvalidUser = await budgetApiService.GetBudgetDataAsync(1000, DateTime.Parse("2024-01-01"));
 
             //Assert
-            budget_of_idUser_1.Should().NotBeNull();
-            budget_of_idUser_1?.BudgetStatus.Name.Should().Be("OPEND");
-            budget_of_idUser_1?.IsCompleted.Should().BeFalse();
-            budget_of_idUser_1?.OpendDate.Should().Be(DateTime.Parse("2024-01-01"));
+            budgetOfIdUser_1.Should().NotBeNull();
+            budgetOfIdUser_1?.BudgetStatus.Name.Should().Be("OPEND");
+            budgetOfIdUser_1?.IsCompleted.Should().BeFalse();
+            budgetOfIdUser_1?.OpendDate.Should().Be(DateTime.Parse("2024-01-01"));
 
-            budget_of_idUser_2.Should().NotBeNull();
-            budget_of_idUser_2?.BudgetStatus.Name.Should().Be("OPEND");
-            budget_of_idUser_2?.IsCompleted.Should().BeFalse();
-            budget_of_idUser_2?.OpendDate.Should().Be(DateTime.Parse("2023-12-29"));
+            budgetOfIdUser_2.Should().NotBeNull();
+            budgetOfIdUser_2?.BudgetStatus.Name.Should().Be("OPEND");
+            budgetOfIdUser_2?.IsCompleted.Should().BeFalse();
+            budgetOfIdUser_2?.OpendDate.Should().Be(DateTime.Parse("2023-12-29"));
 
-            budget_of_idUser_3.Should().NotBeNull();
-            budget_of_idUser_3?.BudgetStatus.Name.Should().Be("OPEND");
-            budget_of_idUser_3?.IsCompleted.Should().BeFalse();
-            budget_of_idUser_3?.OpendDate.Should().Be(DateTime.Parse("2024-01-11"));
+            budgetOfIdUser_3.Should().NotBeNull();
+            budgetOfIdUser_3?.BudgetStatus.Name.Should().Be("OPEND");
+            budgetOfIdUser_3?.IsCompleted.Should().BeFalse();
+            budgetOfIdUser_3?.OpendDate.Should().Be(DateTime.Parse("2024-01-11"));
 
-            budget_of_idUser_4.Should().BeNull();
-            budget_of_invalid_user.Should().BeNull();
+            budgetOfIdUser_4.Should().BeNull();
+            budgetOfInvalidUser.Should().BeNull();
         }
 
         [Fact]
-        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPayments()
+        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPaymentsOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var payments_of_idUser_1 = await budgetApiService.GetPaymentsAsync(1);
-            var payments_of_idUser_2 = await budgetApiService.GetPaymentsAsync(13);
-            var payments_of_non_existing_budget = await budgetApiService.GetPaymentsAsync(37);
+            var paymentsOfIdUser_1 = await budgetApiService.GetPaymentsAsync(1);
+            var paymentsOfIdUser_2 = await budgetApiService.GetPaymentsAsync(13);
+            var paymentsOfNonExistingBudget = await budgetApiService.GetPaymentsAsync(37);
 
             //Assert
-            payments_of_idUser_1.Should().NotBeEmpty();
-            payments_of_idUser_1.Count().Should().Be(7);
-            payments_of_idUser_1
+            paymentsOfIdUser_1.Should().NotBeEmpty();
+            paymentsOfIdUser_1.Count().Should().Be(7);
+            paymentsOfIdUser_1
                 .Where(p => p.DetailedCategory == null ||
                     string.IsNullOrEmpty(p.DetailedCategory.Name) ||
                     p.DetailedCategory.IdGeneralCategory == 0 ||
@@ -83,17 +73,17 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
                     string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count()
                 .Should().Be(0);
-            payments_of_idUser_1
+            paymentsOfIdUser_1
                 .Where(p => p.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            payments_of_idUser_1
+            paymentsOfIdUser_1
                 .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
-            payments_of_idUser_2.Should().NotBeEmpty();
-            payments_of_idUser_2.Count().Should().Be(6);
-            payments_of_idUser_2
+            paymentsOfIdUser_2.Should().NotBeEmpty();
+            paymentsOfIdUser_2.Count().Should().Be(6);
+            paymentsOfIdUser_2
                 .Where(p => p.DetailedCategory == null ||
                     string.IsNullOrEmpty(p.DetailedCategory.Name) ||
                     p.DetailedCategory.IdGeneralCategory == 0 ||
@@ -101,49 +91,49 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
                     string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count()
                 .Should().Be(0);
-            payments_of_idUser_2
+            paymentsOfIdUser_2
                 .Where(p => p.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            payments_of_idUser_2
+            paymentsOfIdUser_2
                 .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
 
-            payments_of_non_existing_budget.Should().BeEmpty();
+            paymentsOfNonExistingBudget.Should().BeEmpty();
         }
 
         [Fact]
-        public async Task BudgetApiService_GetSharedPaymentDataAsync_ReturnsSharedPaymentOrNull()
+        public async Task BudgetApiService_GetSharedPaymentDataAsync_ReturnsSharedPaymentOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var shared_idPayment_1 = await budgetApiService.GetSharedPaymentDataAsync(1);
-            var shared_idPayment_4 = await budgetApiService.GetSharedPaymentDataAsync(4);
-            var shared_idPayment_10 = await budgetApiService.GetSharedPaymentDataAsync(10);
-            var shared_non_existing_payment = await budgetApiService.GetSharedPaymentDataAsync(100);
+            var sharedIdPayment_1 = await budgetApiService.GetSharedPaymentDataAsync(1);
+            var sharedIdPayment_4 = await budgetApiService.GetSharedPaymentDataAsync(4);
+            var sharedIdPayment_10 = await budgetApiService.GetSharedPaymentDataAsync(10);
+            var sharedNonExistingPayment = await budgetApiService.GetSharedPaymentDataAsync(100);
 
             //Assert
-            shared_idPayment_1.Should().NotBeNull();
-            shared_idPayment_1?.IdPayment.Should().Be(1);
-            shared_idPayment_1?.IdFriend.Should().Be(1);
+            sharedIdPayment_1.Should().NotBeNull();
+            sharedIdPayment_1?.IdPayment.Should().Be(1);
+            sharedIdPayment_1?.IdFriend.Should().Be(1);
 
-            shared_idPayment_4.Should().NotBeNull();
-            shared_idPayment_4?.IdPayment.Should().Be(4);
-            shared_idPayment_4?.IdFriend.Should().Be(1);
+            sharedIdPayment_4.Should().NotBeNull();
+            sharedIdPayment_4?.IdPayment.Should().Be(4);
+            sharedIdPayment_4?.IdFriend.Should().Be(1);
 
-            shared_idPayment_10.Should().NotBeNull();
-            shared_idPayment_10?.IdPayment.Should().Be(10);
-            shared_idPayment_10?.IdFriend.Should().Be(3);
+            sharedIdPayment_10.Should().NotBeNull();
+            sharedIdPayment_10?.IdPayment.Should().Be(10);
+            sharedIdPayment_10?.IdFriend.Should().Be(3);
 
-            shared_non_existing_payment.Should().BeNull();
+            sharedNonExistingPayment.Should().BeNull();
         }
 
         [Fact]
-        public async Task BudgetApiService_GetFriendReceiveNameAndTagAsync_ReturnsString()
+        public async Task BudgetApiService_GetFriendReceiveNameAndTagAsync_ReturnsStringOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -153,7 +143,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             var resultOfIdSharedPayment_1 = await budgetApiService.GetFriendReceiveNameAndTagAsync(1);
             var resultOfIdSharedPayment_2 = await budgetApiService.GetFriendReceiveNameAndTagAsync(2);
             var resultOfIdSharedPayment_3 = await budgetApiService.GetFriendReceiveNameAndTagAsync(3);
-            var result_empty = await budgetApiService.GetFriendReceiveNameAndTagAsync(1001);
+            var emptyResult = await budgetApiService.GetFriendReceiveNameAndTagAsync(1001);
 
             //Assert
             resultOfIdSharedPayment_1.Should().NotBeNull();
@@ -171,12 +161,12 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             resultOfIdSharedPayment_3.Item1.Should().Be("test1");
             resultOfIdSharedPayment_3.Item2.Should().Be(1001);
 
-            result_empty.Item1.Should().BeNull();
-            result_empty.Item2.Should().BeNull();
+            emptyResult.Item1.Should().BeNull();
+            emptyResult.Item2.Should().BeNull();
         }
 
         [Fact]
-        public async Task BudgetApiService_GetFriendSenderNameAndTagAsync_ReturnsString()
+        public async Task BudgetApiService_GetFriendSenderNameAndTagAsync_ReturnsStringOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -209,7 +199,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
         }
 
         [Fact]
-        public async Task BudgetApiService_GetAssignedPaymentsAsync_ReturnsPaymentsOrNotfoundOrBadRequest()
+        public async Task BudgetApiService_GetAssignedPaymentsAsync_ReturnsPaymentsOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
