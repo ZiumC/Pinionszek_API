@@ -280,5 +280,56 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             userSettingsOfNonExistingUser.Should().BeNull();
 
         }
+
+        [Fact]
+        public async Task BudgetApiService_GetBudgetsAsync_ReturnsBudgetsOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var budgetOfIdUser_1 = await budgetApiService.GetBudgetsAsync(1);
+            var budgetOfIdUser_2 = await budgetApiService.GetBudgetsAsync(2);
+            var budgetOfIdUser_3 = await budgetApiService.GetBudgetsAsync(3);
+            var budgetOfIdUser_4 = await budgetApiService.GetBudgetsAsync(4);
+            var budgetOfNonExistingUser = await budgetApiService.GetBudgetsAsync(10001);
+
+            //Assert
+            budgetOfIdUser_1.Should().NotBeNull();
+            budgetOfIdUser_1.Count().Should().Be(12);
+            budgetOfIdUser_1
+                .Where(b => b.BudgetStatus == null ||
+                    string.IsNullOrEmpty(b.BudgetStatus.Name))
+                .Should().BeNullOrEmpty();
+            budgetOfIdUser_1
+                .Where(b => b.Payments != null)
+                .Should().BeNullOrEmpty();
+
+
+            budgetOfIdUser_2.Should().NotBeNull();
+            budgetOfIdUser_2.Count().Should().Be(12);
+            budgetOfIdUser_2
+                .Where(b => b.BudgetStatus == null ||
+                    string.IsNullOrEmpty(b.BudgetStatus.Name))
+                .Should().BeNullOrEmpty();
+            budgetOfIdUser_2
+                .Where(b => b.Payments != null)
+                .Should().BeNullOrEmpty();
+
+            budgetOfIdUser_3.Should().NotBeNull();
+            budgetOfIdUser_3.Count().Should().Be(12);
+            budgetOfIdUser_3
+                .Where(b => b.BudgetStatus == null ||
+                    string.IsNullOrEmpty(b.BudgetStatus.Name))
+                .Should().BeNullOrEmpty();
+            budgetOfIdUser_3
+                .Where(b => b.Payments != null)
+                .Should().BeNullOrEmpty();
+
+
+            budgetOfIdUser_4.Should().BeNullOrEmpty();
+            budgetOfNonExistingUser.Should().BeNullOrEmpty();
+        }
     }
 }

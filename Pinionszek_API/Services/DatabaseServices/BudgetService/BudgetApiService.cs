@@ -187,5 +187,10 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                 .Where(us => us.IdUser == idUser)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Budget>> GetBudgetsAsync(int idUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
