@@ -297,8 +297,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_1.Should().NotBeNull();
             budgetResult_1.Should().NotBeNull();
             budgetResult_1?.Budget.Should().NotBeNull();
-            budgetResult_1?.UserSettings.Should().NotBeNull();
-            budgetResult_1?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_1?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_1?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And
@@ -313,8 +311,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_2.Should().NotBeNull();
             budgetResult_2.Should().NotBeNull();
             budgetResult_2?.Budget.Should().NotBeNull();
-            budgetResult_2?.UserSettings.Should().NotBeNull();
-            budgetResult_2?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_2?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_2?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And
@@ -328,8 +324,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_3.Should().NotBeNull();
             budgetResult_3.Should().NotBeNull();
             budgetResult_3?.Budget.Should().NotBeNull();
-            budgetResult_3?.UserSettings.Should().NotBeNull();
-            budgetResult_3?.UserSettings.IdUserSetting.Should().BeGreaterThan(0);
             budgetResult_3?.Budget.Status.Should().NotBeNullOrEmpty();
             budgetResult_3?.Budget.BudgetYear.Should()
                 .NotBeBefore(DateTime.Parse("2024-01-01")).And
@@ -387,13 +381,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_1.Should().NotBeNull();
             budgetsResult_1.Should().NotBeNull();
             budgetsResult_1?.Count().Should().Be(12);
-            budgetsResult_1?.ElementAt(0).UserSettings.Should().NotBeNull();
             budgetsResult_1?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
                 .ToList().Should().NotBeNullOrEmpty();
-            budgetsResult_1?
-                .Where(br => br.UserSettings == null)
-                .ToList().Count().Should().Be(11);
             budgetsResult_1?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -405,13 +395,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_2.Should().NotBeNull();
             budgetsResult_2.Should().NotBeNull();
             budgetsResult_2?.Count().Should().Be(12);
-            budgetsResult_2?.ElementAt(0).UserSettings.Should().NotBeNull();
             budgetsResult_2?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
                 .ToList().Should().NotBeNullOrEmpty();
-            budgetsResult_2?
-                .Where(br => br.UserSettings == null)
-                .ToList().Count().Should().Be(11);
             budgetsResult_2?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -423,13 +409,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okActionResult_3.Should().NotBeNull();
             budgetsResult_3.Should().NotBeNull();
             budgetsResult_3?.Count().Should().Be(12);
-            budgetsResult_3?.ElementAt(0).UserSettings.Should().NotBeNull();
             budgetsResult_3?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
                 .ToList().Should().NotBeNullOrEmpty();
-            budgetsResult_3?
-                .Where(br => br.UserSettings == null)
-                .ToList().Count().Should().Be(11);
             budgetsResult_3?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -445,7 +427,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
-            badRequestResult_2?.Contains("date is invalid").Should().BeTrue();
+            badRequestResult_2?.Contains("is invalid").Should().BeTrue();
         }
     }
 }

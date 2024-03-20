@@ -317,7 +317,39 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetBudgetSummaryDto>))]
         public async Task<IActionResult> GetBudgetsAsync(int idUser, int year)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (year < 1 && year > 9999)
+            {
+                ModelState.AddModelError("error", "Budget year is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var budgetsData = await _budgetService.GetBudgetsAsync(idUser);
+            if (budgetsData == null || budgetsData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            var budgetsByYearData = budgetsData
+                .Where(bbyd => bbyd.BudgetYear.Year == year)
+                .ToList();
+            if (budgetsByYearData == null || budgetsByYearData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            var budgetsSummaryDto = new List<GetBudgetSummaryDto>();
+            foreach (var budgetData in budgetsByYearData) 
+            {
+                
+            }
+
+            return Ok(budgetsSummaryDto);
         }
     }
 }
