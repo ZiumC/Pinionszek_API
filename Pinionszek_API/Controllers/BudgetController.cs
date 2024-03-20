@@ -307,5 +307,17 @@ namespace Pinionszek_API.Controllers
 
             return Ok(budgetSummaryDto);
         }
+
+        /// <summary>
+        /// Get list of budget months by selected year
+        /// </summary>
+        /// <param name="idUser">Budget year</param>
+        /// <param name="year">Budget year</param>
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetBudgetSummaryDto>))]
+        public async Task<IActionResult> GetBudgetsAsync(int idUser, int year)
+        {
+            return Ok();
+        }
     }
 }

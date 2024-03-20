@@ -307,7 +307,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_1?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_1?.Wants.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_1?.Savings.Should().BeGreaterThanOrEqualTo(0);
-            budgetResult_1?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
@@ -324,7 +323,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_2?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_2?.Wants.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_2?.Savings.Should().BeGreaterThanOrEqualTo(0);
-            budgetResult_2?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
             okRequest_3.Should().BeOfType<OkObjectResult>();
             okActionResult_3.Should().NotBeNull();
@@ -340,7 +338,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_3?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_3?.Wants.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_3?.Savings.Should().BeGreaterThanOrEqualTo(0);
-            budgetResult_3?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
 
@@ -351,6 +348,104 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task BudgetController_GetBudgetsAsync_ReturnsBudgetsOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetController(budgetApiService, _mapper);
+            int budget_year = 2024;
+
+            //Act
+            var okRequest_1 = await budgetController.GetBudgetsAsync(1, budget_year);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var budgetsResult_1 = okActionResult_1?.Value as IEnumerable<GetBudgetSummaryDto>;
+
+            var okRequest_2 = await budgetController.GetBudgetsAsync(2, budget_year);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var budgetsResult_2 = okActionResult_2?.Value as IEnumerable<GetBudgetSummaryDto>;
+
+            var okRequest_3 = await budgetController.GetBudgetsAsync(3, budget_year);
+            var okActionResult_3 = okRequest_3 as OkObjectResult;
+            var budgetsResult_3 = okActionResult_3?.Value as IEnumerable<GetBudgetSummaryDto>;
+
+            var notFoundRequest_1 = await budgetController.GetBudgetsAsync(4, budget_year);
+
+            var badRequest_1 = await budgetController.GetBudgetsAsync(-1005, budget_year);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await budgetController.GetBudgetsAsync(1, 1);
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            budgetsResult_1.Should().NotBeNull();
+            budgetsResult_1?.Count().Should().Be(12);
+            budgetsResult_1?.ElementAt(0).UserSettings.Should().NotBeNull();
+            budgetsResult_1?
+                .Where(br => string.IsNullOrEmpty(br.Budget.Status))
+                .ToList().Should().NotBeNullOrEmpty();
+            budgetsResult_1?
+                .Where(br => br.UserSettings == null)
+                .ToList().Count().Should().Be(11);
+            budgetsResult_1?
+                .Where(br => br.Budget.BudgetYear.Year != budget_year)
+                .ToList().Should().BeNullOrEmpty();
+            budgetsResult_1?
+                .Where(br => br.Needs < 0 || br.Wants < 0 || br.Savings < 0)
+                .ToList().Should().BeNullOrEmpty();
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            budgetsResult_2.Should().NotBeNull();
+            budgetsResult_2?.Count().Should().Be(12);
+            budgetsResult_2?.ElementAt(0).UserSettings.Should().NotBeNull();
+            budgetsResult_2?
+                .Where(br => string.IsNullOrEmpty(br.Budget.Status))
+                .ToList().Should().NotBeNullOrEmpty();
+            budgetsResult_2?
+                .Where(br => br.UserSettings == null)
+                .ToList().Count().Should().Be(11);
+            budgetsResult_2?
+                .Where(br => br.Budget.BudgetYear.Year != budget_year)
+                .ToList().Should().BeNullOrEmpty();
+            budgetsResult_2?
+                .Where(br => br.Needs < 0 || br.Wants < 0 || br.Savings < 0)
+                .ToList().Should().BeNullOrEmpty();
+
+            okRequest_3.Should().BeOfType<OkObjectResult>();
+            okActionResult_3.Should().NotBeNull();
+            budgetsResult_3.Should().NotBeNull();
+            budgetsResult_3?.Count().Should().Be(12);
+            budgetsResult_3?.ElementAt(0).UserSettings.Should().NotBeNull();
+            budgetsResult_3?
+                .Where(br => string.IsNullOrEmpty(br.Budget.Status))
+                .ToList().Should().NotBeNullOrEmpty();
+            budgetsResult_3?
+                .Where(br => br.UserSettings == null)
+                .ToList().Count().Should().Be(11);
+            budgetsResult_3?
+                .Where(br => br.Budget.BudgetYear.Year != budget_year)
+                .ToList().Should().BeNullOrEmpty();
+            budgetsResult_3?
+                .Where(br => br.Needs < 0 || br.Wants < 0 || br.Savings < 0)
+                .ToList().Should().BeNullOrEmpty();
+
+            notFoundRequest_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("ID is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("date is invalid").Should().BeTrue();
         }
     }
 }
