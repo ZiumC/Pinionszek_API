@@ -58,6 +58,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
+            var badRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(10, new DateTime());
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
             okActionResult_1.Should().NotBeNull();
@@ -111,7 +115,11 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
-            badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
+            badRequestResult_1?.Contains("ID is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
 
 
@@ -131,6 +139,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(2, DateTime.Parse("2024-01-01"));
             var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(3, DateTime.Parse("2024-01-01"));
             var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(4, DateTime.Parse("2024-01-01"));
+
+            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(-1001, DateTime.Parse("2024-01-01"));
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1001, new DateTime());
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -164,6 +180,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
             notFoundRequest_3.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("ID is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
 
         [Fact]
@@ -179,13 +203,17 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetAssignedPaymentToUserDto>;
 
-            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1001, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1003, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1004, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1001, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1003, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1004, DateTime.Parse("2024-01-01"));
 
-            var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-1005, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(-1001, DateTime.Parse("2024-01-01"));
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1001, new DateTime());
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -225,7 +253,11 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
-            badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
+            badRequestResult_1?.Contains("ID is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
 
         [Fact]
@@ -249,11 +281,15 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var budgetResult_3 = okActionResult_3?.Value as GetBudgetSummaryDto;
 
-            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1001, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetBudgetSummaryAsync(1001, DateTime.Parse("2024-01-01"));
 
-            var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-1005, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetBudgetSummaryAsync(-1005, DateTime.Parse("2024-01-01"));
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await budgetController.GetBudgetSummaryAsync(1005, new DateTime());
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -261,8 +297,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_1.Should().NotBeNull();
             budgetResult_1?.Budget.Should().NotBeNull();
             budgetResult_1?.Budget.Status.Should().NotBeNullOrEmpty();
-            budgetResult_1?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
-            budgetResult_1?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
+            budgetResult_1?.Budget.BudgetYear.Should()
+                .NotBeBefore(DateTime.Parse("2024-01-01")).And
+                .NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_1?.Budget.IsCompleted.Should().BeFalse();
             budgetResult_1?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_1?.Wants.Should().BeGreaterThanOrEqualTo(0);
@@ -275,8 +312,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_2.Should().NotBeNull();
             budgetResult_2?.Budget.Should().NotBeNull();
             budgetResult_2?.Budget.Status.Should().NotBeNullOrEmpty();
-            budgetResult_2?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
-            budgetResult_2?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
+            budgetResult_2?.Budget.BudgetYear.Should()
+                .NotBeBefore(DateTime.Parse("2024-01-01")).And
+                .NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_2?.Budget.IsCompleted.Should().BeFalse();
             budgetResult_2?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_2?.Wants.Should().BeGreaterThanOrEqualTo(0);
@@ -288,8 +326,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_3.Should().NotBeNull();
             budgetResult_3?.Budget.Should().NotBeNull();
             budgetResult_3?.Budget.Status.Should().NotBeNullOrEmpty();
-            budgetResult_3?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
-            budgetResult_3?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
+            budgetResult_3?.Budget.BudgetYear.Should()
+                .NotBeBefore(DateTime.Parse("2024-01-01")).And
+                .NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_3?.Budget.IsCompleted.Should().BeFalse();
             budgetResult_3?.Needs.Should().BeGreaterThanOrEqualTo(0);
             budgetResult_3?.Wants.Should().BeGreaterThanOrEqualTo(0);
@@ -300,7 +339,11 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
-            badRequestResult_1?.Contains("User ID is invalid").Should().BeTrue();
+            badRequestResult_1?.Contains("ID is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
     }
 }

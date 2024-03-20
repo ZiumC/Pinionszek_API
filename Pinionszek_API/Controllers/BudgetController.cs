@@ -39,6 +39,12 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
             var budgetData = await _budgetService
                 .GetBudgetDataAsync(idUser, date);
             if (budgetData == null)
@@ -92,6 +98,12 @@ namespace Pinionszek_API.Controllers
             if (idUser <= 0)
             {
                 ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
@@ -161,6 +173,12 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
             var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
             if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
             {
@@ -221,13 +239,19 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">ID of use</param>
         /// <param name="date">Budget date</param>
-        [HttpGet("stats/{idUser}")]
+        [HttpGet("summary")]
         [ProducesResponseType(200, Type = typeof(GetBudgetSummaryDto))]
         public async Task<IActionResult> GetBudgetSummaryAsync(int idUser, DateTime date)
         {
             if (idUser <= 0)
             {
                 ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
@@ -264,7 +288,7 @@ namespace Pinionszek_API.Controllers
 
             var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
             //var userSettingsDto = _mapper.Map<GetUserSettingsDto>();
-            var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto 
+            var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
             {
                 Budget = budgetDto,
                 UserSettings = new GetUserSettingsDto(),
