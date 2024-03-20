@@ -372,9 +372,13 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetBudgetsAsync(1, 1);
+            var badRequest_2 = await budgetController.GetBudgetsAsync(1, -1);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            var badRequest_3 = await budgetController.GetBudgetsAsync(1, 99999);
+            var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
+            var badRequestResult_3 = badRequestActionResult_3?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -383,7 +387,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetsResult_1?.Count().Should().Be(12);
             budgetsResult_1?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
-                .ToList().Should().NotBeNullOrEmpty();
+                .ToList().Should().BeNullOrEmpty();
             budgetsResult_1?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -397,7 +401,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetsResult_2?.Count().Should().Be(12);
             budgetsResult_2?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
-                .ToList().Should().NotBeNullOrEmpty();
+                .ToList().Should().BeNullOrEmpty();
             budgetsResult_2?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -411,7 +415,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetsResult_3?.Count().Should().Be(12);
             budgetsResult_3?
                 .Where(br => string.IsNullOrEmpty(br.Budget.Status))
-                .ToList().Should().NotBeNullOrEmpty();
+                .ToList().Should().BeNullOrEmpty();
             budgetsResult_3?
                 .Where(br => br.Budget.BudgetYear.Year != budget_year)
                 .ToList().Should().BeNullOrEmpty();
@@ -428,6 +432,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_3.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_3?.Value.Should().NotBeNull();
+            badRequestResult_3?.Contains("is invalid").Should().BeTrue();
         }
     }
 }

@@ -294,11 +294,9 @@ namespace Pinionszek_API.Controllers
             decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
 
             var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
-            var userSettingsDto = _mapper.Map<GetUserSettingsDto>(userSettingsData);
             var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
             {
                 Budget = budgetDto,
-                UserSettings = userSettingsDto,
                 Needs = needs,
                 Wants = wants,
                 Savings = savings,
@@ -323,7 +321,7 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (year < 1 && year > 9999)
+            if (year < 1 || year > 9999)
             {
                 ModelState.AddModelError("error", "Budget year is invalid");
                 return BadRequest(ModelState);
@@ -344,9 +342,41 @@ namespace Pinionszek_API.Controllers
             }
 
             var budgetsSummaryDto = new List<GetBudgetSummaryDto>();
-            foreach (var budgetData in budgetsByYearData) 
+            foreach (var budgetData in budgetsByYearData)
             {
-                
+                int idNeedGeneralCategory = 1;
+                var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+                decimal needs = budgetPaymentsData
+                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                        bpd.DetailedCategory.IdGeneralCategory == idNeedGeneralCategory)
+                    .Sum(bpd => bpd.Charge);
+
+                int idWantsGeneralCategory = 2;
+                decimal wants = budgetPaymentsData
+                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                        bpd.DetailedCategory.IdGeneralCategory == idWantsGeneralCategory)
+                    .Sum(bpd => bpd.Charge);
+
+                int idSavingsGeneralCategory = 3;
+                decimal savings = budgetPaymentsData
+                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                        bpd.DetailedCategory.IdGeneralCategory == idSavingsGeneralCategory)
+                    .Sum(bpd => bpd.Charge);
+
+                decimal refounds = budgetPaymentsData
+                    .Sum(bpd => bpd.Refund);
+
+                decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
+
+                var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
+                budgetsSummaryDto.Add(_mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
+                {
+                    Budget = budgetDto,
+                    Needs = needs,
+                    Wants = wants,
+                    Savings = savings,
+                    Actual = actual
+                }));
             }
 
             return Ok(budgetsSummaryDto);
