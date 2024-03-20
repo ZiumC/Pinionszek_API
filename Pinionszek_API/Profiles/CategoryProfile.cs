@@ -11,6 +11,9 @@ namespace Pinionszek_API.Profiles
             CreateMap<DetailedCategory, GetPaymentCategoryDto>()
                 .ForMember(dest => dest.DetailedName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.GeneralName, opt => opt.MapFrom(src => src.GeneralCategory.Name));
+
+
+
         }
     }
 }

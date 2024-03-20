@@ -222,11 +222,59 @@ namespace Pinionszek_API.Controllers
         /// <param name="idUser">ID of use</param>
         /// <param name="date">Budget date</param>
         [HttpGet("stats/{idUser}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
+        [ProducesResponseType(200, Type = typeof(GetBudgetSummaryDto))]
         public async Task<IActionResult> GetBudgetSummaryAsync(int idUser, DateTime date)
         {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
 
-            return Ok();
+            var budgetData = await _budgetService
+                .GetBudgetDataAsync(idUser, date);
+            if (budgetData == null)
+            {
+                return NotFound();
+            }
+
+            int idNeedGeneralCategory = 1;
+            var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+            decimal needs = budgetPaymentsData
+                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                    bpd.DetailedCategory.IdGeneralCategory == idNeedGeneralCategory)
+                .Sum(bpd => bpd.Charge);
+
+            int idWantsGeneralCategory = 2;
+            decimal wants = budgetPaymentsData
+                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                    bpd.DetailedCategory.IdGeneralCategory == idWantsGeneralCategory)
+                .Sum(bpd => bpd.Charge);
+
+            int idSavingsGeneralCategory = 3;
+            decimal savings = budgetPaymentsData
+                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
+                    bpd.DetailedCategory.IdGeneralCategory == idSavingsGeneralCategory)
+                .Sum(bpd => bpd.Charge);
+
+            decimal refounds = budgetPaymentsData
+                .Sum(bpd => bpd.Refund);
+
+            decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
+
+            var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
+            //var userSettingsDto = _mapper.Map<GetUserSettingsDto>();
+            var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto 
+            {
+                Budget = budgetDto,
+                UserSettings = new GetUserSettingsDto(),
+                Needs = needs,
+                Wants = wants,
+                Savings = savings,
+                Actual = actual
+            });
+
+            return Ok(budgetSummaryDto);
         }
     }
 }

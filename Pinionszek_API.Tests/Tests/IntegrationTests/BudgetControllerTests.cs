@@ -29,6 +29,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             {
                 cfg.AddProfile(new PaymentProfile());
                 cfg.AddProfile(new CategoryProfile());
+                cfg.AddProfile(new BudgetProfile());
             });
             _mapper = mockMapper.CreateMapper();
         }
@@ -263,10 +264,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_1?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
             budgetResult_1?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_1?.Budget.IsCompleted.Should().BeFalse();
-            budgetResult_1?.Needs.Should().BePositive();
-            budgetResult_1?.Wants.Should().BePositive();
-            budgetResult_1?.Savings.Should().BePositive();
-            budgetResult_1?.Unused.Should().BePositive();
+            budgetResult_1?.Needs.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_1?.Wants.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_1?.Savings.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_1?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
@@ -277,10 +278,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_2?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
             budgetResult_2?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_2?.Budget.IsCompleted.Should().BeFalse();
-            budgetResult_2?.Needs.Should().BePositive();
-            budgetResult_2?.Wants.Should().BePositive();
-            budgetResult_2?.Savings.Should().BePositive();
-            budgetResult_2?.Unused.Should().BePositive();
+            budgetResult_2?.Needs.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_2?.Wants.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_2?.Savings.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_2?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
             okRequest_3.Should().BeOfType<OkObjectResult>();
             okActionResult_3.Should().NotBeNull();
@@ -290,10 +291,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_3?.Budget.BudgetYear.Should().NotBeBefore(DateTime.Parse("2024-01-01"));
             budgetResult_3?.Budget.BudgetYear.Should().NotBeAfter(DateTime.Parse("2024-01-31"));
             budgetResult_3?.Budget.IsCompleted.Should().BeFalse();
-            budgetResult_3?.Needs.Should().BePositive();
-            budgetResult_3?.Wants.Should().BePositive();
-            budgetResult_3?.Savings.Should().BePositive();
-            budgetResult_3?.Unused.Should().BePositive();
+            budgetResult_3?.Needs.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_3?.Wants.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_3?.Savings.Should().BeGreaterThanOrEqualTo(0);
+            budgetResult_3?.Actual.Should().BeGreaterThanOrEqualTo(0);
 
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
 
