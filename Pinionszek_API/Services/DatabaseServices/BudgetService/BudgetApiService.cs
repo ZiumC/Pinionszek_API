@@ -190,7 +190,23 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
 
         public async Task<IEnumerable<Budget>> GetBudgetsAsync(int idUser)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Budgets
+                .Where(b => b.IdUser == idUser)
+                .Join(_dbContext.BudgetStatuses,
+                bs => bs.IdBudgetStatus,
+                b => b.IdBudgetStatus,
+                (b, bs) => new Budget
+                {
+                    IdBudget = b.IdBudget,
+                    IsCompleted = b.IsCompleted,
+                    OpendDate = b.OpendDate,
+                    Revenue = b.Revenue,
+                    Surplus = b.Surplus,
+                    BudgetYear = b.BudgetYear,
+                    IdBudgetStatus = b.IdBudgetStatus,
+                    BudgetStatus = bs,
+                    IdUser = b.IdUser
+                }).ToListAsync();
         }
     }
 }
