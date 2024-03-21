@@ -457,24 +457,44 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(_config, budgetApiService, _mapper);
             int firstPaymentId = 1;
             int lastPaymentId = 13;
-            var okRequests = new List<OkObjectResult?>();
+            var user1requests = new List<OkObjectResult?>();
+            var user2requests = new List<OkObjectResult?>();
             var paymentDetails = new List<GetPrivatePaymentDto?>();
 
             //Act
             for (int id = firstPaymentId; id <= lastPaymentId; id++)
             {
-                var okRequest = await budgetController.GetPaymentDetailsAsync(1, 1);
-                var okActionResult = okRequest as OkObjectResult;
-                var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+                if (id <= 6 || id == 12)
+                {
+                    var okRequest = await budgetController.GetPaymentDetailsAsync(1, id);
+                    var okActionResult = okRequest as OkObjectResult;
+                    var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+                    user1requests.Add(okActionResult);
+                    paymentDetails.Add(paymentDetail);
+                }
 
-                okRequests.Add(okActionResult);
-                paymentDetails.Add(paymentDetail);
+                if (id > 6 && id <= 11 || id == 13)
+                {
+                    var okRequest = await budgetController.GetPaymentDetailsAsync(2, id);
+                    var okActionResult = okRequest as OkObjectResult;
+                    var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+                    user2requests.Add(okActionResult);
+                    paymentDetails.Add(paymentDetail);
+                }
+
             }
 
             //Assert
-            okRequests.Should().NotBeNullOrEmpty();
-            okRequests.Should().HaveCount(13);
-            foreach (var request in okRequests)
+            user1requests.Should().NotBeNullOrEmpty();
+            user1requests.Should().HaveCount(7);
+            foreach (var request in user1requests)
+            {
+                request.Should().BeOfType<OkObjectResult>();
+            }
+
+            user2requests.Should().NotBeNullOrEmpty();
+            user2requests.Should().HaveCount(6);
+            foreach (var request in user2requests)
             {
                 request.Should().BeOfType<OkObjectResult>();
             }
@@ -493,9 +513,13 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 payment?.Category.Should().NotBeNull();
                 payment?.Category.GeneralName.Should().NotBeNullOrEmpty();
                 payment?.Category.DetailedName.Should().NotBeNullOrEmpty();
+
+                var paymentId = payment?.IdPayment;
+                if (paymentId == 1 || paymentId == 4 || paymentId == 10)
+                {
+                    payment?.IdSharedPayment.Should().BeGreaterThan(0);
+                }
             }
-
-
         }
 
     }
