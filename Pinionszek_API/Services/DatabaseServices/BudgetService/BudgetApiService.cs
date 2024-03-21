@@ -211,7 +211,7 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
 
         public async Task<Payment?> GetPaymentAsync(int idPayment, int idUser)
         {
-            return await _dbContext.Budgets
+            var paymentUserQuery = await _dbContext.Budgets
                 .Where(b => b.IdUser == idUser)
                 .Join(_dbContext.Payments,
                 b => b.IdBudget,
@@ -231,12 +231,39 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                     PaymentDate = p.PaymentDate,
                     PaidOn = p.PaidOn,
                     PaymentAddedOn = p.PaymentAddedOn,
+                    IdDetailedCategory = p.IdDetailedCategory,
                     PaymentStatus = new PaymentStatus
                     {
                         IdPaymentStatus = ps.IdPaymentStatus,
                         Name = ps.Name,
                     }
                 }).FirstOrDefaultAsync();
+
+            if (paymentUserQuery != null)
+            {
+                var detailedCategoryQuery = await _dbContext.DetailedCategories
+                    .Where(dc => dc.IdDetailedCategory == paymentUserQuery.IdDetailedCategory)
+                    .Join(_dbContext.GeneralCategories,
+                    dc => dc.IdGeneralCategory,
+                    gc => gc.IdGeneralCategory,
+                    (dc, gc) => new DetailedCategory
+                    {
+                        IdDetailedCategory = dc.IdDetailedCategory,
+                        Name = dc.Name,
+                        GeneralCategory = new GeneralCategory
+                        {
+                            IdGeneralCategory = gc.IdGeneralCategory,
+                            Name = gc.Name,
+                        }
+                    }).FirstOrDefaultAsync();
+
+                if (detailedCategoryQuery != null)
+                {
+                    paymentUserQuery.DetailedCategory = detailedCategoryQuery;
+                }
+            }
+
+            return paymentUserQuery;
         }
     }
 }

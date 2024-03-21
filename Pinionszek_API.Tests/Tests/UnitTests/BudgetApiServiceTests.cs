@@ -353,6 +353,8 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment1?.Refund.Should().BeGreaterThanOrEqualTo(0);
             payment1?.PaymentStatus.Should().NotBeNull();
             payment1?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+            payment1?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
+            payment1?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
 
             payment2.Should().NotBeNull();
             payment2?.Name.Should().NotBeNullOrEmpty();
@@ -360,6 +362,8 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment2?.Refund.Should().BeGreaterThanOrEqualTo(0);
             payment2?.PaymentStatus.Should().NotBeNull();
             payment2?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+            payment2?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
+            payment2?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
 
             payment3.Should().NotBeNull();
             payment3?.Name.Should().NotBeNullOrEmpty();
@@ -367,6 +371,8 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment3?.Refund.Should().BeGreaterThanOrEqualTo(0);
             payment3?.PaymentStatus.Should().NotBeNull();
             payment3?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+            payment3?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
+            payment3?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
 
             payment4.Should().BeNull();
             
