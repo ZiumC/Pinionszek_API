@@ -407,8 +407,15 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            var paymentData = await _budgetService.GetPaymentAsync(idPayment, idUser);
+            if (paymentData == null)
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            var paymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
+
+            return Ok(paymentDto);
         }
     }
 }

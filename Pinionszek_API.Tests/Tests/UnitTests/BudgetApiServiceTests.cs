@@ -345,6 +345,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             var payment3 = await budgetApiService.GetPaymentAsync(2, 1);
             var payment4 = await budgetApiService.GetPaymentAsync(4, 2);
             var payment5 = await budgetApiService.GetPaymentAsync(13, 1);
+            var payment6 = await budgetApiService.GetPaymentAsync(4, 1);
 
             //Assert
             payment1.Should().NotBeNull();
@@ -355,6 +356,9 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment1?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
             payment1?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
             payment1?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
+            payment1?.SharedPayment.Should().NotBeNull();
+            payment1?.SharedPayment?.IdSharedPayment.Should().BeGreaterThan(0);
+
 
             payment2.Should().NotBeNull();
             payment2?.Name.Should().NotBeNullOrEmpty();
@@ -364,6 +368,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment2?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
             payment2?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
             payment2?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
+            payment2?.SharedPayment.Should().BeNull();
 
             payment3.Should().NotBeNull();
             payment3?.Name.Should().NotBeNullOrEmpty();
@@ -373,10 +378,22 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             payment3?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
             payment3?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
             payment3?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
+            payment3?.SharedPayment.Should().BeNull();
 
             payment4.Should().BeNull();
             
             payment5.Should().BeNull();
+
+            payment6.Should().NotBeNull();
+            payment6?.Name.Should().NotBeNullOrEmpty();
+            payment6?.Charge.Should().BeGreaterThanOrEqualTo(0);
+            payment6?.Refund.Should().BeGreaterThanOrEqualTo(0);
+            payment6?.PaymentStatus.Should().NotBeNull();
+            payment6?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+            payment6?.DetailedCategory.Name.Should().NotBeNullOrEmpty();
+            payment6?.DetailedCategory.GeneralCategory.Name.Should().NotBeNullOrEmpty();
+            payment6?.SharedPayment.Should().NotBeNull();
+            payment6?.SharedPayment?.IdSharedPayment.Should().BeGreaterThan(0);
         }
     }
 }

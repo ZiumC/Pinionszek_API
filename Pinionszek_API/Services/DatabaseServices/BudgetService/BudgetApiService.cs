@@ -257,10 +257,17 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                         }
                     }).FirstOrDefaultAsync();
 
+                var sharedPaymentQuery = await _dbContext.SharedPayments
+                    .Where(sp => sp.IdPayment == paymentUserQuery.IdPayment)
+                    .FirstOrDefaultAsync();
+
                 if (detailedCategoryQuery != null)
                 {
                     paymentUserQuery.DetailedCategory = detailedCategoryQuery;
                 }
+
+                paymentUserQuery.SharedPayment = sharedPaymentQuery;
+
             }
 
             return paymentUserQuery;
