@@ -9,6 +9,7 @@ using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Utils;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
@@ -28,13 +29,13 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming private payments by user ID and budget date 
+        /// Get upcoming private payments by user ID and budget date 
         /// </summary>
-        /// <param name="idUser">ID of user</param>
-        /// <param name="date">Budget date </param>
-        [HttpGet("upcoming-payments/{idUser}/private")]
+        /// <param name="idUser">User ID</param>
+        /// <param name="date">Budget date</param>
+        [HttpGet("upcoming-payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
         {
             if (idUser <= 0)
             {
@@ -90,13 +91,13 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming shared payments with other users by user ID and budget date 
+        /// Get upcoming shared payments with other users by userID (that user who share) and budget date 
         /// </summary>
-        /// <param name="idUser">ID of user</param>
-        /// <param name="date">Budget date </param>
-        [HttpGet("upcoming-payments/{idUser}/share")]
+        /// <param name="idUser">User ID</param>
+        /// <param name="date">Budget date</param>
+        [HttpGet("upcoming-payments/share")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
         {
             if (idUser <= 0)
             {
@@ -162,13 +163,13 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Find upcoming payments that are shared for user by user tag and date
+        /// Get upcoming payments that are shared for user by userTag and payment date
         /// </summary>
-        /// <param name="userTag">user tag</param>
-        /// <param name="date">Payment of year and month</param>
-        [HttpGet("upcoming-payments/{userTag}/assigement")]
+        /// <param name="userTag">User tag</param>
+        /// <param name="date">Payment year and month</param>
+        [HttpGet("upcoming-payments/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync(int userTag, DateTime date)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
         {
             if (userTag <= 0)
             {
@@ -240,11 +241,11 @@ namespace Pinionszek_API.Controllers
         /// <summary>
         /// Get budget spendings, status, rules and revenue
         /// </summary>
-        /// <param name="idUser">ID of use</param>
+        /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
         [HttpGet("summary")]
         [ProducesResponseType(200, Type = typeof(GetBudgetSummaryDto))]
-        public async Task<IActionResult> GetBudgetSummaryAsync(int idUser, DateTime date)
+        public async Task<IActionResult> GetBudgetSummaryAsync([Required] DateTime date, [Required] int idUser)
         {
             if (idUser <= 0)
             {
@@ -310,13 +311,13 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Get list of budget months by selected year
+        /// Get list of budget months by selected year and user ID
         /// </summary>
-        /// <param name="idUser">Budget year</param>
+        /// <param name="idUser">User ID</param>
         /// <param name="year">Budget year</param>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetBudgetSummaryDto>))]
-        public async Task<IActionResult> GetBudgetsAsync(int idUser, int year)
+        public async Task<IActionResult> GetBudgetsAsync([Required] int year, [Required] int idUser)
         {
             if (idUser <= 0)
             {

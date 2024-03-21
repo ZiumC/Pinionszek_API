@@ -54,22 +54,22 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(1, DateTime.Parse("2024-01-01"));
+            var okRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(DateTime.Parse("2024-01-01"), 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetPrivatePaymentDto>;
 
-            var okRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(2, DateTime.Parse("2024-01-01"));
+            var okRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(DateTime.Parse("2024-01-01"), 2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetPrivatePaymentDto>;
 
-            var notFoundRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(3, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(4, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(DateTime.Parse("2024-01-01"), 3);
+            var notFoundRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(DateTime.Parse("2024-01-01"), 4);
 
-            var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(-10, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(DateTime.Parse("2024-01-01"), -10);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(10, new DateTime());
+            var badRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(new DateTime(), 10);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
@@ -143,19 +143,19 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1, DateTime.Parse("2024-01-01"));
+            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(DateTime.Parse("2024-01-01"), 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
 
-            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(2, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(3, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(4, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(DateTime.Parse("2024-01-01"), 2);
+            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(DateTime.Parse("2024-01-01"), 3);
+            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(DateTime.Parse("2024-01-01"), 4);
 
-            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(-1001, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(DateTime.Parse("2024-01-01"), -1001);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1001, new DateTime());
+            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(new DateTime(), 1001);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
@@ -210,19 +210,19 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1002, DateTime.Parse("2024-01-01"));
+            var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(DateTime.Parse("2024-01-01"), 1002);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetAssignedPaymentToUserDto>;
 
-            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1001, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1003, DateTime.Parse("2024-01-01"));
-            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1004, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(DateTime.Parse("2024-01-01"), 1001);
+            var notFoundRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(DateTime.Parse("2024-01-01"), 1003);
+            var notFoundRequest_3 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(DateTime.Parse("2024-01-01"), 1004);
 
-            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(-1001, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(DateTime.Parse("2024-01-01"), -1001);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1001, new DateTime());
+            var badRequest_2 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(new DateTime(), 1001);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
@@ -280,25 +280,25 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetBudgetSummaryAsync(1, DateTime.Parse("2024-01-01"));
+            var okRequest_1 = await budgetController.GetBudgetSummaryAsync(DateTime.Parse("2024-01-01"), 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var budgetResult_1 = okActionResult_1?.Value as GetBudgetSummaryDto;
 
-            var okRequest_2 = await budgetController.GetBudgetSummaryAsync(2, DateTime.Parse("2024-01-01"));
+            var okRequest_2 = await budgetController.GetBudgetSummaryAsync(DateTime.Parse("2024-01-01"), 2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var budgetResult_2 = okActionResult_2?.Value as GetBudgetSummaryDto;
 
-            var okRequest_3 = await budgetController.GetBudgetSummaryAsync(3, DateTime.Parse("2024-01-01"));
+            var okRequest_3 = await budgetController.GetBudgetSummaryAsync(DateTime.Parse("2024-01-01"), 3);
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var budgetResult_3 = okActionResult_3?.Value as GetBudgetSummaryDto;
 
-            var notFoundRequest_1 = await budgetController.GetBudgetSummaryAsync(1001, DateTime.Parse("2024-01-01"));
+            var notFoundRequest_1 = await budgetController.GetBudgetSummaryAsync(DateTime.Parse("2024-01-01"), 1001);
 
-            var badRequest_1 = await budgetController.GetBudgetSummaryAsync(-1005, DateTime.Parse("2024-01-01"));
+            var badRequest_1 = await budgetController.GetBudgetSummaryAsync(DateTime.Parse("2024-01-01"), -1005);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetBudgetSummaryAsync(1005, new DateTime());
+            var badRequest_2 = await budgetController.GetBudgetSummaryAsync(new DateTime(), 1005);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
@@ -364,29 +364,29 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             int budget_year = 2024;
 
             //Act
-            var okRequest_1 = await budgetController.GetBudgetsAsync(1, budget_year);
+            var okRequest_1 = await budgetController.GetBudgetsAsync(budget_year, 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var budgetsResult_1 = okActionResult_1?.Value as IEnumerable<GetBudgetSummaryDto>;
 
-            var okRequest_2 = await budgetController.GetBudgetsAsync(2, budget_year);
+            var okRequest_2 = await budgetController.GetBudgetsAsync(budget_year, 2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var budgetsResult_2 = okActionResult_2?.Value as IEnumerable<GetBudgetSummaryDto>;
 
-            var okRequest_3 = await budgetController.GetBudgetsAsync(3, budget_year);
+            var okRequest_3 = await budgetController.GetBudgetsAsync(budget_year, 3);
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var budgetsResult_3 = okActionResult_3?.Value as IEnumerable<GetBudgetSummaryDto>;
 
-            var notFoundRequest_1 = await budgetController.GetBudgetsAsync(4, budget_year);
+            var notFoundRequest_1 = await budgetController.GetBudgetsAsync(budget_year, 4);
 
-            var badRequest_1 = await budgetController.GetBudgetsAsync(-1005, budget_year);
+            var badRequest_1 = await budgetController.GetBudgetsAsync(budget_year, -1005);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
-            var badRequest_2 = await budgetController.GetBudgetsAsync(1, -1);
+            var badRequest_2 = await budgetController.GetBudgetsAsync(-1, 1);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
 
-            var badRequest_3 = await budgetController.GetBudgetsAsync(1, 99999);
+            var badRequest_3 = await budgetController.GetBudgetsAsync(99999, 1);
             var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
             var badRequestResult_3 = badRequestActionResult_3?.Value as string;
 
