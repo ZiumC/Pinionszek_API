@@ -272,39 +272,39 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            int idNeedGeneralCategory = 1;
-            var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
-            decimal needs = budgetPaymentsData
-                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                    bpd.DetailedCategory.IdGeneralCategory == idNeedGeneralCategory)
-                .Sum(bpd => bpd.Charge);
-
-            int idWantsGeneralCategory = 2;
-            decimal wants = budgetPaymentsData
-                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                    bpd.DetailedCategory.IdGeneralCategory == idWantsGeneralCategory)
-                .Sum(bpd => bpd.Charge);
-
-            int idSavingsGeneralCategory = 3;
-            decimal savings = budgetPaymentsData
-                .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                    bpd.DetailedCategory.IdGeneralCategory == idSavingsGeneralCategory)
-                .Sum(bpd => bpd.Charge);
-
-            decimal refounds = budgetPaymentsData
-                .Sum(bpd => bpd.Refund);
-
-            decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
-
-            var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
-            var budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
+            GetBudgetSummaryDto budgetSummaryDto;
+            try
             {
-                Budget = budgetDto,
-                Needs = needs,
-                Wants = wants,
-                Savings = savings,
-                Actual = actual
-            });
+                var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+                decimal needs = _budgetUtils
+                            .GetPaymentsSum(GeneralCatEnum.NEEDS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                decimal wants = _budgetUtils
+                    .GetPaymentsSum(GeneralCatEnum.WANTS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                decimal savings = _budgetUtils
+                    .GetPaymentsSum(GeneralCatEnum.SAVINGS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                decimal refounds = _budgetUtils
+                    .GetPaymentsSum(GeneralCatEnum.NO_CATEGORY, PaymentColEnum.REFOUND, budgetPaymentsData);
+
+                decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
+
+                var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
+                budgetSummaryDto = _mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
+                {
+                    Budget = budgetDto,
+                    Needs = needs,
+                    Wants = wants,
+                    Savings = savings,
+                    Actual = actual
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Internal server error");
+            }
 
             return Ok(budgetSummaryDto);
         }
