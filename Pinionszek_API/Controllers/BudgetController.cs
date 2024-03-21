@@ -348,7 +348,6 @@ namespace Pinionszek_API.Controllers
             foreach (var budgetData in budgetsByYearData)
             {
                 var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
-
                 try
                 {
                     decimal needs = _budgetUtils
