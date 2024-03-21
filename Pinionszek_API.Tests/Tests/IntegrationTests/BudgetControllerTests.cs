@@ -447,5 +447,56 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_3?.Value.Should().NotBeNull();
             badRequestResult_3?.Contains("is invalid").Should().BeTrue();
         }
+
+        [Fact]
+        public async Task BudgetController_GetPaymentDetailsAsync_ReturnsPaymentOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            int firstPaymentId = 1;
+            int lastPaymentId = 13;
+            var okRequests = new List<OkObjectResult?>();
+            var paymentDetails = new List<GetPrivatePaymentDto?>();
+
+            //Act
+            for (int id = firstPaymentId; id <= lastPaymentId; id++)
+            {
+                var okRequest = await budgetController.GetPaymentDetailsAsync(1, 1);
+                var okActionResult = okRequest as OkObjectResult;
+                var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+
+                okRequests.Add(okActionResult);
+                paymentDetails.Add(paymentDetail);
+            }
+
+            //Assert
+            okRequests.Should().NotBeNullOrEmpty();
+            okRequests.Should().HaveCount(13);
+            foreach (var request in okRequests)
+            {
+                request.Should().BeOfType<OkObjectResult>();
+            }
+
+            paymentDetails.Should().NotBeNullOrEmpty();
+            paymentDetails.Should().HaveCount(13);
+            foreach (var payment in paymentDetails)
+            {
+                payment.Should().BeOfType<GetPrivatePaymentDto>();
+                payment.Should().NotBeNull();
+                payment.IdPayment.Should().BeGreaterThan(0);
+                payment?.Name.Should().NotBeNullOrEmpty();
+                payment?.Charge.Should().BeGreaterThanOrEqualTo(0);
+                payment?.Refund.Should().BeGreaterThanOrEqualTo(0);
+                payment?.Status.Should().NotBeNullOrEmpty();
+                payment?.Category.Should().NotBeNull();
+                payment?.Category.GeneralName.Should().NotBeNullOrEmpty();
+                payment?.Category.DetailedName.Should().NotBeNullOrEmpty();
+            }
+
+
+        }
+
     }
 }

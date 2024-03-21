@@ -385,5 +385,17 @@ namespace Pinionszek_API.Controllers
 
             return Ok(budgetsSummaryDto);
         }
+
+        /// <summary>
+        /// Get payment details by payment ID and user ID
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        /// <param name="idPayment">Payment ID</param>
+        [HttpGet("payments/{idPayment}")]
+        [ProducesResponseType(200, Type = typeof(GetPrivatePaymentDto))]
+        public async Task<IActionResult> GetPaymentDetailsAsync([Required] int idUser, int idPayment)
+        {
+            return Ok();
+        }
     }
 }
