@@ -3,6 +3,7 @@ using Castle.Components.DictionaryAdapter.Xml;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
@@ -23,6 +24,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
     {
 
         private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
         public BudgetControllerTests()
         {
             var mockMapper = new MapperConfiguration(cfg =>
@@ -33,6 +35,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new UserSettingsProfile());
             });
             _mapper = mockMapper.CreateMapper();
+
+            _config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(
+                 path: "appsettings.json",
+                 optional: false,
+                 reloadOnChange: true)
+           .Build();
         }
 
         [Fact]
@@ -41,7 +51,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(budgetApiService, _mapper);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(1, DateTime.Parse("2024-01-01"));
@@ -130,7 +140,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(budgetApiService, _mapper);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithFriendAsync(1, DateTime.Parse("2024-01-01"));
@@ -197,7 +207,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(budgetApiService, _mapper);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetUpcomingPaymentsSharedWithUserAsync(1002, DateTime.Parse("2024-01-01"));
@@ -267,7 +277,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(budgetApiService, _mapper);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetBudgetSummaryAsync(1, DateTime.Parse("2024-01-01"));
@@ -350,7 +360,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(budgetApiService, _mapper);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
             int budget_year = 2024;
 
             //Act

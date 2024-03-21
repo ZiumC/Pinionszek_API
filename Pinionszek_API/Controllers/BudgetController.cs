@@ -7,6 +7,7 @@ using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Utils;
 using System.Collections.Generic;
 
 namespace Pinionszek_API.Controllers
@@ -16,10 +17,12 @@ namespace Pinionszek_API.Controllers
     public class BudgetController : ControllerBase
     {
         private readonly IBudgetApiService _budgetService;
+        private readonly BudgetUtils _budgetUtils;
         private readonly IMapper _mapper;
 
-        public BudgetController(IBudgetApiService budgetService, IMapper mapper)
+        public BudgetController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
         {
+            _budgetUtils = new BudgetUtils(_config);
             _budgetService = budgetService;
             _mapper = mapper;
         }
@@ -344,39 +347,40 @@ namespace Pinionszek_API.Controllers
             var budgetsSummaryDto = new List<GetBudgetSummaryDto>();
             foreach (var budgetData in budgetsByYearData)
             {
-                int idNeedGeneralCategory = 1;
                 var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
-                decimal needs = budgetPaymentsData
-                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                        bpd.DetailedCategory.IdGeneralCategory == idNeedGeneralCategory)
-                    .Sum(bpd => bpd.Charge);
 
-                int idWantsGeneralCategory = 2;
-                decimal wants = budgetPaymentsData
-                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                        bpd.DetailedCategory.IdGeneralCategory == idWantsGeneralCategory)
-                    .Sum(bpd => bpd.Charge);
-
-                int idSavingsGeneralCategory = 3;
-                decimal savings = budgetPaymentsData
-                    .Where(bpd => bpd.DetailedCategory.GeneralCategory.IsDefault &&
-                        bpd.DetailedCategory.IdGeneralCategory == idSavingsGeneralCategory)
-                    .Sum(bpd => bpd.Charge);
-
-                decimal refounds = budgetPaymentsData
-                    .Sum(bpd => bpd.Refund);
-
-                decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
-
-                var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
-                budgetsSummaryDto.Add(_mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
+                try
                 {
-                    Budget = budgetDto,
-                    Needs = needs,
-                    Wants = wants,
-                    Savings = savings,
-                    Actual = actual
-                }));
+                    decimal needs = _budgetUtils
+                        .GetPaymentsSum(GeneralCatEnum.NEEDS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                    decimal wants = _budgetUtils
+                        .GetPaymentsSum(GeneralCatEnum.WANTS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                    decimal savings = _budgetUtils
+                        .GetPaymentsSum(GeneralCatEnum.SAVINGS, PaymentColEnum.CHARGE, budgetPaymentsData);
+
+                    decimal refounds = _budgetUtils
+                        .GetPaymentsSum(GeneralCatEnum.NO_CATEGORY, PaymentColEnum.REFOUND, budgetPaymentsData);
+
+                    decimal actual = (budgetData.Revenue + budgetData.Surplus + refounds) - (needs + wants + savings);
+
+                    var budgetDto = _mapper.Map<GetBudgetDto>(budgetData);
+                    budgetsSummaryDto.Add(_mapper.Map<GetBudgetSummaryDto>(new GetBudgetSummaryDto
+                    {
+                        Budget = budgetDto,
+                        Needs = needs,
+                        Wants = wants,
+                        Savings = savings,
+                        Actual = actual
+                    }));
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    return StatusCode(500, "Internal server error");
+                }
             }
 
             return Ok(budgetsSummaryDto);
