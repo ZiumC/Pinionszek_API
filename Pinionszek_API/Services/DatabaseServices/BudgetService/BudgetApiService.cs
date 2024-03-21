@@ -193,8 +193,8 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
             return await _dbContext.Budgets
                 .Where(b => b.IdUser == idUser)
                 .Join(_dbContext.BudgetStatuses,
-                bs => bs.IdBudgetStatus,
                 b => b.IdBudgetStatus,
+                bs => bs.IdBudgetStatus,
                 (b, bs) => new Budget
                 {
                     IdBudget = b.IdBudget,
@@ -209,9 +209,34 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                 }).ToListAsync();
         }
 
-        public Task<Payment?> GetPaymentAsync(int idPayment, int idUser)
+        public async Task<Payment?> GetPaymentAsync(int idPayment, int idUser)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Budgets
+                .Where(b => b.IdUser == idUser)
+                .Join(_dbContext.Payments,
+                b => b.IdBudget,
+                p => p.IdBudget,
+                (b, p) => p)
+                .Where(p => p.IdPayment == idPayment)
+                .Join(_dbContext.PaymentStatuses,
+                p => p.IdPaymentStatus,
+                ps => ps.IdPaymentStatus,
+                (p, ps) => new Payment
+                {
+                    IdPayment = p.IdPayment,
+                    Name = p.Name,
+                    Charge = p.Charge,
+                    Refund = p.Refund,
+                    Message = p.Message,
+                    PaymentDate = p.PaymentDate,
+                    PaidOn = p.PaidOn,
+                    PaymentAddedOn = p.PaymentAddedOn,
+                    PaymentStatus = new PaymentStatus
+                    {
+                        IdPaymentStatus = ps.IdPaymentStatus,
+                        Name = ps.Name,
+                    }
+                }).FirstOrDefaultAsync();
         }
     }
 }
