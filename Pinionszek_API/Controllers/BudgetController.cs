@@ -395,6 +395,19 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(GetPrivatePaymentDto))]
         public async Task<IActionResult> GetPaymentDetailsAsync([Required] int idUser, int idPayment)
         {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (idPayment <= 0)
+            {
+                ModelState.AddModelError("error", "Payment ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+
             return Ok();
         }
     }

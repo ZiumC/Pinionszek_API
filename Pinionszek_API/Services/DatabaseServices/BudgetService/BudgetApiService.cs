@@ -208,5 +208,10 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                     IdUser = b.IdUser
                 }).ToListAsync();
         }
+
+        public Task<Payment?> GetPaymentAsync(int idPayment, int idUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

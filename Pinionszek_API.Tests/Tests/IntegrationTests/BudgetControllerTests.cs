@@ -485,7 +485,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             {
                 payment.Should().BeOfType<GetPrivatePaymentDto>();
                 payment.Should().NotBeNull();
-                payment.IdPayment.Should().BeGreaterThan(0);
+                payment?.IdPayment.Should().BeGreaterThan(0);
                 payment?.Name.Should().NotBeNullOrEmpty();
                 payment?.Charge.Should().BeGreaterThanOrEqualTo(0);
                 payment?.Refund.Should().BeGreaterThanOrEqualTo(0);

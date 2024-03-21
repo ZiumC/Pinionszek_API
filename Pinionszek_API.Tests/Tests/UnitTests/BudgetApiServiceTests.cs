@@ -331,5 +331,46 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
             budgetOfIdUser_4.Should().BeNullOrEmpty();
             budgetOfNonExistingUser.Should().BeNullOrEmpty();
         }
+
+        [Fact]
+        public async Task BudgetApiService_GetPaymentAsync_ReturnsPaymentOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+
+            //Act
+            var payment1 = await budgetApiService.GetPaymentAsync(1, 1);
+            var payment2 = await budgetApiService.GetPaymentAsync(7, 2);
+            var payment3 = await budgetApiService.GetPaymentAsync(2, 1);
+            var payment4 = await budgetApiService.GetPaymentAsync(4, 2);
+            var payment5 = await budgetApiService.GetPaymentAsync(13, 1);
+
+            //Assert
+            payment1.Should().NotBeNull();
+            payment1?.Name.Should().NotBeNullOrEmpty();
+            payment1?.Charge.Should().BeGreaterThanOrEqualTo(0);
+            payment1?.Refund.Should().BeGreaterThanOrEqualTo(0);
+            payment1?.PaymentStatus.Should().NotBeNull();
+            payment1?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+
+            payment2.Should().NotBeNull();
+            payment2?.Name.Should().NotBeNullOrEmpty();
+            payment2?.Charge.Should().BeGreaterThanOrEqualTo(0);
+            payment2?.Refund.Should().BeGreaterThanOrEqualTo(0);
+            payment2?.PaymentStatus.Should().NotBeNull();
+            payment2?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+
+            payment3.Should().NotBeNull();
+            payment3?.Name.Should().NotBeNullOrEmpty();
+            payment3?.Charge.Should().BeGreaterThanOrEqualTo(0);
+            payment3?.Refund.Should().BeGreaterThanOrEqualTo(0);
+            payment3?.PaymentStatus.Should().NotBeNull();
+            payment3?.PaymentStatus.Name.Should().NotBeNullOrEmpty();
+
+            payment4.Should().BeNull();
+            
+            payment5.Should().BeNull();
+        }
     }
 }
