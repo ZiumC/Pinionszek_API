@@ -5,6 +5,8 @@ using Pinionszek_API.Services.DatabaseServices.UserService;
 
 namespace Pinionszek_API.Controllers
 {
+    //[ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase

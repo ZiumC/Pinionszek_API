@@ -26,8 +26,10 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Pinionszek API",
         Version = "v1",
-        Description = "REST API for Pinionszek project"
+        Description = "GET endpoints for REST API"
     });
+
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
     // Set the comments path for the Swagger JSON and UI.
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -44,7 +46,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint($"/swagger/v1/swagger.json", "REST Api v1");
+    });
 }
 
 app.UseHttpsRedirection();

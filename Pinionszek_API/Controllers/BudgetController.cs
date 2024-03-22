@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
     public class BudgetController : ControllerBase
