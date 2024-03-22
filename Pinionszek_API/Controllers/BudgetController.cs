@@ -471,5 +471,17 @@ namespace Pinionszek_API.Controllers
 
             return Ok(privatePaymentDto);
         }
+
+        /// <summary>
+        /// Get shared payments with other users by userID (that user who share) and budget date 
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        /// <param name="date">Budget date</param>
+        [HttpGet("payments/share")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
+        public async Task<IActionResult> GetPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
+        {
+            return Ok();
+        }
     }
 }
