@@ -3,12 +3,14 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IBudgetApiService, BudgetApiService>();
+builder.Services.AddScoped<IUserApiService, UserApiService>();
 builder.Services.AddDbContext<ProdDbContext>(opt => opt.UseSqlServer("name=ConnectionStrings:Default"));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
