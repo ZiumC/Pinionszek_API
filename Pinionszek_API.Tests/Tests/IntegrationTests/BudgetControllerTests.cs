@@ -4,9 +4,11 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Moq;
 using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Profiles;
@@ -522,5 +524,82 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             }
         }
 
+        [Fact]
+        public async Task BudgetController_GetPrivatePaymentsAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetDate = DateTime.Parse("2024-01-01");
+
+            //Act
+            var okRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetPrivatePaymentDto>;
+
+            var okRequest_2 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 2);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetPrivatePaymentDto>;
+
+            var notfoundRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 3);
+
+            var badRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, -1005);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            paymentsResult_1.Should().NotBeNull();
+            paymentsResult_1.Should().BeOfType<IEnumerable<GetPrivatePaymentDto>>();
+            paymentsResult_1?.Count().Should().Be(7);
+            paymentsResult_1?
+                .Where(pr => pr.IdPayment <= 0)
+                .Should().BeEmpty();
+            paymentsResult_1?
+                .Where(pr => string.IsNullOrEmpty(pr.Name))
+                .Should().BeEmpty();
+            paymentsResult_1?
+                .Where(pr => pr.Charge >= 0 || pr.Refund >= 0)
+                .Should().NotBeEmpty();
+            paymentsResult_1?
+                .Where(pr => string.IsNullOrEmpty(pr.Status))
+                .Should().BeEmpty();
+            paymentsResult_1?
+                .Where(pr => pr.Category == null ||
+                string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                string.IsNullOrEmpty(pr.Category.GeneralName))
+                .Should().BeEmpty();
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            paymentsResult_2.Should().NotBeNull();
+            paymentsResult_2.Should().BeOfType<IEnumerable<GetPrivatePaymentDto>>();
+            paymentsResult_2?.Count().Should().Be(7);
+            paymentsResult_2?
+                .Where(pr => pr.IdPayment <= 0)
+                .Should().BeEmpty();
+            paymentsResult_2?
+                .Where(pr => string.IsNullOrEmpty(pr.Name))
+                .Should().BeEmpty();
+            paymentsResult_2?
+                .Where(pr => pr.Charge >= 0 || pr.Refund >= 0)
+                .Should().NotBeEmpty();
+            paymentsResult_2?
+                .Where(pr => string.IsNullOrEmpty(pr.Status))
+                .Should().BeEmpty();
+            paymentsResult_2?
+                .Where(pr => pr.Category == null ||
+                string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                string.IsNullOrEmpty(pr.Category.GeneralName))
+                .Should().BeEmpty();
+
+            notfoundRequest_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+        }
     }
 }

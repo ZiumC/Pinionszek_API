@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
@@ -416,6 +417,18 @@ namespace Pinionszek_API.Controllers
             var paymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
 
             return Ok(paymentDto);
+        }
+
+        /// <summary>
+        /// Get all private payments by user ID and budget date
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        /// <param name="date">Budget date</param>
+        [HttpGet("payments/private")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
+        public async Task<IActionResult> GetPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
+        {
+            return Ok();
         }
     }
 }
