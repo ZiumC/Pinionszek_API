@@ -15,7 +15,22 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
 
         public async Task<IEnumerable<DetailedCategory>?> GetUserCategoriesAsync(int idUser)
         {
-            throw new NotImplementedException();
+            return await _dbContext.DetailedCategories
+                .Where(dc => dc.IdUser == idUser)
+                .Join(_dbContext.GeneralCategories,
+                dc => dc.IdGeneralCategory,
+                gc => gc.IdGeneralCategory,
+                (dc, gc) => new DetailedCategory
+                {
+                    IdDetailedCategory = dc.IdDetailedCategory,
+                    Name = dc.Name,
+                    GeneralCategory = new GeneralCategory
+                    {
+                        IdGeneralCategory = gc.IdGeneralCategory,
+                        Name = gc.Name,
+                        IsDefault = gc.IsDefault
+                    }
+                }).ToListAsync();
         }
     }
 }

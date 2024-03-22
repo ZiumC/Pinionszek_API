@@ -64,7 +64,6 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
                 .Should().BeNullOrEmpty();
 
             userCategories4.Should().BeNullOrEmpty();
-
         }
     }
 }
