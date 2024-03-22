@@ -538,5 +538,17 @@ namespace Pinionszek_API.Controllers
 
             return Ok(sharedPaymentsDto);
         }
+
+        /// <summary>
+        /// Get payments that are shared for user by userTag and payment date
+        /// </summary>
+        /// <param name="userTag">User tag</param>
+        /// <param name="date">Payment year and month</param>
+        [HttpGet("payments/assigement")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
+        public async Task<IActionResult> GetPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
+        {
+            return Ok();
+        }
     }
 }

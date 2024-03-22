@@ -709,5 +709,109 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
+
+        [Fact]
+        public async Task BudgetController_GetPaymentsSharedWithUserAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetDate = DateTime.Parse("2024-01-01");
+
+            //Act
+            var okRequest_1 = await budgetController.GetPaymentsSharedWithUserAsync(budgetDate, 1001);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetAssignedPaymentToUserDto>;
+
+            var okRequest_2 = await budgetController.GetPaymentsSharedWithUserAsync(budgetDate, 1002);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetAssignedPaymentToUserDto>;
+
+            var notFoundRequest_2 = await budgetController.GetPaymentsSharedWithUserAsync(budgetDate, 1003);
+            var notFoundRequest_3 = await budgetController.GetPaymentsSharedWithUserAsync(budgetDate, 1004);
+
+            var badRequest_1 = await budgetController.GetPaymentsSharedWithUserAsync(budgetDate, -1001);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await budgetController.GetPaymentsSharedWithUserAsync(new DateTime(), 1001);
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            paymentsResult_1.Should().NotBeNullOrEmpty();
+            paymentsResult_1?.Count().Should().Be(1);
+            paymentsResult_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.Payment.IdSharedPayment <= 0
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.Payment.PaymentDate != null &&
+                    (pr.Payment.PaymentDate <= DateTime.Parse("2024-01-01")
+                    && pr.Payment.PaymentDate >= DateTime.Parse("2024-01-31"))
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(
+                    pr => pr.SourceFriend == null
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_1?
+                .Where(pr => pr.SourceFriend.FriendTag == 1002)
+                .ToList().Count().Should().Be(0);
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            paymentsResult_2.Should().NotBeNullOrEmpty();
+            paymentsResult_2?.Count().Should().Be(2);
+            paymentsResult_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => pr.Payment.IdSharedPayment <= 0
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => pr.Payment.PaymentDate != null &&
+                    (pr.Payment.PaymentDate <= DateTime.Parse("2024-01-01")
+                    && pr.Payment.PaymentDate >= DateTime.Parse("2024-01-31"))
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => pr.SourceFriend == null
+                ).ToList().Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(pr => pr.SourceFriend.FriendTag == 1001)
+                .ToList().Count().Should().Be(0);
+
+            notFoundRequest_2.Should().BeOfType<NotFoundResult>();
+            notFoundRequest_3.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
+        }
     }
 }
