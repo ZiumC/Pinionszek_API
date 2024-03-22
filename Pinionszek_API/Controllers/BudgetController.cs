@@ -428,7 +428,48 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
         public async Task<IActionResult> GetPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            var budgetData = await _budgetService.GetBudgetDataAsync(idUser, date);
+            if (budgetData == null)
+            {
+                return NotFound();
+            }
+
+            var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+            if (budgetPaymentsData == null || budgetPaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            foreach (var payment in budgetPaymentsData)
+            {
+                var sharedPaymentData = await _budgetService
+                    .GetSharedPaymentDataAsync(payment.IdPayment);
+
+                payment.SharedPayment = sharedPaymentData;
+            }
+
+            var privatePaymentsData = budgetPaymentsData
+                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
+            if (privatePaymentsData == null || privatePaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            var privatePaymentDto = _mapper.Map<IEnumerable<GetPrivatePaymentDto>>(privatePaymentsData);
+
+            return Ok(privatePaymentDto);
         }
     }
 }

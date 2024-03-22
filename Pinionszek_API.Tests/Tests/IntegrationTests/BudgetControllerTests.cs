@@ -540,11 +540,11 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Act
             var okRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetPrivatePaymentDto>;
+            var paymentsResult_1 = okActionResult_1?.Value as List<GetPrivatePaymentDto>;
 
             var okRequest_2 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
-            var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetPrivatePaymentDto>;
+            var paymentsResult_2 = okActionResult_2?.Value as List<GetPrivatePaymentDto>;
 
             var notfoundRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 3);
 
@@ -552,12 +552,16 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
+            var badRequest_2 = await budgetController.GetPrivatePaymentsAsync(new DateTime(), 1);
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
             okActionResult_1.Should().NotBeNull();
             paymentsResult_1.Should().NotBeNull();
-            paymentsResult_1.Should().BeOfType<IEnumerable<GetPrivatePaymentDto>>();
-            paymentsResult_1?.Count().Should().Be(7);
+            paymentsResult_1.Should().BeOfType<List<GetPrivatePaymentDto>>();
+            paymentsResult_1?.Count().Should().Be(5);
             paymentsResult_1?
                 .Where(pr => pr.IdPayment <= 0)
                 .Should().BeEmpty();
@@ -579,8 +583,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             okRequest_2.Should().BeOfType<OkObjectResult>();
             okActionResult_2.Should().NotBeNull();
             paymentsResult_2.Should().NotBeNull();
-            paymentsResult_2.Should().BeOfType<IEnumerable<GetPrivatePaymentDto>>();
-            paymentsResult_2?.Count().Should().Be(7);
+            paymentsResult_2.Should().BeOfType<List<GetPrivatePaymentDto>>();
+            paymentsResult_2?.Count().Should().Be(5);
             paymentsResult_2?
                 .Where(pr => pr.IdPayment <= 0)
                 .Should().BeEmpty();
@@ -604,6 +608,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
     }
 }
