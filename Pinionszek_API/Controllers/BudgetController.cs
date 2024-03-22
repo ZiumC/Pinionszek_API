@@ -548,7 +548,54 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
         public async Task<IActionResult> GetPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
         {
-            return Ok();
+            if (userTag <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
+            if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            var assignedPaymentsToUserDto = new List<GetAssignedPaymentToUserDto>();
+            foreach (var assignedPaymentData in assignedPaymentsToUserData)
+            {
+                int idAssignedPayment = assignedPaymentData.IdPayment;
+                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(idAssignedPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+
+                int idSharedPayment = sharedPaymentData.IdSharedPayment;
+                var friendNameAndTag = await _budgetService.GetFriendSenderNameAndTagAsync(idSharedPayment);
+
+                var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
+                var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
+                _mapper.Map(new GetFriendDto
+                {
+                    Name = friendNameAndTag.Item1,
+                    FriendTag = friendNameAndTag.Item2,
+                }, assignedPaymentToUserDto);
+
+                assignedPaymentsToUserDto.Add(assignedPaymentToUserDto);
+            }
+
+            if (assignedPaymentsToUserDto.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(assignedPaymentsToUserDto);
         }
     }
 }

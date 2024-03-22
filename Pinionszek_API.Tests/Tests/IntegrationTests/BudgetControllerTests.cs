@@ -768,7 +768,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                     pr => pr.SourceFriend == null
                 ).ToList().Should().BeNullOrEmpty();
             paymentsResult_1?
-                .Where(pr => pr.SourceFriend.FriendTag == 1002)
+                .Where(pr => pr.SourceFriend.FriendTag == 1001)
                 .ToList().Count().Should().Be(0);
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
@@ -799,7 +799,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                     pr => pr.SourceFriend == null
                 ).ToList().Should().BeNullOrEmpty();
             paymentsResult_2?
-                .Where(pr => pr.SourceFriend.FriendTag == 1001)
+                .Where(pr => pr.SourceFriend.FriendTag == 1002)
                 .ToList().Count().Should().Be(0);
 
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
