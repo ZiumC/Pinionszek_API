@@ -481,7 +481,62 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
         public async Task<IActionResult> GetPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            var budgetData = await _budgetService
+                .GetBudgetDataAsync(idUser, date);
+            if (budgetData == null)
+            {
+                return NotFound();
+            }
+
+            var budgetPaymentsData = await _budgetService
+                .GetPaymentsAsync(budgetData.IdBudget);
+            if (budgetPaymentsData == null)
+            {
+                return NotFound();
+            }
+
+            List<GetSharedPaymentToFriendDto> sharedPaymentsDto = new List<GetSharedPaymentToFriendDto>();
+            foreach (var paymentData in budgetPaymentsData)
+            {
+                int idPayment = paymentData.IdPayment;
+                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(idPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+
+                int idSharedPayment = sharedPaymentData.IdSharedPayment;
+                var friendNameAndTag = await _budgetService.GetFriendReceiveNameAndTagAsync(idSharedPayment);
+
+                var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
+                var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
+                _mapper.Map(new GetFriendDto
+                {
+                    Name = friendNameAndTag.Item1,
+                    FriendTag = friendNameAndTag.Item2,
+                }, sharedPaymentToFriendDto);
+
+                sharedPaymentsDto.Add(sharedPaymentToFriendDto);
+            }
+
+            if (sharedPaymentsDto.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(sharedPaymentsDto);
         }
     }
 }

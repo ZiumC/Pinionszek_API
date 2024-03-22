@@ -628,7 +628,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
 
-            var notFoundRequest_1 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 2);
+            var okRequest_2 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 2);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
+
             var notFoundRequest_2 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 3);
             var notFoundRequest_3 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 4);
 
@@ -668,7 +671,33 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
-            notFoundRequest_1.Should().BeOfType<NotFoundResult>();
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            paymentsResult_2.Should().NotBeNullOrEmpty();
+            paymentsResult_2?.Count().Should().Be(1);
+            paymentsResult_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => pr.Payment.IdSharedPayment != null ||
+                          pr.Payment.IdSharedPayment > 0
+                ).ToList()
+                .Should().NotBeNullOrEmpty();
+            paymentsResult_2?
+                .Where(
+                    pr => pr.TargetFriend == null
+                ).ToList()
+                .Should().BeNullOrEmpty();
+
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
             notFoundRequest_3.Should().BeOfType<NotFoundResult>();
 
