@@ -61,5 +61,35 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
             userFriends_4.Should().BeNullOrEmpty();
         }
+        [Fact]
+        public async Task UserApiService_GetUserSettingsAsync_ReturnsSettingsOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            int user_1 = 1;
+            int user_2 = 2;
+            int user_3 = 3;
+            int user_4 = 4;
+            int user_5 = 5;
+
+            //Act
+            var userSettings_1 = await userApiService.GetUserSettingsAsync(user_1);
+            var userSettings_2 = await userApiService.GetUserSettingsAsync(user_2);
+            var userSettings_3 = await userApiService.GetUserSettingsAsync(user_3);
+            var userSettings_4 = await userApiService.GetUserSettingsAsync(user_4);
+            var userSettings_5 = await userApiService.GetUserSettingsAsync(user_5);
+
+            //Assert
+            userSettings_1.Should().NotBeNull();
+
+            userSettings_2.Should().NotBeNull();
+
+            userSettings_3.Should().NotBeNull();
+
+            userSettings_4.Should().NotBeNull();
+
+            userSettings_5.Should().BeNull();
+        }
     }
 }
