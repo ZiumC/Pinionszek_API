@@ -25,7 +25,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.Utils
 
 
         [Fact]
-        public async Task AccountUtils_MaskEmailString_ReturnsMaskedEmailOrThrowsExteption()
+        public void AccountUtils_MaskEmailString_ReturnsMaskedEmailOrThrowsExteption()
         {
             //Arrange
             var accountUtils = new AccountUtils(_config);
