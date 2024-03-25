@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Pinionszek_API.Models.DTOs.GetDto;
+using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Services.DatabaseServices.UserService;
+using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
-    //[ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
@@ -14,10 +16,11 @@ namespace Pinionszek_API.Controllers
         private readonly IUserApiService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(IConfiguration _config, IUserApiService budgetService, IMapper mapper)
+        public UserController(IConfiguration _config, IUserApiService userService, IMapper mapper)
         {
-            _userService = budgetService;
+            _userService = userService;
             _mapper = mapper;
         }
+
     }
 }

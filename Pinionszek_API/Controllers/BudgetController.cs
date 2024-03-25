@@ -598,5 +598,16 @@ namespace Pinionszek_API.Controllers
 
             return Ok(assignedPaymentsToUserDto);
         }
+
+        /// <summary>
+        /// Get payments general categories by user ID
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("payments-categories/general")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
+        public async Task<IActionResult> GetGeneralCategoriesAsync([Required] int idUser)
+        {
+            return Ok();
+        }
     }
 }
