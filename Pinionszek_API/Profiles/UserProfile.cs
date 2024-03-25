@@ -6,7 +6,7 @@ namespace Pinionszek_API.Profiles
 {
     public class UserProfile : Profile
     {
-        public UserProfile() 
+        public UserProfile()
         {
             CreateMap<Friend, GetUserFriendDto>()
                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.User.Login));
@@ -15,6 +15,8 @@ namespace Pinionszek_API.Profiles
                    .ForMember(dest => dest.NeedsRule, opt => opt.MapFrom(src => src.Needs))
                    .ForMember(dest => dest.WantsRule, opt => opt.MapFrom(src => src.Wants))
                    .ForMember(dest => dest.SavingsRule, opt => opt.MapFrom(src => src.Savings));
+
+            CreateMap<User, GetUserProfileDto>();
 
         }
     }

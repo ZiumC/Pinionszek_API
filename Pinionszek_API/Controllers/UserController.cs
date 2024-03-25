@@ -5,6 +5,7 @@ using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.UserService;
+using Pinionszek_API.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
@@ -16,11 +17,14 @@ namespace Pinionszek_API.Controllers
     {
         private readonly IUserApiService _userService;
         private readonly IMapper _mapper;
+        private readonly AccountUtils _accountUtils;
 
         public UserController(IConfiguration _config, IUserApiService userService, IMapper mapper)
         {
             _userService = userService;
             _mapper = mapper;
+            _accountUtils = new AccountUtils(_config);
+
         }
 
         /// <summary>
@@ -77,7 +81,22 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(GetUserProfileDto))]
         public async Task<IActionResult> GetUserProfileDataAsync(int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userProfileData = await _userService.GetUserDataAsync(idUser);
+            if (userProfileData == null)
+            {
+                return NotFound();
+            }
+
+            string email = _accountUtils.MaskEmailString(userProfileData.Email);
+            userProfileData.Email = email;
+
+            return Ok(_mapper.Map<GetUserProfileDto>(userProfileData));
         }
     }
 }
