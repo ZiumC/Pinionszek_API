@@ -1,4 +1,4 @@
-﻿namespace Pinionszek_API.Models.DTOs.GetDto
+﻿namespace Pinionszek_API.Models.DTOs.GetDto.User
 {
     public class GetUserSettingsDto
     {

@@ -7,6 +7,7 @@ using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
+using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Utils;
 using System.Collections.Generic;
@@ -551,7 +552,7 @@ namespace Pinionszek_API.Controllers
         {
             if (userTag <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("error", "User tag is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -600,14 +601,26 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Get payments general categories by user ID
+        /// Get payments categories by user ID
         /// </summary>
         /// <param name="idUser">User ID</param>
-        [HttpGet("payments-categories/general")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
-        public async Task<IActionResult> GetGeneralCategoriesAsync([Required] int idUser)
+        [HttpGet("payments-categories")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
+        public async Task<IActionResult> GetPaymentsCategoriesAsync([Required] int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userGeneralCategoriesData = await _budgetService.GetUserCategoriesAsync(idUser);
+            if (userGeneralCategoriesData == null || userGeneralCategoriesData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetUserCategoryDto>>(userGeneralCategoriesData));
         }
     }
 }
