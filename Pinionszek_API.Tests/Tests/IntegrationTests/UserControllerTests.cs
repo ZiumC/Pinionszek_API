@@ -107,5 +107,84 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
         }
+        [Fact]
+        public async Task UserController_GetUserSettingsAsync_ReturnsFriendssOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            var userController = new UserController(_config, userApiService, _mapper);
+            int user_1 = 1;
+            int user_2 = 2;
+            int user_3 = 3;
+            int user_4 = 4;
+            int user_5 = 5;
+
+            //Act
+            var okRequest_1 = await userController.GetUserFriendsAsync(user_1);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var settingsResult_1 = okActionResult_1?.Value as GetUserSettingsDto;
+
+            var okRequest_2 = await userController.GetUserFriendsAsync(user_2);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var settingsResult_2 = okActionResult_2?.Value as GetUserSettingsDto;
+
+            var okRequest_3 = await userController.GetUserFriendsAsync(user_3);
+            var okActionResult_3 = okRequest_3 as OkObjectResult;
+            var settingsResult_3 = okActionResult_3?.Value as GetUserSettingsDto;
+
+            var okRequest_4 = await userController.GetUserFriendsAsync(user_4);
+            var okActionResult_4 = okRequest_4 as OkObjectResult;
+            var settingsResult_4 = okActionResult_4?.Value as GetUserSettingsDto;
+
+            var notfound_1 = await userController.GetUserFriendsAsync(user_5);
+
+            var badRequest_1 = await userController.GetUserFriendsAsync(-user_4);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            settingsResult_1?.UseBudgetRules.Should().BeTrue();
+            settingsResult_1?.DisplayBudgetRules.Should().BeFalse();
+            settingsResult_1?.IdUserSetting.Should().BeGreaterThan(0);
+            settingsResult_1?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_1?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_1?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            settingsResult_2?.UseBudgetRules.Should().BeFalse();
+            settingsResult_2?.DisplayBudgetRules.Should().BeFalse();
+            settingsResult_2?.IdUserSetting.Should().BeGreaterThan(0);
+            settingsResult_2?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_2?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_2?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+
+            okRequest_3.Should().BeOfType<OkObjectResult>();
+            okActionResult_3.Should().NotBeNull();
+            settingsResult_3?.UseBudgetRules.Should().BeTrue();
+            settingsResult_3?.DisplayBudgetRules.Should().BeTrue();
+            settingsResult_3?.IdUserSetting.Should().BeGreaterThan(0);
+            settingsResult_3?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_3?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_3?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+
+            okRequest_4.Should().BeOfType<OkObjectResult>();
+            okActionResult_4.Should().NotBeNull();
+            settingsResult_4?.UseBudgetRules.Should().BeTrue();
+            settingsResult_4?.DisplayBudgetRules.Should().BeTrue();
+            settingsResult_4?.IdUserSetting.Should().BeGreaterThan(0);
+            settingsResult_4?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_4?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
+            settingsResult_4?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+
+            notfound_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+        }
     }
 }
