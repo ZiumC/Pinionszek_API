@@ -91,5 +91,63 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
             userSettings_5.Should().BeNull();
         }
+        [Fact]
+        public async Task UserApiService_GetUserDataAsync_ReturnsUserOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            int user_1 = 1;
+            int user_2 = 2;
+            int user_3 = 3;
+            int user_4 = 4;
+            int user_5 = 5;
+
+            //Act
+            var userData_1 = await userApiService.GetUserDataAsync(user_1);
+            var userData_2 = await userApiService.GetUserDataAsync(user_2);
+            var userData_3 = await userApiService.GetUserDataAsync(user_3);
+            var userData_4 = await userApiService.GetUserDataAsync(user_4);
+            var userData_5 = await userApiService.GetUserDataAsync(user_5);
+
+            //Assert
+            userData_1.Should().NotBeNull();
+            userData_1?.IdUser.Should().BeGreaterThan(0);
+            userData_1?.UserTag.Should().BeGreaterThan(0);
+            userData_1?.Email.Should().NotBeNullOrEmpty();
+            userData_1?.Login.Should().NotBeNullOrEmpty();
+            userData_1?.Password.Should().NotBeNullOrEmpty();
+            userData_1?.PasswordSalt.Should().NotBeNullOrEmpty();
+            userData_1?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+
+            userData_2.Should().NotBeNull();
+            userData_2?.IdUser.Should().BeGreaterThan(0);
+            userData_2?.UserTag.Should().BeGreaterThan(0);
+            userData_2?.Email.Should().NotBeNullOrEmpty();
+            userData_2?.Login.Should().NotBeNullOrEmpty();
+            userData_2?.Password.Should().NotBeNullOrEmpty();
+            userData_2?.PasswordSalt.Should().NotBeNullOrEmpty();
+            userData_2?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+
+            userData_3.Should().NotBeNull();
+            userData_3?.IdUser.Should().BeGreaterThan(0);
+            userData_3?.UserTag.Should().BeGreaterThan(0);
+            userData_3?.Email.Should().NotBeNullOrEmpty();
+            userData_3?.Login.Should().NotBeNullOrEmpty();
+            userData_3?.Password.Should().NotBeNullOrEmpty();
+            userData_3?.PasswordSalt.Should().NotBeNullOrEmpty();
+            userData_3?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+
+            userData_4.Should().NotBeNull();
+            userData_4?.IdUser.Should().BeGreaterThan(0);
+            userData_4?.UserTag.Should().BeGreaterThan(0);
+            userData_4?.Email.Should().NotBeNullOrEmpty();
+            userData_4?.Login.Should().NotBeNullOrEmpty();
+            userData_4?.Password.Should().NotBeNullOrEmpty();
+            userData_4?.PasswordSalt.Should().NotBeNullOrEmpty();
+            userData_4?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+
+            userData_5.Should().BeNull();
+        }
     }
 }

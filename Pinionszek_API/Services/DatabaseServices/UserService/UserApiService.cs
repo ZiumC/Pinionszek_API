@@ -39,5 +39,24 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
                 .Where(us => us.IdUser == idUser)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<User?> GetUserDataAsync(int idUser)
+        {
+            return await _dbContext.Users
+                .Where(u => u.IdUser == idUser)
+                .Select(u => new User
+                {
+                    IdUser = u.IdUser,
+                    UserTag = u.UserTag,
+                    Email = u.Email,
+                    Login = u.Login,
+                    Password = u.Password,
+                    PasswordSalt = u.PasswordSalt,
+                    RegisteredAt = u.RegisteredAt,
+                    RefreshToken = u.RefreshToken,
+                    LoginAttempts = u.LoginAttempts,
+                    BlockedTo = u.BlockedTo
+                }).FirstOrDefaultAsync();
+        }
     }
 }
