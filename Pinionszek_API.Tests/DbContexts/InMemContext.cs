@@ -18,7 +18,7 @@ namespace Pinionszek_API.Tests.DbContexts
                 .Options;
 
             var prodDbContext = new ProdDbContext(options);
-            prodDbContext.Database.EnsureCreated();
+            prodDbContext.Database.EnsureDeleted();
 
             if (prodDbContext.Users.Count() == 0)
             {
@@ -118,7 +118,7 @@ namespace Pinionszek_API.Tests.DbContexts
                     IdUser = 3,
                     Needs = new decimal(55.00),
                     Wants = new decimal(40.00),
-                    Savings = new decimal(15.00),
+                    Savings = new decimal(5.00),
                 });
 
                 await prodDbContext.SaveChangesAsync();

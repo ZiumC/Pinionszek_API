@@ -121,25 +121,25 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             int user_5 = 5;
 
             //Act
-            var okRequest_1 = await userController.GetUserFriendsAsync(user_1);
+            var okRequest_1 = await userController.GetUserSettingsAsync(user_1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var settingsResult_1 = okActionResult_1?.Value as GetUserSettingsDto;
 
-            var okRequest_2 = await userController.GetUserFriendsAsync(user_2);
+            var okRequest_2 = await userController.GetUserSettingsAsync(user_2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var settingsResult_2 = okActionResult_2?.Value as GetUserSettingsDto;
 
-            var okRequest_3 = await userController.GetUserFriendsAsync(user_3);
+            var okRequest_3 = await userController.GetUserSettingsAsync(user_3);
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var settingsResult_3 = okActionResult_3?.Value as GetUserSettingsDto;
 
-            var okRequest_4 = await userController.GetUserFriendsAsync(user_4);
+            var okRequest_4 = await userController.GetUserSettingsAsync(user_4);
             var okActionResult_4 = okRequest_4 as OkObjectResult;
             var settingsResult_4 = okActionResult_4?.Value as GetUserSettingsDto;
 
-            var notfound_1 = await userController.GetUserFriendsAsync(user_5);
+            var notfound_1 = await userController.GetUserSettingsAsync(user_5);
 
-            var badRequest_1 = await userController.GetUserFriendsAsync(-user_4);
+            var badRequest_1 = await userController.GetUserSettingsAsync(-user_4);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
@@ -152,6 +152,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             settingsResult_1?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_1?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_1?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+            var percentSum_1 = settingsResult_1?.NeedsRule + settingsResult_1?.WantsRule +
+                settingsResult_1?.SavingsRule;
+            percentSum_1.Should().BeLessThanOrEqualTo(100);
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
             okActionResult_2.Should().NotBeNull();
@@ -161,6 +164,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             settingsResult_2?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_2?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_2?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+            var percentSum_2 = settingsResult_2?.NeedsRule + settingsResult_2?.WantsRule +
+                settingsResult_2?.SavingsRule;
+            percentSum_2.Should().BeLessThanOrEqualTo(100);
 
             okRequest_3.Should().BeOfType<OkObjectResult>();
             okActionResult_3.Should().NotBeNull();
@@ -170,6 +176,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             settingsResult_3?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_3?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_3?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+            var percentSum_3 = settingsResult_3?.NeedsRule + settingsResult_3?.WantsRule +
+                settingsResult_3?.SavingsRule;
+            percentSum_3.Should().BeLessThanOrEqualTo(100);
 
             okRequest_4.Should().BeOfType<OkObjectResult>();
             okActionResult_4.Should().NotBeNull();
@@ -179,6 +188,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             settingsResult_4?.NeedsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_4?.WantsRule.Should().BeGreaterThanOrEqualTo(0);
             settingsResult_4?.SavingsRule.Should().BeGreaterThanOrEqualTo(0);
+            var percentSum_4 = settingsResult_4?.NeedsRule + settingsResult_4?.WantsRule +
+                settingsResult_4?.SavingsRule;
+            percentSum_4.Should().BeLessThanOrEqualTo(100);
 
             notfound_1.Should().BeOfType<NotFoundResult>();
 

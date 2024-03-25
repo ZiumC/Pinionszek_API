@@ -54,7 +54,19 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(GetUserSettingsDto))]
         public async Task<IActionResult> GetUserSettingsAsync(int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userSettingsData = await _userService.GetUserSettingsAsync(idUser);
+            if (userSettingsData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<GetUserSettingsDto>(userSettingsData));
         }
 
     }
