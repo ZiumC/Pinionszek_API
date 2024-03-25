@@ -27,9 +27,9 @@ namespace Pinionszek_API.Controllers
         /// Get user friends by user ID 
         /// </summary>
         /// <param name="idUser">User ID</param>
-        [HttpGet("friends")]
+        [HttpGet("{idUser}/friends")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserFriendDto>))]
-        public async Task<IActionResult> GetUserFriendsAsync([Required] int idUser)
+        public async Task<IActionResult> GetUserFriendsAsync(int idUser)
         {
             if (idUser <= 0)
             {
@@ -37,13 +37,24 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userFriendsData = await _userService.GetUserFriends(idUser);
+            var userFriendsData = await _userService.GetUserFriendsAsync(idUser);
             if (userFriendsData == null || userFriendsData.Count() == 0)
             {
                 return NotFound();
             }
 
             return Ok(_mapper.Map<IEnumerable<GetUserFriendDto>>(userFriendsData));
+        }
+
+        /// <summary>
+        /// Get user settings by user ID 
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("{idUser}/settings")]
+        [ProducesResponseType(200, Type = typeof(GetUserSettingsDto))]
+        public async Task<IActionResult> GetUserSettingsAsync(int idUser)
+        {
+            return Ok();
         }
 
     }

@@ -13,7 +13,7 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Friend>?> GetUserFriends(int idUser)
+        public async Task<IEnumerable<Friend>?> GetUserFriendsAsync(int idUser)
         {
             return await _dbContext.Friends
                 .Where(f => f.IdUser == idUser)
@@ -31,6 +31,13 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
                         Login = u.Login
                     }
                 }).ToListAsync();
+        }
+
+        public async Task<UserSettings?> GetUserSettingsAsync(int idUser)
+        {
+            return await _dbContext.UserSettings
+                .Where(us => us.IdUser == idUser)
+                .FirstOrDefaultAsync();
         }
     }
 }

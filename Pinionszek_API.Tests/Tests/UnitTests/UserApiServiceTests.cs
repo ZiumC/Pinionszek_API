@@ -14,7 +14,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
     {
 
         [Fact]
-        public async Task UserApiService_GetUserFriends_ReturnsFriendsOrNotfound()
+        public async Task UserApiService_GetUserFriendsAsync_ReturnsFriendsOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -26,10 +26,10 @@ namespace Pinionszek_API.Tests.Tests.UnitTests
 
 
             //Act
-            var userFriends_1 = await userApiService.GetUserFriends(user_1.IdUser);
-            var userFriends_2 = await userApiService.GetUserFriends(user_2.IdUser);
-            var userFriends_3 = await userApiService.GetUserFriends(user_3.IdUser);
-            var userFriends_4 = await userApiService.GetUserFriends(user_4.IdUser);
+            var userFriends_1 = await userApiService.GetUserFriendsAsync(user_1.IdUser);
+            var userFriends_2 = await userApiService.GetUserFriendsAsync(user_2.IdUser);
+            var userFriends_3 = await userApiService.GetUserFriendsAsync(user_3.IdUser);
+            var userFriends_4 = await userApiService.GetUserFriendsAsync(user_4.IdUser);
 
             //Assert
             userFriends_1.Should().NotBeNull();

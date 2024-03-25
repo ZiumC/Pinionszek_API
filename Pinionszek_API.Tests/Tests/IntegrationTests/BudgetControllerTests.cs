@@ -35,7 +35,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new PaymentProfile());
                 cfg.AddProfile(new CategoryProfile());
                 cfg.AddProfile(new BudgetProfile());
-                cfg.AddProfile(new UserSettingsProfile());
             });
             _mapper = mockMapper.CreateMapper();
 
