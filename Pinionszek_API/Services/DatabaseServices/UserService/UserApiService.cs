@@ -13,5 +13,9 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
             _dbContext = dbContext;
         }
 
+        public Task<IEnumerable<Friend>?> GetUserFriends(int idUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
