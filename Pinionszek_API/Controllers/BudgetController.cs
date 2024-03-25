@@ -148,7 +148,7 @@ namespace Pinionszek_API.Controllers
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
                 var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -224,7 +224,7 @@ namespace Pinionszek_API.Controllers
 
                 var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
                 var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -524,7 +524,7 @@ namespace Pinionszek_API.Controllers
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
                 var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -583,7 +583,7 @@ namespace Pinionszek_API.Controllers
 
                 var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
                 var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,

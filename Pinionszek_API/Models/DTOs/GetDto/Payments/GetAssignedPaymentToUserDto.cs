@@ -3,6 +3,6 @@
     public class GetAssignedPaymentToUserDto
     {
         public GetAssignedPaymentDto Payment { get; set; }
-        public GetFriendDto SourceFriend { get; set; }
+        public GetPaymentFriendDto SourceFriend { get; set; }
     }
 }

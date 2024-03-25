@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
+using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,6 +21,17 @@ namespace Pinionszek_API.Controllers
         {
             _userService = userService;
             _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Get user friends by user ID 
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("friends")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserFriendDto>))]
+        public async Task<IActionResult> GetUserFriendsAsync([Required] int idUser) 
+        {
+            return Ok();
         }
 
     }

@@ -3,6 +3,6 @@
     public class GetSharedPaymentToFriendDto
     {
         public GetPrivatePaymentDto Payment { get; set; }
-        public GetFriendDto TargetFriend { get; set; }
+        public GetPaymentFriendDto TargetFriend { get; set; }
     }
 }
