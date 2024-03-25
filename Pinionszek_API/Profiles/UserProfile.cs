@@ -10,7 +10,12 @@ namespace Pinionszek_API.Profiles
         {
             CreateMap<Friend, GetUserFriendDto>()
                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.User.Login));
-                   
+
+            CreateMap<UserSettings, GetUserSettingsDto>()
+                   .ForMember(dest => dest.NeedsRule, opt => opt.MapFrom(src => src.Needs))
+                   .ForMember(dest => dest.WantsRule, opt => opt.MapFrom(src => src.Wants))
+                   .ForMember(dest => dest.SavingsRule, opt => opt.MapFrom(src => src.Savings));
+
         }
     }
 }
