@@ -107,8 +107,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
         }
+
         [Fact]
-        public async Task UserController_GetUserSettingsAsync_ReturnsFriendssOrNotfoundOrBadrequest()
+        public async Task UserController_GetUserSettingsAsync_ReturnsSettingsOrNotfoundOrBadrequest()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
@@ -191,6 +192,75 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var percentSum_4 = settingsResult_4?.NeedsRule + settingsResult_4?.WantsRule +
                 settingsResult_4?.SavingsRule;
             percentSum_4.Should().BeLessThanOrEqualTo(100);
+
+            notfound_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task UserControllerGetUserProfileDataAsync_ReturnsUserProfileOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            var userController = new UserController(_config, userApiService, _mapper);
+            int user_1 = 1;
+            int user_2 = 2;
+            int user_3 = 3;
+            int user_4 = 4;
+            int user_5 = 5;
+            var dateAfter = DateTime.Parse("2019-01-01");
+
+            //Act
+            var okRequest_1 = await userController.GetUserProfileDataAsync(user_1);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var profileResult_1 = okActionResult_1?.Value as GetUserProfileDto;
+
+            var okRequest_2 = await userController.GetUserProfileDataAsync(user_2);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var profileResult_2 = okActionResult_2?.Value as GetUserProfileDto;
+
+            var okRequest_3 = await userController.GetUserProfileDataAsync(user_3);
+            var okActionResult_3 = okRequest_3 as OkObjectResult;
+            var profileResult_3 = okActionResult_3?.Value as GetUserProfileDto;
+
+            var okRequest_4 = await userController.GetUserProfileDataAsync(user_4);
+            var okActionResult_4 = okRequest_4 as OkObjectResult;
+            var profileResult_4 = okActionResult_4?.Value as GetUserProfileDto;
+
+            var notfound_1 = await userController.GetUserProfileDataAsync(user_5);
+
+            var badRequest_1 = await userController.GetUserProfileDataAsync(-user_4);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            profileResult_1?.UserTag.Should().BeGreaterThan(0);
+            profileResult_1?.RegisteredAt.Should().BeAfter(dateAfter);
+            profileResult_1?.Email.Should().Contain("*");
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            profileResult_2?.UserTag.Should().BeGreaterThan(0);
+            profileResult_2?.RegisteredAt.Should().BeAfter(dateAfter);
+            profileResult_2?.Email.Should().Contain("*");
+
+            okRequest_3.Should().BeOfType<OkObjectResult>();
+            okActionResult_3.Should().NotBeNull();
+            profileResult_3?.UserTag.Should().BeGreaterThan(0);
+            profileResult_3?.RegisteredAt.Should().BeAfter(dateAfter);
+            profileResult_3?.Email.Should().Contain("*");
+
+            okRequest_4.Should().BeOfType<OkObjectResult>();
+            okActionResult_4.Should().NotBeNull();
+            profileResult_4?.UserTag.Should().BeGreaterThan(0);
+            profileResult_4?.RegisteredAt.Should().BeAfter(dateAfter);
+            profileResult_4?.Email.Should().Contain("*");
 
             notfound_1.Should().BeOfType<NotFoundResult>();
 

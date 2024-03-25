@@ -69,5 +69,15 @@ namespace Pinionszek_API.Controllers
             return Ok(_mapper.Map<GetUserSettingsDto>(userSettingsData));
         }
 
+        /// <summary>
+        /// Get user prodile data by user ID 
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("{idUser}")]
+        [ProducesResponseType(200, Type = typeof(GetUserProfileDto))]
+        public async Task<IActionResult> GetUserProfileDataAsync(int idUser)
+        {
+            return Ok();
+        }
     }
 }
