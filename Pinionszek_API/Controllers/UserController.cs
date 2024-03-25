@@ -29,9 +29,21 @@ namespace Pinionszek_API.Controllers
         /// <param name="idUser">User ID</param>
         [HttpGet("friends")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserFriendDto>))]
-        public async Task<IActionResult> GetUserFriendsAsync([Required] int idUser) 
+        public async Task<IActionResult> GetUserFriendsAsync([Required] int idUser)
         {
-            return Ok();
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userFriendsData = await _userService.GetUserFriends(idUser);
+            if (userFriendsData == null || userFriendsData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetUserFriendDto>>(userFriendsData));
         }
 
     }

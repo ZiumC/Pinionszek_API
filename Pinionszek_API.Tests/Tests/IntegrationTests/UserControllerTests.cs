@@ -34,7 +34,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new PaymentProfile());
+                cfg.AddProfile(new UserProfile());
             });
             _mapper = mockMapper.CreateMapper();
         }
@@ -76,30 +76,30 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             friendsResult_1?.Count().Should().Be(3);
             friendsResult_1?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
             friendsResult_1?
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
             okActionResult_2.Should().NotBeNull();
-            friendsResult_2?.Count().Should().Be(3);
+            friendsResult_2?.Count().Should().Be(2);
             friendsResult_2?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
             friendsResult_2?
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
 
             okRequest_3.Should().BeOfType<OkObjectResult>();
             okActionResult_3.Should().NotBeNull();
-            friendsResult_3?.Count().Should().Be(3);
+            friendsResult_3?.Count().Should().Be(1);
             friendsResult_3?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
             friendsResult_3?
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
-                .Should().NotBeNullOrEmpty();
+                .Should().BeNullOrEmpty();
 
             notfound_1.Should().BeOfType<NotFoundResult>();
 
