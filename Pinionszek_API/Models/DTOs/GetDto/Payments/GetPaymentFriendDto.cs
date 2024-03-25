@@ -1,6 +1,6 @@
-﻿namespace Pinionszek_API.Models.DTOs.GetDto
+﻿namespace Pinionszek_API.Models.DTOs.GetDto.Payments
 {
-    public class GetFriendDto
+    public class GetPaymentFriendDto
     {
         public string? Name { get; set; }
         public int? FriendTag { get; set; }

@@ -3,12 +3,14 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IBudgetApiService, BudgetApiService>();
+builder.Services.AddScoped<IUserApiService, UserApiService>();
 builder.Services.AddDbContext<ProdDbContext>(opt => opt.UseSqlServer("name=ConnectionStrings:Default"));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -24,8 +26,10 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Pinionszek API",
         Version = "v1",
-        Description = "REST API for Pinionszek project"
+        Description = "GET endpoints for REST API"
     });
+
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
     // Set the comments path for the Swagger JSON and UI.
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -42,7 +46,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint($"/swagger/v1/swagger.json", "REST Api v1");
+    });
 }
 
 app.UseHttpsRedirection();

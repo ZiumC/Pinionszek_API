@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Pinionszek_API.Models.DatabaseModel;
-using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 
 namespace Pinionszek_API.Profiles
@@ -17,7 +16,7 @@ namespace Pinionszek_API.Profiles
             CreateMap<GetPrivatePaymentDto, GetSharedPaymentToFriendDto>()
                  .ForMember(dest => dest.Payment, opt => opt.MapFrom(src => src));
 
-            CreateMap<GetFriendDto, GetSharedPaymentToFriendDto>()
+            CreateMap<GetPaymentFriendDto, GetSharedPaymentToFriendDto>()
                 .ForMember(dest => dest.TargetFriend, opt => opt.MapFrom(src => src));
 
             CreateMap<Payment, GetAssignedPaymentDto>()
@@ -29,7 +28,7 @@ namespace Pinionszek_API.Profiles
             CreateMap<GetAssignedPaymentDto, GetAssignedPaymentToUserDto>()
                  .ForMember(dest => dest.Payment, opt => opt.MapFrom(src => src));
 
-            CreateMap<GetFriendDto, GetAssignedPaymentToUserDto>()
+            CreateMap<GetPaymentFriendDto, GetAssignedPaymentToUserDto>()
                 .ForMember(dest => dest.SourceFriend, opt => opt.MapFrom(src => src));
         }
     }

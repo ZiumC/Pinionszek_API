@@ -7,6 +7,7 @@ using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
+using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Utils;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
     public class BudgetController : ControllerBase
@@ -146,7 +148,7 @@ namespace Pinionszek_API.Controllers
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
                 var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -222,7 +224,7 @@ namespace Pinionszek_API.Controllers
 
                 var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
                 var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -522,7 +524,7 @@ namespace Pinionszek_API.Controllers
 
                 var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
                 var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -550,7 +552,7 @@ namespace Pinionszek_API.Controllers
         {
             if (userTag <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("error", "User tag is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -581,7 +583,7 @@ namespace Pinionszek_API.Controllers
 
                 var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
                 var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
-                _mapper.Map(new GetFriendDto
+                _mapper.Map(new GetPaymentFriendDto
                 {
                     Name = friendNameAndTag.Item1,
                     FriendTag = friendNameAndTag.Item2,
@@ -596,6 +598,29 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(assignedPaymentsToUserDto);
+        }
+
+        /// <summary>
+        /// Get payments categories by user ID
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("payments-categories")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
+        public async Task<IActionResult> GetPaymentsCategoriesAsync([Required] int idUser)
+        {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userGeneralCategoriesData = await _budgetService.GetUserCategoriesAsync(idUser);
+            if (userGeneralCategoriesData == null || userGeneralCategoriesData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetUserCategoryDto>>(userGeneralCategoriesData));
         }
     }
 }
