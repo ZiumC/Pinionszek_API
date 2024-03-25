@@ -13,9 +13,24 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
             _dbContext = dbContext;
         }
 
-        public Task<IEnumerable<Friend>?> GetUserFriends(int idUser)
+        public async Task<IEnumerable<Friend>?> GetUserFriends(int idUser)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Friends
+                .Where(f => f.IdUser == idUser)
+                .Join(_dbContext.Users,
+                f => f.IdUser,
+                u => u.IdUser,
+                (f, u) => new Friend
+                {
+                    IdFriend = f.IdFriend,
+                    FriendTag = f.FriendTag,
+                    DateAdded = f.DateAdded,
+                    User = new User
+                    {
+                        IdUser = u.IdUser,
+                        Login = u.Login
+                    }
+                }).ToListAsync();
         }
     }
 }
