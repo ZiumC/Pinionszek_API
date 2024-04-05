@@ -276,25 +276,25 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new UserApiService(await dbContext);
-            var budgetController = new UserController(_config, budgetApiService, _mapper);
+            var userApiService = new UserApiService(await dbContext);
+            var userController = new UserController(_config, userApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetPaymentsCategoriesAsync(1);
+            var okRequest_1 = await userController.GetPaymentsCategoriesAsync(1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsCategoriesResult_1 = okActionResult_1?.Value as IEnumerable<GetUserCategoryDto>;
 
-            var okRequest_2 = await budgetController.GetPaymentsCategoriesAsync(2);
+            var okRequest_2 = await userController.GetPaymentsCategoriesAsync(2);
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var paymentsCategoriesResult_2 = okActionResult_2?.Value as IEnumerable<GetUserCategoryDto>;
 
-            var okRequest_3 = await budgetController.GetPaymentsCategoriesAsync(3);
+            var okRequest_3 = await userController.GetPaymentsCategoriesAsync(3);
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var paymentsCategoriesResult_3 = okActionResult_3?.Value as IEnumerable<GetUserCategoryDto>;
 
-            var notFoundRequest_1 = await budgetController.GetPaymentsCategoriesAsync(4);
+            var notFoundRequest_1 = await userController.GetPaymentsCategoriesAsync(4);
 
-            var badRequest_1 = await budgetController.GetPaymentsCategoriesAsync(-1);
+            var badRequest_1 = await userController.GetPaymentsCategoriesAsync(-1);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
 
