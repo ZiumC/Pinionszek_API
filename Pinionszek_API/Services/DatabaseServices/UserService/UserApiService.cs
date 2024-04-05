@@ -78,5 +78,26 @@ namespace Pinionszek_API.Services.DatabaseServices.UserService
                     }
                 }).ToListAsync();
         }
+
+        public async Task<DetailedCategory?> GetUserPaymentCategoryAsync(int idUser, int idDetailedCategory)
+        {
+            return await _dbContext.DetailedCategories
+                .Where(dc => dc.IdUser == idUser &&
+                    dc.IdDetailedCategory == idDetailedCategory)
+                .Join(_dbContext.GeneralCategories,
+                dc => dc.IdGeneralCategory,
+                gc => gc.IdGeneralCategory,
+                (dc, gc) => new DetailedCategory
+                {
+                    IdDetailedCategory = dc.IdDetailedCategory,
+                    Name = dc.Name,
+                    GeneralCategory = new GeneralCategory
+                    {
+                        IdGeneralCategory = gc.IdGeneralCategory,
+                        Name = gc.Name,
+                        IsDefault = gc.IsDefault
+                    }
+                }).FirstOrDefaultAsync();
+        }
     }
 }
