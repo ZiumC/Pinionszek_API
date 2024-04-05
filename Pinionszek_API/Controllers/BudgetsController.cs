@@ -604,7 +604,7 @@ namespace Pinionszek_API.Controllers
         /// Get payments categories by user ID
         /// </summary>
         /// <param name="idUser">User ID</param>
-        [HttpGet("payments-categories")]
+        [HttpGet("payment-categories")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
         public async Task<IActionResult> GetPaymentsCategoriesAsync([Required] int idUser)
         {
