@@ -813,5 +813,34 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
+
+        [Fact]
+        public async Task BudgetController_GetDefaultGeneralCategoriesAsync_ReturnsCategoriesOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
+
+            //Act
+            var okRequest_1 = await budgetController.GetDefaultGeneralCategoriesAsync();
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var generalCategoriessResult_1 = okActionResult_1?.Value as IEnumerable<GetGeneralCategoryDto>;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            generalCategoriessResult_1.Should().NotBeNullOrEmpty();
+            generalCategoriessResult_1?.Count().Should().Be(3);
+            generalCategoriessResult_1?
+                .Where(gcr => string.IsNullOrEmpty(gcr.Name))
+                .Should().BeNullOrEmpty();
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IsDefault)
+                .Count().Should().Be(3);
+        }
     }
 }

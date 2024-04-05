@@ -599,5 +599,15 @@ namespace Pinionszek_API.Controllers
 
             return Ok(assignedPaymentsToUserDto);
         }
+
+        /// <summary>
+        /// Get default general payment categories
+        /// </summary>
+        [HttpGet("payment-categories/default")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
+        public async Task<IActionResult> GetDefaultGeneralCategoriesAsync()
+        {
+            return Ok();
+        }
     }
 }
