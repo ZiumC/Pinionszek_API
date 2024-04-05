@@ -214,14 +214,14 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var user_1 = new { IdUser = 1, IdDetailedCategories = new List<int>() { 1, 3, 4, 5, 8, 9 } };
             var user_2 = new { IdUser = 2, IdDetailedCategories = new List<int>() { 2, 6, 10, 12 } };
             var user_3 = new { IdUser = 3, IdDetailedCategories = new List<int>() { 7, 11, 13 } };
-            var user_4 = new { IdUser = 4, IdDetailedCategories = new List<int>() { 1, 11, 29 } }; 
+            var user_4 = new { IdUser = 4, IdDetailedCategories = new List<int>() { 1, 11, 29 } };
             var userCategories_1 = new List<DetailedCategory?>();
             var userCategories_2 = new List<DetailedCategory?>();
             var userCategories_3 = new List<DetailedCategory?>();
             var userCategories_4 = new List<DetailedCategory?>();
 
             //Act
-            foreach (int idDetaieldCategory in user_1.IdDetailedCategories) 
+            foreach (int idDetaieldCategory in user_1.IdDetailedCategories)
             {
                 userCategories_1.Add(await userApiService.GetUserPaymentCategoryAsync(user_1.IdUser, idDetaieldCategory));
             }
@@ -277,7 +277,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 
             userCategories_4.Should().NotBeNullOrEmpty();
             userCategories_4?.Count().Should().Be(3);
-            foreach (var cat in userCategories_4) 
+            foreach (var cat in userCategories_4)
             {
                 cat.Should().BeNull();
             }
