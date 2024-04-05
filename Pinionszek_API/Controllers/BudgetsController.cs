@@ -18,13 +18,13 @@ namespace Pinionszek_API.Controllers
     [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
-    public class BudgetController : ControllerBase
+    public class BudgetsController : ControllerBase
     {
         private readonly IBudgetApiService _budgetService;
         private readonly BudgetUtils _budgetUtils;
         private readonly IMapper _mapper;
 
-        public BudgetController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
+        public BudgetsController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
         {
             _budgetUtils = new BudgetUtils(_config);
             _budgetService = budgetService;

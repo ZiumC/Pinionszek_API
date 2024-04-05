@@ -53,7 +53,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -143,7 +143,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -211,7 +211,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -282,7 +282,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -366,7 +366,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             int budget_year = 2024;
 
             //Act
@@ -460,7 +460,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             int firstPaymentId = 1;
             int lastPaymentId = 13;
             var user1requests = new List<OkObjectResult?>();
@@ -534,7 +534,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -620,7 +620,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -716,7 +716,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -820,7 +820,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetPaymentsCategoriesAsync(1);
