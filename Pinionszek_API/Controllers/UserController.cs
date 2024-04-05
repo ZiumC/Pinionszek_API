@@ -98,5 +98,28 @@ namespace Pinionszek_API.Controllers
 
             return Ok(_mapper.Map<GetUserProfileDto>(userProfileData));
         }
+
+        /// <summary>
+        /// Get user payment categories by user ID
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        [HttpGet("{idUser}/payment-categories")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
+        public async Task<IActionResult> GetPaymentsCategoriesAsync([Required] int idUser)
+        {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userGeneralCategoriesData = await _userService.GetUserPaymentCategoriesAsync(idUser);
+            if (userGeneralCategoriesData == null || userGeneralCategoriesData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetUserCategoryDto>>(userGeneralCategoriesData));
+        }
     }
 }

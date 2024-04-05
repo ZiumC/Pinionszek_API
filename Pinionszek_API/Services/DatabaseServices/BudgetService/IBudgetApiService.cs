@@ -14,6 +14,5 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
         public Task<UserSettings?> GetUserSettingsAsync(int idUser);
         public Task<IEnumerable<Budget>> GetBudgetsAsync(int idUser);
         public Task<Payment?> GetPaymentAsync(int idPayment, int idUser);
-        public Task<IEnumerable<DetailedCategory>?> GetUserCategoriesAsync(int idUser);
     }
 }
