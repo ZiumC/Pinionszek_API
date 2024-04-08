@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
@@ -36,9 +37,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -49,6 +53,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -83,9 +99,13 @@ namespace Pinionszek_API.Controllers
             }
 
             var upcomingPrivatePaymentsData = upcomingPaymentsData
-                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
+                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0)
+                .OrderBy(upd => upd.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
-            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
+            if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
                 return NotFound();
             }
@@ -98,9 +118,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/share")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -111,6 +134,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -131,6 +166,7 @@ namespace Pinionszek_API.Controllers
             var upcomingPrivatePaymentsData = budgetPaymentsData
                 .Where(p => p.PaymentDate != null)
                 .ToList();
+
             if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
                 return NotFound();
@@ -157,6 +193,14 @@ namespace Pinionszek_API.Controllers
                 sharedPaymentsDto.Add(sharedPaymentToFriendDto);
             }
 
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            sharedPaymentsDto = sharedPaymentsDto
+                .OrderBy(p => p.Payment.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             if (sharedPaymentsDto.Count() == 0)
             {
                 return NotFound();
@@ -170,9 +214,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="userTag">User tag</param>
         /// <param name="date">Payment year and month</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync
+            ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
         {
             if (userTag <= 0)
             {
@@ -186,6 +233,18 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
             if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
             {
@@ -196,11 +255,13 @@ namespace Pinionszek_API.Controllers
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
 
             var upcomingAssignedPaymentsData = assignedPaymentsToUserData
-                .Where(
-                    apd => apd.PaymentDate != null &&
-                    (apd.PaymentDate >= firstDayOfMonth &&
-                    apd.PaymentDate <= lastDayOfMonth)
-                ).ToList();
+                .Where(apd => apd.PaymentDate != null &&
+                        (apd.PaymentDate >= firstDayOfMonth &&
+                         apd.PaymentDate <= lastDayOfMonth))
+                .OrderBy(apd => apd.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (
                     upcomingAssignedPaymentsData == null ||
                     upcomingAssignedPaymentsData.Count() == 0
@@ -426,9 +487,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetPrivatePaymentsAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -439,6 +503,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -463,7 +539,11 @@ namespace Pinionszek_API.Controllers
             }
 
             var privatePaymentsData = budgetPaymentsData
-                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
+                .Where(upd => upd.SharedPayment == null ||
+                       upd.SharedPayment?.IdSharedPayment == 0)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList(); ;
             if (privatePaymentsData == null || privatePaymentsData.Count() == 0)
             {
                 return NotFound();
@@ -479,9 +559,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("payments/share")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
-        public async Task<IActionResult> GetPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetPaymentsSharedWithFriendAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -492,6 +575,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -533,6 +628,13 @@ namespace Pinionszek_API.Controllers
                 sharedPaymentsDto.Add(sharedPaymentToFriendDto);
             }
 
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            sharedPaymentsDto = sharedPaymentsDto
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             if (sharedPaymentsDto.Count() == 0)
             {
                 return NotFound();
@@ -546,9 +648,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="userTag">User tag</param>
         /// <param name="date">Payment year and month</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("payments/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
+        public async Task<IActionResult> GetPaymentsSharedWithUserAsync
+            ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
         {
             if (userTag <= 0)
             {
@@ -559,6 +664,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -591,6 +708,13 @@ namespace Pinionszek_API.Controllers
 
                 assignedPaymentsToUserDto.Add(assignedPaymentToUserDto);
             }
+
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            assignedPaymentsToUserDto = assignedPaymentsToUserDto
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             if (assignedPaymentsToUserDto.Count() == 0)
             {

@@ -31,9 +31,11 @@ namespace Pinionszek_API.Controllers
         /// Get user friends by user ID 
         /// </summary>
         /// <param name="idUser">User ID</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("{idUser}/friends")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserFriendDto>))]
-        public async Task<IActionResult> GetUserFriendsAsync(int idUser)
+        public async Task<IActionResult> GetUserFriendsAsync(int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -41,7 +43,23 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var userFriendsData = await _userService.GetUserFriendsAsync(idUser);
+            userFriendsData = userFriendsData?
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (userFriendsData == null || userFriendsData.Count() == 0)
             {
                 return NotFound();
@@ -103,9 +121,12 @@ namespace Pinionszek_API.Controllers
         /// Get user payment categories by user ID
         /// </summary>
         /// <param name="idUser">User ID</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("{idUser}/payment-categories")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
-        public async Task<IActionResult> GetPaymentsCategoriesAsync(int idUser)
+        public async Task<IActionResult> GetPaymentsCategoriesAsync
+            (int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -113,7 +134,24 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var userGeneralCategoriesData = await _userService.GetUserPaymentCategoriesAsync(idUser);
+            userGeneralCategoriesData = userGeneralCategoriesData?
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             if (userGeneralCategoriesData == null || userGeneralCategoriesData.Count() == 0)
             {
                 return NotFound();
