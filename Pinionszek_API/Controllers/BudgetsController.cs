@@ -134,6 +134,18 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var budgetData = await _budgetService
                 .GetBudgetDataAsync(idUser, date);
             if (budgetData == null)
@@ -150,6 +162,8 @@ namespace Pinionszek_API.Controllers
 
             var upcomingPrivatePaymentsData = budgetPaymentsData
                 .Where(p => p.PaymentDate != null)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
             if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
