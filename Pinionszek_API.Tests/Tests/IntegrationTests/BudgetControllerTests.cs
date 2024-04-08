@@ -954,6 +954,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
 
+            var okRequest_3_page_1 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 1, 1, 1);
+            var okActionResult_3_page_1 = okRequest_3_page_1 as OkObjectResult;
+            var paymentsResult_3_page_1 = okActionResult_3_page_1?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
+
+            var okRequest_3_page_2 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 1, 2, 1);
+            var okActionResult_3_page_2 = okRequest_3_page_2 as OkObjectResult;
+            var paymentsResult_3_page_2 = okActionResult_3_page_2?.Value as IEnumerable<GetSharedPaymentToFriendDto>;
+
             var notFoundRequest_2 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 3);
             var notFoundRequest_3 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 4);
 
@@ -964,6 +972,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var badRequest_2 = await budgetController.GetPaymentsSharedWithFriendAsync(new DateTime(), 1001);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            var badRequest_3 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 1, 0, 1);
+            var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
+            var badRequestResult_3 = badRequestActionResult_3?.Value as string;
+
+            var badRequest_4 = await budgetController.GetPaymentsSharedWithFriendAsync(budgetDate, 1, 1, -1);
+            var badRequestActionResult_4 = badRequest_4 as BadRequestObjectResult;
+            var badRequestResult_4 = badRequestActionResult_4?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -1020,6 +1036,60 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
+            okRequest_3_page_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_1.Should().NotBeNull();
+            paymentsResult_3_page_1.Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_1?.Count().Should().Be(1);
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => pr.Payment.IdSharedPayment != null ||
+                          pr.Payment.IdSharedPayment > 0
+                ).ToList()
+                .Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => pr.TargetFriend == null
+                ).ToList()
+                .Should().BeNullOrEmpty();
+
+            okRequest_3_page_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_2.Should().NotBeNull();
+            paymentsResult_3_page_2.Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_2?.Count().Should().Be(1);
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Payment.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Payment.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => pr.Payment.IdSharedPayment != null ||
+                          pr.Payment.IdSharedPayment > 0
+                ).ToList()
+                .Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => pr.TargetFriend == null
+                ).ToList()
+                .Should().BeNullOrEmpty();
+
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
             notFoundRequest_3.Should().BeOfType<NotFoundResult>();
 
@@ -1030,6 +1100,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
+
+            badRequest_3.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_3?.Value.Should().NotBeNull();
+            badRequestResult_3?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_4.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_4?.Value.Should().NotBeNull();
+            badRequestResult_4?.Contains("is invalid").Should().BeTrue();
         }
 
         [Fact]
