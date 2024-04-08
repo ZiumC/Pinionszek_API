@@ -57,7 +57,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
-            var okRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 1);
+            var okRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 1, 1, 1);
             var okActionResult_1 = okRequest_1 as OkObjectResult;
             var paymentsResult_1 = okActionResult_1?.Value as IEnumerable<GetPrivatePaymentDto>;
 

@@ -83,8 +83,6 @@ namespace Pinionszek_API.Controllers
 
             var upcomingPaymentsData = budgetPaymentsData
                 .Where(bpd => bpd.PaymentDate != null)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToList();
             if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
             {
@@ -100,9 +98,13 @@ namespace Pinionszek_API.Controllers
             }
 
             var upcomingPrivatePaymentsData = upcomingPaymentsData
-                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
+                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0)
+                .OrderBy(bpd => bpd.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
-            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
+            if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
                 return NotFound();
             }
