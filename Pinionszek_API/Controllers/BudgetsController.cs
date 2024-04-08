@@ -164,9 +164,8 @@ namespace Pinionszek_API.Controllers
 
             var upcomingPrivatePaymentsData = budgetPaymentsData
                 .Where(p => p.PaymentDate != null)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToList();
+
             if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
             {
                 return NotFound();
@@ -192,6 +191,14 @@ namespace Pinionszek_API.Controllers
 
                 sharedPaymentsDto.Add(sharedPaymentToFriendDto);
             }
+
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            sharedPaymentsDto = sharedPaymentsDto
+                .OrderBy(p => p.Payment.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             if (sharedPaymentsDto.Count() == 0)
             {
