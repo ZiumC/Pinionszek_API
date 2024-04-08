@@ -336,11 +336,28 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var paymentsCategoriesResult_3 = okActionResult_3?.Value as IEnumerable<GetUserCategoryDto>;
 
+            var okRequest_4_page_1 = await userController.GetPaymentsCategoriesAsync(1, 1, 4);
+            var okActionResult_4_page_1 = okRequest_4_page_1 as OkObjectResult;
+            var paymentsCategoriesResult_4_page_1 = okActionResult_4_page_1?.Value as IEnumerable<GetUserCategoryDto>;
+
+            var okRequest_4_page_2 = await userController.GetPaymentsCategoriesAsync(1, 2, 4);
+            var okActionResult_4_page_2 = okRequest_4_page_2 as OkObjectResult;
+            var paymentsCategoriesResult_4_page_2 = okActionResult_4_page_2?.Value as IEnumerable<GetUserCategoryDto>;
+
+
             var notFoundRequest_1 = await userController.GetPaymentsCategoriesAsync(4);
 
             var badRequest_1 = await userController.GetPaymentsCategoriesAsync(-1);
             var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
             var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 = await userController.GetPaymentsCategoriesAsync(1, -1, 12);
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            var badRequest_3 = await userController.GetPaymentsCategoriesAsync(1, 1, -12);
+            var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
+            var badRequestResult_3 = badRequestActionResult_3?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -382,11 +399,45 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 string.IsNullOrEmpty(pcr.GeneralCategory.Name))
                 .Should().BeNullOrEmpty();
 
+            okRequest_4_page_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_4_page_1.Should().NotBeNull();
+            paymentsCategoriesResult_4_page_1.Should().NotBeNullOrEmpty();
+            paymentsCategoriesResult_4_page_1?.Count().Should().Be(4);
+            paymentsCategoriesResult_4_page_1?
+                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
+                pcr.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            paymentsCategoriesResult_4_page_1?
+                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            okRequest_4_page_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_4_page_2.Should().NotBeNull();
+            paymentsCategoriesResult_4_page_2.Should().NotBeNullOrEmpty();
+            paymentsCategoriesResult_4_page_2?.Count().Should().Be(2);
+            paymentsCategoriesResult_4_page_2?
+                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
+                pcr.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            paymentsCategoriesResult_4_page_2?
+                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_3.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_3?.Value.Should().NotBeNull();
+            badRequestResult_3?.Contains("is invalid").Should().BeTrue();
         }
 
         [Fact]
