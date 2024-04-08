@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Pinionszek_API.Controllers;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Profiles;
@@ -35,6 +36,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var mockMapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new UserProfile());
+                cfg.AddProfile(new CategoryProfile());
             });
             _mapper = mockMapper.CreateMapper();
         }
@@ -267,6 +269,175 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task UserController_GetPaymentsCategoriesAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            var userController = new UserController(_config, userApiService, _mapper);
+
+            //Act
+            var okRequest_1 = await userController.GetPaymentsCategoriesAsync(1);
+            var okActionResult_1 = okRequest_1 as OkObjectResult;
+            var paymentsCategoriesResult_1 = okActionResult_1?.Value as IEnumerable<GetUserCategoryDto>;
+
+            var okRequest_2 = await userController.GetPaymentsCategoriesAsync(2);
+            var okActionResult_2 = okRequest_2 as OkObjectResult;
+            var paymentsCategoriesResult_2 = okActionResult_2?.Value as IEnumerable<GetUserCategoryDto>;
+
+            var okRequest_3 = await userController.GetPaymentsCategoriesAsync(3);
+            var okActionResult_3 = okRequest_3 as OkObjectResult;
+            var paymentsCategoriesResult_3 = okActionResult_3?.Value as IEnumerable<GetUserCategoryDto>;
+
+            var notFoundRequest_1 = await userController.GetPaymentsCategoriesAsync(4);
+
+            var badRequest_1 = await userController.GetPaymentsCategoriesAsync(-1);
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_1.Should().NotBeNull();
+            paymentsCategoriesResult_1.Should().NotBeNullOrEmpty();
+            paymentsCategoriesResult_1?.Count().Should().Be(6);
+            paymentsCategoriesResult_1?
+                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
+                pcr.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            paymentsCategoriesResult_1?
+                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            okRequest_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_2.Should().NotBeNull();
+            paymentsCategoriesResult_2.Should().NotBeNullOrEmpty();
+            paymentsCategoriesResult_2?.Count().Should().Be(4);
+            paymentsCategoriesResult_2?
+                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
+                pcr.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            paymentsCategoriesResult_2?
+                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            okRequest_3.Should().BeOfType<OkObjectResult>();
+            okActionResult_3.Should().NotBeNull();
+            paymentsCategoriesResult_3.Should().NotBeNullOrEmpty();
+            paymentsCategoriesResult_3?.Count().Should().Be(3);
+            paymentsCategoriesResult_3?
+                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
+                pcr.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            paymentsCategoriesResult_3?
+                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            notFoundRequest_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+        }
+
+        [Fact]
+        public async void UserController_GetPaymentCategoryAsync_ReturnsPaymentCategoryOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            var userController = new UserController(_config, userApiService, _mapper);
+            var user_1 = new { IdUser = 1, IdDetailedCategories = new List<int>() { 1, 3, 4, 5, 8, 9 } };
+            var user_2 = new { IdUser = 2, IdDetailedCategories = new List<int>() { 2, 6, 10, 12 } };
+            var user_3 = new { IdUser = 3, IdDetailedCategories = new List<int>() { 7, 11, 13 } };
+            var user_4 = new { IdUser = 4, IdDetailedCategories = new List<int>() { 7, -11 } };
+            var userCategories_1 = new List<GetUserCategoryDto?>();
+            var userCategories_2 = new List<GetUserCategoryDto?>();
+            var userCategories_3 = new List<GetUserCategoryDto?>();
+
+            //Act
+            foreach (var idDetailedCategory in user_1.IdDetailedCategories)
+            {
+                var okRequest = await userController.GetPaymentCategoryAsync(user_1.IdUser, idDetailedCategory);
+                var okActionResult = okRequest as OkObjectResult;
+                userCategories_1.Add(okActionResult?.Value as GetUserCategoryDto);
+            }
+
+            foreach (var idDetailedCategory in user_2.IdDetailedCategories)
+            {
+                var okRequest = await userController.GetPaymentCategoryAsync(user_2.IdUser, idDetailedCategory);
+                var okActionResult = okRequest as OkObjectResult;
+                userCategories_2.Add(okActionResult?.Value as GetUserCategoryDto);
+            }
+
+            foreach (var idDetailedCategory in user_3.IdDetailedCategories)
+            {
+                var okRequest = await userController.GetPaymentCategoryAsync(user_3.IdUser, idDetailedCategory);
+                var okActionResult = okRequest as OkObjectResult;
+                userCategories_3.Add(okActionResult?.Value as GetUserCategoryDto);
+            }
+
+            var notfoundRequest_1 = 
+                await userController.GetPaymentCategoryAsync(user_4.IdUser, user_4.IdDetailedCategories.First());
+
+            var badRequest_1 = 
+                await userController.GetPaymentCategoryAsync(-user_4.IdUser, user_4.IdDetailedCategories.First());
+            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
+            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+
+            var badRequest_2 =
+                await userController.GetPaymentCategoryAsync(user_4.IdUser, user_4.IdDetailedCategories.Last());
+            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
+            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            //Assert
+            userCategories_1.Should().NotBeNullOrEmpty();
+            userCategories_1?.Count().Should().Be(6);
+            userCategories_1?
+                .Where(pcr => pcr?.IdDetailedCategory <= 0 ||
+                pcr?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            userCategories_1?
+                .Where(pcr => string.IsNullOrEmpty(pcr?.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            userCategories_2.Should().NotBeNullOrEmpty();
+            userCategories_2?.Count().Should().Be(4);
+            userCategories_2?
+                .Where(pcr => pcr?.IdDetailedCategory <= 0 ||
+                pcr?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            userCategories_2?
+                .Where(pcr => string.IsNullOrEmpty(pcr?.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            userCategories_3.Should().NotBeNullOrEmpty();
+            userCategories_3?.Count().Should().Be(3);
+            userCategories_3?
+                .Where(pcr => pcr?.IdDetailedCategory <= 0 ||
+                pcr?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            userCategories_3?
+                .Where(pcr => string.IsNullOrEmpty(pcr?.Name) ||
+                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+
+            notfoundRequest_1.Should().BeOfType<NotFoundResult>();
+
+            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_1?.Value.Should().NotBeNull();
+            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_2.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_2?.Value.Should().NotBeNull();
+            badRequestResult_2?.Contains("is invalid").Should().BeTrue();
         }
     }
 }

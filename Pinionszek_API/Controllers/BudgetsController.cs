@@ -18,13 +18,13 @@ namespace Pinionszek_API.Controllers
     [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
-    public class BudgetController : ControllerBase
+    public class BudgetsController : ControllerBase
     {
         private readonly IBudgetApiService _budgetService;
         private readonly BudgetUtils _budgetUtils;
         private readonly IMapper _mapper;
 
-        public BudgetController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
+        public BudgetsController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
         {
             _budgetUtils = new BudgetUtils(_config);
             _budgetService = budgetService;
@@ -601,26 +601,19 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Get payments categories by user ID
+        /// Get default general payment categories
         /// </summary>
-        /// <param name="idUser">User ID</param>
-        [HttpGet("payments-categories")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetUserCategoryDto>))]
-        public async Task<IActionResult> GetPaymentsCategoriesAsync([Required] int idUser)
+        [HttpGet("payment-categories/default")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
+        public async Task<IActionResult> GetDefaultGeneralCategoriesAsync()
         {
-            if (idUser <= 0)
-            {
-                ModelState.AddModelError("error", "User ID is invalid");
-                return BadRequest(ModelState);
-            }
-
-            var userGeneralCategoriesData = await _budgetService.GetUserCategoriesAsync(idUser);
-            if (userGeneralCategoriesData == null || userGeneralCategoriesData.Count() == 0)
+            var defaultCategories = await _budgetService.GetDefaultGeneralCategoriesAsync();
+            if (defaultCategories == null || defaultCategories.Count() == 0)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<GetUserCategoryDto>>(userGeneralCategoriesData));
+            return Ok(_mapper.Map<IEnumerable<GetGeneralCategoryDto>>(defaultCategories));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Tests.DbContexts;
@@ -148,6 +149,138 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             userData_4?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
 
             userData_5.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task UserApiService_GetUserPaymentCategoriesAsync_ReturnsCategoriesOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            int idUser_1 = 1;
+            int idUser_2 = 2;
+            int idUser_3 = 3;
+            int idUser_4 = 4;
+
+            //Act
+            var userCategories1 = await userApiService.GetUserPaymentCategoriesAsync(idUser_1);
+            var userCategories2 = await userApiService.GetUserPaymentCategoriesAsync(idUser_2);
+            var userCategories3 = await userApiService.GetUserPaymentCategoriesAsync(idUser_3);
+            var userCategories4 = await userApiService.GetUserPaymentCategoriesAsync(idUser_4);
+
+            //Assert
+            userCategories1.Should().NotBeNullOrEmpty();
+            userCategories1?.Count().Should().Be(6);
+            userCategories1?
+                .Where(uc => string.IsNullOrEmpty(uc.Name) ||
+                    string.IsNullOrEmpty(uc.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories1?
+                .Where(uc => uc.IdDetailedCategory <= 0 ||
+                    uc.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories2.Should().NotBeNullOrEmpty();
+            userCategories2?.Count().Should().Be(4);
+            userCategories2?
+                .Where(uc => string.IsNullOrEmpty(uc.Name) ||
+                    string.IsNullOrEmpty(uc.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories2?
+                .Where(uc => uc.IdDetailedCategory <= 0 ||
+                    uc.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories3.Should().NotBeNullOrEmpty();
+            userCategories3?.Count().Should().Be(3);
+            userCategories3?
+                .Where(uc => string.IsNullOrEmpty(uc.Name) ||
+                    string.IsNullOrEmpty(uc.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories3?
+                .Where(uc => uc.IdDetailedCategory <= 0 ||
+                    uc.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories4.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task UserApiService_GetUserPaymentCategoryAsync_ReturnsCategoryOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var userApiService = new UserApiService(await dbContext);
+            var user_1 = new { IdUser = 1, IdDetailedCategories = new List<int>() { 1, 3, 4, 5, 8, 9 } };
+            var user_2 = new { IdUser = 2, IdDetailedCategories = new List<int>() { 2, 6, 10, 12 } };
+            var user_3 = new { IdUser = 3, IdDetailedCategories = new List<int>() { 7, 11, 13 } };
+            var user_4 = new { IdUser = 4, IdDetailedCategories = new List<int>() { 1, 11, 29 } };
+            var userCategories_1 = new List<DetailedCategory?>();
+            var userCategories_2 = new List<DetailedCategory?>();
+            var userCategories_3 = new List<DetailedCategory?>();
+            var userCategories_4 = new List<DetailedCategory?>();
+
+            //Act
+            foreach (int idDetaieldCategory in user_1.IdDetailedCategories)
+            {
+                userCategories_1.Add(await userApiService.GetUserPaymentCategoryAsync(user_1.IdUser, idDetaieldCategory));
+            }
+
+            foreach (int idDetaieldCategory in user_2.IdDetailedCategories)
+            {
+                userCategories_2.Add(await userApiService.GetUserPaymentCategoryAsync(user_2.IdUser, idDetaieldCategory));
+            }
+
+            foreach (int idDetaieldCategory in user_3.IdDetailedCategories)
+            {
+                userCategories_3.Add(await userApiService.GetUserPaymentCategoryAsync(user_3.IdUser, idDetaieldCategory));
+            }
+
+            foreach (int idDetaieldCategory in user_4.IdDetailedCategories)
+            {
+                userCategories_4.Add(await userApiService.GetUserPaymentCategoryAsync(user_4.IdUser, idDetaieldCategory));
+            }
+
+            //Assert
+            userCategories_1.Should().NotBeNullOrEmpty();
+            userCategories_1?.Count().Should().Be(6);
+            userCategories_1?
+                .Where(uc => string.IsNullOrEmpty(uc?.Name) ||
+                    string.IsNullOrEmpty(uc.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories_1?
+                .Where(uc => uc?.IdDetailedCategory <= 0 ||
+                    uc?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories_2.Should().NotBeNullOrEmpty();
+            userCategories_2?.Count().Should().Be(4);
+            userCategories_2?
+                .Where(uc => string.IsNullOrEmpty(uc?.Name) ||
+                    string.IsNullOrEmpty(uc?.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories_2?
+                .Where(uc => uc?.IdDetailedCategory <= 0 ||
+                    uc?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories_3.Should().NotBeNullOrEmpty();
+            userCategories_3?.Count().Should().Be(3);
+            userCategories_3?
+                .Where(uc => string.IsNullOrEmpty(uc?.Name) ||
+                    string.IsNullOrEmpty(uc?.GeneralCategory.Name))
+                .Should().BeNullOrEmpty();
+            userCategories_3?
+                .Where(uc => uc?.IdDetailedCategory <= 0 ||
+                    uc?.GeneralCategory.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+
+            userCategories_4.Should().NotBeNullOrEmpty();
+            userCategories_4?.Count().Should().Be(3);
+            foreach (var cat in userCategories_4)
+            {
+                cat.Should().BeNull();
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Pinionszek_API.Profiles
                 .ForMember(dest => dest.IdDetailedCategory, opt => opt.MapFrom(src => src.IdDetailedCategory))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
-            CreateMap<GeneralCategory, GetUserGeneralCategoryDto>()
+            CreateMap<GeneralCategory, GetGeneralCategoryDto>()
                 .ForMember(dest => dest.IdGeneralCategory, opt => opt.MapFrom(src => src.IdGeneralCategory))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.IsDefault, opt => opt.MapFrom(src => src.IsDefault));

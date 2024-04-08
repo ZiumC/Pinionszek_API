@@ -1,6 +1,6 @@
-﻿namespace Pinionszek_API.Models.DTOs.GetDto.User
+﻿namespace Pinionszek_API.Models.DTOs.GetDto.Payments
 {
-    public class GetUserGeneralCategoryDto
+    public class GetGeneralCategoryDto
     {
         public int IdGeneralCategory { get; set; }
         public string Name { get; set; }

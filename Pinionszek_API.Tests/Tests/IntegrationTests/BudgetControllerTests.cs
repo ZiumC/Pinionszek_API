@@ -53,7 +53,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -143,7 +143,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -211,7 +211,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -282,7 +282,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -366,7 +366,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             int budget_year = 2024;
 
             //Act
@@ -460,7 +460,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             int firstPaymentId = 1;
             int lastPaymentId = 13;
             var user1requests = new List<OkObjectResult?>();
@@ -534,7 +534,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -620,7 +620,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -716,7 +716,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -815,77 +815,32 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task BudgetController_GetPaymentsCategoriesAsync_ReturnsPaymentsOrNotfoundOrBadrequest()
+        public async Task BudgetController_GetDefaultGeneralCategoriesAsync_ReturnsCategoriesOrNotfound()
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetController(_config, budgetApiService, _mapper);
+            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
 
             //Act
-            var okRequest_1 = await budgetController.GetPaymentsCategoriesAsync(1);
+            var okRequest_1 = await budgetController.GetDefaultGeneralCategoriesAsync();
             var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var paymentsCategoriesResult_1 = okActionResult_1?.Value as IEnumerable<GetUserCategoryDto>;
-
-            var okRequest_2 = await budgetController.GetPaymentsCategoriesAsync(2);
-            var okActionResult_2 = okRequest_2 as OkObjectResult;
-            var paymentsCategoriesResult_2 = okActionResult_2?.Value as IEnumerable<GetUserCategoryDto>;
-
-            var okRequest_3 = await budgetController.GetPaymentsCategoriesAsync(3);
-            var okActionResult_3 = okRequest_3 as OkObjectResult;
-            var paymentsCategoriesResult_3 = okActionResult_3?.Value as IEnumerable<GetUserCategoryDto>;
-
-            var notFoundRequest_1 = await budgetController.GetPaymentsCategoriesAsync(4);
-
-            var badRequest_1 = await budgetController.GetPaymentsCategoriesAsync(-1);
-            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
-            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+            var generalCategoriessResult_1 = okActionResult_1?.Value as IEnumerable<GetGeneralCategoryDto>;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
             okActionResult_1.Should().NotBeNull();
-            paymentsCategoriesResult_1.Should().NotBeNullOrEmpty();
-            paymentsCategoriesResult_1?.Count().Should().Be(6);
-            paymentsCategoriesResult_1?
-                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
-                pcr.GeneralCategory.IdGeneralCategory <= 0)
+            generalCategoriessResult_1.Should().NotBeNullOrEmpty();
+            generalCategoriessResult_1?.Count().Should().Be(3);
+            generalCategoriessResult_1?
+                .Where(gcr => string.IsNullOrEmpty(gcr.Name))
                 .Should().BeNullOrEmpty();
-            paymentsCategoriesResult_1?
-                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
-                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IdGeneralCategory <= 0)
                 .Should().BeNullOrEmpty();
-
-            okRequest_2.Should().BeOfType<OkObjectResult>();
-            okActionResult_2.Should().NotBeNull();
-            paymentsCategoriesResult_2.Should().NotBeNullOrEmpty();
-            paymentsCategoriesResult_2?.Count().Should().Be(4);
-            paymentsCategoriesResult_2?
-                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
-                pcr.GeneralCategory.IdGeneralCategory <= 0)
-                .Should().BeNullOrEmpty();
-            paymentsCategoriesResult_2?
-                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
-                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
-                .Should().BeNullOrEmpty();
-
-            okRequest_3.Should().BeOfType<OkObjectResult>();
-            okActionResult_3.Should().NotBeNull();
-            paymentsCategoriesResult_3.Should().NotBeNullOrEmpty();
-            paymentsCategoriesResult_3?.Count().Should().Be(3);
-            paymentsCategoriesResult_3?
-                .Where(pcr => pcr.IdDetailedCategory <= 0 ||
-                pcr.GeneralCategory.IdGeneralCategory <= 0)
-                .Should().BeNullOrEmpty();
-            paymentsCategoriesResult_3?
-                .Where(pcr => string.IsNullOrEmpty(pcr.Name) ||
-                string.IsNullOrEmpty(pcr.GeneralCategory.Name))
-                .Should().BeNullOrEmpty();
-
-            notFoundRequest_1.Should().BeOfType<NotFoundResult>();
-
-            badRequest_1.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_1?.Value.Should().NotBeNull();
-            badRequestResult_1?.Contains("is invalid").Should().BeTrue();
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IsDefault)
+                .Count().Should().Be(3);
         }
     }
 }
