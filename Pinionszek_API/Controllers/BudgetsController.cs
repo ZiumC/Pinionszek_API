@@ -628,6 +628,8 @@ namespace Pinionszek_API.Controllers
                 sharedPaymentsDto.Add(sharedPaymentToFriendDto);
             }
 
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
             sharedPaymentsDto = sharedPaymentsDto
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
