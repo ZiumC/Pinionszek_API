@@ -204,9 +204,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="userTag">User tag</param>
         /// <param name="date">Payment year and month</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync
+            ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
         {
             if (userTag <= 0)
             {
@@ -220,6 +223,18 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
             if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
             {
@@ -230,11 +245,12 @@ namespace Pinionszek_API.Controllers
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
 
             var upcomingAssignedPaymentsData = assignedPaymentsToUserData
-                .Where(
-                    apd => apd.PaymentDate != null &&
-                    (apd.PaymentDate >= firstDayOfMonth &&
-                    apd.PaymentDate <= lastDayOfMonth)
-                ).ToList();
+                .Where(apd => apd.PaymentDate != null &&
+                        (apd.PaymentDate >= firstDayOfMonth &&
+                         apd.PaymentDate <= lastDayOfMonth))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (
                     upcomingAssignedPaymentsData == null ||
                     upcomingAssignedPaymentsData.Count() == 0
