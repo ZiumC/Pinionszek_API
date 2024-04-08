@@ -607,7 +607,13 @@ namespace Pinionszek_API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
         public async Task<IActionResult> GetDefaultGeneralCategoriesAsync()
         {
-            return Ok();
+            var defaultCategories = await _budgetService.GetDefaultGeneralCategoriesAsync();
+            if (defaultCategories == null || defaultCategories.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetGeneralCategoryDto>>(defaultCategories));
         }
     }
 }
