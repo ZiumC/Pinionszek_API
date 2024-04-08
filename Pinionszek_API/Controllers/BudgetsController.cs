@@ -36,9 +36,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number of payments</param>
+        /// <param name="pageSize">Page size of payments</param>
         [HttpGet("upcoming-payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -49,6 +52,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -74,7 +89,12 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            foreach (var payment in upcomingPaymentsData)
+            var upcomingPaymentsPerPage = upcomingPaymentsData
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var payment in upcomingPaymentsPerPage)
             {
                 var sharedPaymentData = await _budgetService
                     .GetSharedPaymentDataAsync(payment.IdPayment);
@@ -82,10 +102,10 @@ namespace Pinionszek_API.Controllers
                 payment.SharedPayment = sharedPaymentData;
             }
 
-            var upcomingPrivatePaymentsData = upcomingPaymentsData
+            var upcomingPrivatePaymentsData = upcomingPaymentsPerPage
                 .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
 
-            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
+            if (upcomingPaymentsPerPage == null || upcomingPaymentsPerPage.Count() == 0)
             {
                 return NotFound();
             }
