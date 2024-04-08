@@ -99,7 +99,7 @@ namespace Pinionszek_API.Controllers
 
             var upcomingPrivatePaymentsData = upcomingPaymentsData
                 .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0)
-                .OrderBy(bpd => bpd.PaymentDate)
+                .OrderBy(upd => upd.PaymentDate)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

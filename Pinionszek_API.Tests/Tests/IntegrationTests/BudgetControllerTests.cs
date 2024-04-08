@@ -65,6 +65,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var paymentsResult_2 = okActionResult_2?.Value as IEnumerable<GetPrivatePaymentDto>;
 
+            var okRequest_3_page_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 2, 1, 1);
+            var okActionResult_3_page_1 = okRequest_3_page_1 as OkObjectResult;
+            var paymentsResult_3_page_1 = okActionResult_3_page_1?.Value as IEnumerable<GetPrivatePaymentDto>;
+
+            var okRequest_3_page_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 2, 2, 1);
+            var okActionResult_3_page_2 = okRequest_3_page_2 as OkObjectResult;
+            var paymentsResult_3_page_2 = okActionResult_3_page_2?.Value as IEnumerable<GetPrivatePaymentDto>;
+
             var notFoundRequest_1 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 3);
             var notFoundRequest_2 = await budgetController.GetUpcomingPrivatePaymentsAsync(budgetDate, 4);
 
@@ -130,6 +138,57 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 ).ToList()
                 .Should().BeNullOrEmpty();
 
+            okRequest_3_page_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_1.Should().NotBeNull();
+            paymentsResult_3_page_1.Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_1?.Count().Should().Be(1);
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(
+                    pr => pr.IdSharedPayment != null ||
+                          pr.IdSharedPayment > 0
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_1?
+                .Where(pr => pr.IdPayment == 13)
+                .ToList().Count()
+                .Should().Be(1);
+
+            okRequest_3_page_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_2.Should().NotBeNull();
+            paymentsResult_3_page_2.Should().NotBeNullOrEmpty();
+            paymentsResult_3_page_2?.Count().Should().Be(1);
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Status)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                          string.IsNullOrEmpty(pr.Category.GeneralName)
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(
+                    pr => pr.IdSharedPayment != null ||
+                          pr.IdSharedPayment > 0
+                ).ToList()
+                .Should().BeNullOrEmpty();
+            paymentsResult_3_page_2?
+                .Where(pr => pr.IdPayment == 7)
+                .ToList().Count()
+                .Should().Be(1);
 
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
             notFoundRequest_2.Should().BeOfType<NotFoundResult>();
