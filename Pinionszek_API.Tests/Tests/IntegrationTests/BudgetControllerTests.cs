@@ -798,6 +798,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var okActionResult_2 = okRequest_2 as OkObjectResult;
             var paymentsResult_2 = okActionResult_2?.Value as List<GetPrivatePaymentDto>;
 
+            var okRequest_3_page_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1, 1, 3);
+            var okActionResult_3_page_1 = okRequest_3_page_1 as OkObjectResult;
+            var paymentsResult_3_page_1 = okActionResult_3_page_1?.Value as List<GetPrivatePaymentDto>;
+
+            var okRequest_3_page_2 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1, 2, 3);
+            var okActionResult_3_page_2 = okRequest_3_page_2 as OkObjectResult;
+            var paymentsResult_3_page_2 = okActionResult_3_page_2?.Value as List<GetPrivatePaymentDto>;
+
             var notfoundRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 3);
 
             var badRequest_1 = await budgetController.GetPrivatePaymentsAsync(budgetDate, -1005);
@@ -807,6 +815,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var badRequest_2 = await budgetController.GetPrivatePaymentsAsync(new DateTime(), 1);
             var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
             var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+
+            var badRequest_3 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1, -1, 1);
+            var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
+            var badRequestResult_3 = badRequestActionResult_3?.Value as string;
+
+            var badRequest_4 = await budgetController.GetPrivatePaymentsAsync(budgetDate, 1, 1, 0);
+            var badRequestActionResult_4 = badRequest_4 as BadRequestObjectResult;
+            var badRequestResult_4 = badRequestActionResult_4?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
@@ -855,6 +871,52 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 string.IsNullOrEmpty(pr.Category.GeneralName))
                 .Should().BeEmpty();
 
+            okRequest_3_page_1.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_1.Should().NotBeNull();
+            paymentsResult_3_page_1.Should().NotBeNull();
+            paymentsResult_3_page_1.Should().BeOfType<List<GetPrivatePaymentDto>>();
+            paymentsResult_3_page_1?.Count().Should().Be(3);
+            paymentsResult_3_page_1?
+                .Where(pr => pr.IdPayment <= 0)
+                .Should().BeEmpty();
+            paymentsResult_3_page_1?
+                .Where(pr => string.IsNullOrEmpty(pr.Name))
+                .Should().BeEmpty();
+            paymentsResult_3_page_1?
+                .Where(pr => pr.Charge >= 0 || pr.Refund >= 0)
+                .Should().NotBeEmpty();
+            paymentsResult_3_page_1?
+                .Where(pr => string.IsNullOrEmpty(pr.Status))
+                .Should().BeEmpty();
+            paymentsResult_3_page_1?
+                .Where(pr => pr.Category == null ||
+                string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                string.IsNullOrEmpty(pr.Category.GeneralName))
+                .Should().BeEmpty();
+
+            okRequest_3_page_2.Should().BeOfType<OkObjectResult>();
+            okActionResult_3_page_2.Should().NotBeNull();
+            paymentsResult_3_page_2.Should().NotBeNull();
+            paymentsResult_3_page_2.Should().BeOfType<List<GetPrivatePaymentDto>>();
+            paymentsResult_3_page_2?.Count().Should().Be(2);
+            paymentsResult_3_page_2?
+                .Where(pr => pr.IdPayment <= 0)
+                .Should().BeEmpty();
+            paymentsResult_3_page_2?
+                .Where(pr => string.IsNullOrEmpty(pr.Name))
+                .Should().BeEmpty();
+            paymentsResult_3_page_2?
+                .Where(pr => pr.Charge >= 0 || pr.Refund >= 0)
+                .Should().NotBeEmpty();
+            paymentsResult_3_page_2?
+                .Where(pr => string.IsNullOrEmpty(pr.Status))
+                .Should().BeEmpty();
+            paymentsResult_3_page_2?
+                .Where(pr => pr.Category == null ||
+                string.IsNullOrEmpty(pr.Category.DetailedName) ||
+                string.IsNullOrEmpty(pr.Category.GeneralName))
+                .Should().BeEmpty();
+
             notfoundRequest_1.Should().BeOfType<NotFoundResult>();
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
@@ -864,6 +926,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
+
+            badRequest_3.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_3?.Value.Should().NotBeNull();
+            badRequestResult_3?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_4.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_4?.Value.Should().NotBeNull();
+            badRequestResult_4?.Contains("is invalid").Should().BeTrue();
         }
 
         [Fact]

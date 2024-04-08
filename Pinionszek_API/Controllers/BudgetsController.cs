@@ -486,9 +486,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
-        public async Task<IActionResult> GetPrivatePaymentsAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetPrivatePaymentsAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
@@ -499,6 +502,18 @@ namespace Pinionszek_API.Controllers
             if (date == DateTime.MinValue)
             {
                 ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -523,7 +538,11 @@ namespace Pinionszek_API.Controllers
             }
 
             var privatePaymentsData = budgetPaymentsData
-                .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
+                .Where(upd => upd.SharedPayment == null ||
+                       upd.SharedPayment?.IdSharedPayment == 0)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList(); ;
             if (privatePaymentsData == null || privatePaymentsData.Count() == 0)
             {
                 return NotFound();
