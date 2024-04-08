@@ -648,9 +648,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="userTag">User tag</param>
         /// <param name="date">Payment year and month</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("payments/assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
-        public async Task<IActionResult> GetPaymentsSharedWithUserAsync([Required] DateTime date, [Required] int userTag)
+        public async Task<IActionResult> GetPaymentsSharedWithUserAsync
+            ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
         {
             if (userTag <= 0)
             {
@@ -693,6 +696,13 @@ namespace Pinionszek_API.Controllers
 
                 assignedPaymentsToUserDto.Add(assignedPaymentToUserDto);
             }
+
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            assignedPaymentsToUserDto = assignedPaymentsToUserDto
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             if (assignedPaymentsToUserDto.Count() == 0)
             {
