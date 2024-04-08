@@ -1290,6 +1290,14 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
             badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
+
+            badRequest_3.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_3?.Value.Should().NotBeNull();
+            badRequestResult_3?.Contains("is invalid").Should().BeTrue();
+
+            badRequest_4.Should().BeOfType<BadRequestObjectResult>();
+            badRequestActionResult_4?.Value.Should().NotBeNull();
+            badRequestResult_4?.Contains("is invalid").Should().BeTrue();
         }
 
         [Fact]

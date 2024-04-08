@@ -667,6 +667,18 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
             var assignedPaymentsToUserData = await _budgetService.GetAssignedPaymentsAsync(userTag);
             if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
             {
