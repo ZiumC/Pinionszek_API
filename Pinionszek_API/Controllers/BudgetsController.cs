@@ -36,8 +36,8 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
-        /// <param name="page">Page number of payments</param>
-        /// <param name="pageSize">Page size of payments</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
         public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync
@@ -83,18 +83,15 @@ namespace Pinionszek_API.Controllers
 
             var upcomingPaymentsData = budgetPaymentsData
                 .Where(bpd => bpd.PaymentDate != null)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
             if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
             {
                 return NotFound();
             }
 
-            var upcomingPaymentsPerPage = upcomingPaymentsData
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            foreach (var payment in upcomingPaymentsPerPage)
+            foreach (var payment in upcomingPaymentsData)
             {
                 var sharedPaymentData = await _budgetService
                     .GetSharedPaymentDataAsync(payment.IdPayment);
@@ -102,10 +99,10 @@ namespace Pinionszek_API.Controllers
                 payment.SharedPayment = sharedPaymentData;
             }
 
-            var upcomingPrivatePaymentsData = upcomingPaymentsPerPage
+            var upcomingPrivatePaymentsData = upcomingPaymentsData
                 .Where(upd => upd.SharedPayment == null || upd.SharedPayment?.IdSharedPayment == 0);
 
-            if (upcomingPaymentsPerPage == null || upcomingPaymentsPerPage.Count() == 0)
+            if (upcomingPaymentsData == null || upcomingPaymentsData.Count() == 0)
             {
                 return NotFound();
             }
@@ -118,9 +115,12 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
         [HttpGet("upcoming-payments/share")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
-        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync([Required] DateTime date, [Required] int idUser)
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
         {
             if (idUser <= 0)
             {
