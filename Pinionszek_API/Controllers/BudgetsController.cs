@@ -257,6 +257,7 @@ namespace Pinionszek_API.Controllers
                 .Where(apd => apd.PaymentDate != null &&
                         (apd.PaymentDate >= firstDayOfMonth &&
                          apd.PaymentDate <= lastDayOfMonth))
+                .OrderBy(apd => apd.PaymentDate)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
