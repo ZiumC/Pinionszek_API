@@ -10,7 +10,6 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
         public Task<(string?, int?)> GetFriendSenderNameAndTagAsync(int idSharedPayment);
         public Task<UserSettings?> GetUserSettingsAsync(int idUser);
         public Task<IEnumerable<Budget>> GetBudgetsAsync(int idUser);
-        public Task<Payment?> GetPaymentAsync(int idPayment, int idUser);
         public Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync();
     }
 }

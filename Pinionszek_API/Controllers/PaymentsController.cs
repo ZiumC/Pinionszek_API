@@ -295,5 +295,37 @@ namespace Pinionszek_API.Controllers
 
             return Ok(assignedPaymentsToUserDto);
         }
+
+        /// <summary>
+        /// Get payment details by payment ID and user ID
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        /// <param name="idPayment">Payment ID</param>
+        [HttpGet("payments/{idPayment}")]
+        [ProducesResponseType(200, Type = typeof(GetPrivatePaymentDto))]
+        public async Task<IActionResult> GetPaymentDetailsAsync([Required] int idUser, int idPayment)
+        {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (idPayment <= 0)
+            {
+                ModelState.AddModelError("error", "Payment ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var paymentData = await _paymentService.GetPaymentAsync(idPayment, idUser);
+            if (paymentData == null)
+            {
+                return NotFound();
+            }
+
+            var paymentDto = _mapper.Map<GetPrivatePaymentDto>(paymentData);
+
+            return Ok(paymentDto);
+        }
     }
 }

@@ -536,5 +536,80 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             badRequestActionResult_4?.Value.Should().NotBeNull();
             badRequestResult_4?.Contains("is invalid").Should().BeTrue();
         }
+
+        [Fact]
+        public async Task PaymentsController_GetPaymentDetailsAsync_ReturnsPaymentOrNotfoundOrBadrequest()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var paymentsApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            int firstPaymentId = 1;
+            int lastPaymentId = 13;
+            var user1requests = new List<OkObjectResult?>();
+            var user2requests = new List<OkObjectResult?>();
+            var paymentDetails = new List<GetPrivatePaymentDto?>();
+
+            //Act
+            for (int id = firstPaymentId; id <= lastPaymentId; id++)
+            {
+                if (id <= 6 || id == 12)
+                {
+                    var okRequest = await paymentsController.GetPaymentDetailsAsync(1, id);
+                    var okActionResult = okRequest as OkObjectResult;
+                    var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+                    user1requests.Add(okActionResult);
+                    paymentDetails.Add(paymentDetail);
+                }
+
+                if (id > 6 && id <= 11 || id == 13)
+                {
+                    var okRequest = await paymentsController.GetPaymentDetailsAsync(2, id);
+                    var okActionResult = okRequest as OkObjectResult;
+                    var paymentDetail = okActionResult?.Value as GetPrivatePaymentDto;
+                    user2requests.Add(okActionResult);
+                    paymentDetails.Add(paymentDetail);
+                }
+
+            }
+
+            //Assert
+            user1requests.Should().NotBeNullOrEmpty();
+            user1requests.Should().HaveCount(7);
+            foreach (var request in user1requests)
+            {
+                request.Should().BeOfType<OkObjectResult>();
+            }
+
+            user2requests.Should().NotBeNullOrEmpty();
+            user2requests.Should().HaveCount(6);
+            foreach (var request in user2requests)
+            {
+                request.Should().BeOfType<OkObjectResult>();
+            }
+
+            paymentDetails.Should().NotBeNullOrEmpty();
+            paymentDetails.Should().HaveCount(13);
+            foreach (var payment in paymentDetails)
+            {
+                payment.Should().BeOfType<GetPrivatePaymentDto>();
+                payment.Should().NotBeNull();
+                payment?.IdPayment.Should().BeGreaterThan(0);
+                payment?.Name.Should().NotBeNullOrEmpty();
+                payment?.Charge.Should().BeGreaterThanOrEqualTo(0);
+                payment?.Refund.Should().BeGreaterThanOrEqualTo(0);
+                payment?.Status.Should().NotBeNullOrEmpty();
+                payment?.Category.Should().NotBeNull();
+                payment?.Category.GeneralName.Should().NotBeNullOrEmpty();
+                payment?.Category.DetailedName.Should().NotBeNullOrEmpty();
+
+                var paymentId = payment?.IdPayment;
+                if (paymentId == 1 || paymentId == 4 || paymentId == 10)
+                {
+                    payment?.IdSharedPayment.Should().BeGreaterThan(0);
+                }
+            }
+        }
     }
 }
