@@ -32,7 +32,7 @@ namespace Pinionszek_API.Controllers
         /// <param name="date">Budget date</param>
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
-        [HttpGet("upcoming-payments/private")]
+        [HttpGet("upcoming/private")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetPrivatePaymentDto>))]
         public async Task<IActionResult> GetUpcomingPrivatePaymentsAsync
             ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
@@ -104,6 +104,102 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(_mapper.Map<IEnumerable<GetPrivatePaymentDto>>(upcomingPrivatePaymentsData));
+        }
+
+        /// <summary>
+        /// Get upcoming shared payments with other users by userID (that user who share) and budget date 
+        /// </summary>
+        /// <param name="idUser">User ID</param>
+        /// <param name="date">Budget date</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
+        [HttpGet("upcoming/share")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSharedPaymentToFriendDto>))]
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithFriendAsync
+            ([Required] DateTime date, [Required] int idUser, int page = 1, int pageSize = 20)
+        {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var budgetData = await _budgetService
+                .GetBudgetDataAsync(idUser, date);
+            if (budgetData == null)
+            {
+                return NotFound();
+            }
+
+            var budgetPaymentsData = await _paymentService
+                .GetPaymentsAsync(budgetData.IdBudget);
+            if (budgetPaymentsData == null)
+            {
+                return NotFound();
+            }
+
+            var upcomingPrivatePaymentsData = budgetPaymentsData
+                .Where(p => p.PaymentDate != null)
+                .ToList();
+
+            if (upcomingPrivatePaymentsData == null || upcomingPrivatePaymentsData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            List<GetSharedPaymentToFriendDto> sharedPaymentsDto = new List<GetSharedPaymentToFriendDto>();
+            foreach (var privatePaymentData in upcomingPrivatePaymentsData)
+            {
+                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(privatePaymentData.IdPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+                var friendNameAndTag = await _budgetService.GetFriendReceiveNameAndTagAsync(sharedPaymentData.IdSharedPayment);
+
+                var privatePaymentDto = _mapper.Map<GetPrivatePaymentDto>(privatePaymentData);
+                var sharedPaymentToFriendDto = _mapper.Map<GetSharedPaymentToFriendDto>(privatePaymentDto);
+                _mapper.Map(new GetPaymentFriendDto
+                {
+                    Name = friendNameAndTag.Item1,
+                    FriendTag = friendNameAndTag.Item2,
+                }, sharedPaymentToFriendDto);
+
+                sharedPaymentsDto.Add(sharedPaymentToFriendDto);
+            }
+
+            //i know this is waste or server resource but this is needed
+            //due to properly return pages with proper size
+            sharedPaymentsDto = sharedPaymentsDto
+                .OrderBy(p => p.Payment.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            if (sharedPaymentsDto.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(sharedPaymentsDto);
         }
     }
 }
