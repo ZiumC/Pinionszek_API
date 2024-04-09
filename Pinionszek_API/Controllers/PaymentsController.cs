@@ -85,7 +85,7 @@ namespace Pinionszek_API.Controllers
 
             foreach (var payment in upcomingPaymentsData)
             {
-                var sharedPaymentData = await _budgetService
+                var sharedPaymentData = await _paymentService
                     .GetSharedPaymentDataAsync(payment.IdPayment);
 
                 payment.SharedPayment = sharedPaymentData;
@@ -168,7 +168,7 @@ namespace Pinionszek_API.Controllers
             List<GetSharedPaymentToFriendDto> sharedPaymentsDto = new List<GetSharedPaymentToFriendDto>();
             foreach (var privatePaymentData in upcomingPrivatePaymentsData)
             {
-                var sharedPaymentData = await _budgetService.GetSharedPaymentDataAsync(privatePaymentData.IdPayment);
+                var sharedPaymentData = await _paymentService.GetSharedPaymentDataAsync(privatePaymentData.IdPayment);
                 if (sharedPaymentData == null)
                 {
                     continue;
@@ -200,6 +200,100 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(sharedPaymentsDto);
+        }
+
+        /// <summary>
+        /// Get upcoming payments that are shared for user by userTag and payment date
+        /// </summary>
+        /// <param name="userTag">User tag</param>
+        /// <param name="date">Payment year and month</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
+        [HttpGet("upcoming/assigement")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
+        public async Task<IActionResult> GetUpcomingPaymentsSharedWithUserAsync
+            ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
+        {
+            if (userTag <= 0)
+            {
+                ModelState.AddModelError("error", "User ID is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (date == DateTime.MinValue)
+            {
+                ModelState.AddModelError("error", "Budget date is not specified");
+                return BadRequest(ModelState);
+            }
+
+            if (page <= 0)
+            {
+                ModelState.AddModelError("error", "Page number is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (pageSize <= 0)
+            {
+                ModelState.AddModelError("error", "Page size is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var assignedPaymentsToUserData = await _paymentService.GetAssignedPaymentsAsync(userTag);
+            if (assignedPaymentsToUserData == null || assignedPaymentsToUserData.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
+
+            var upcomingAssignedPaymentsData = assignedPaymentsToUserData
+                .Where(apd => apd.PaymentDate != null &&
+                        (apd.PaymentDate >= firstDayOfMonth &&
+                         apd.PaymentDate <= lastDayOfMonth))
+                .OrderBy(apd => apd.PaymentDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            if (
+                    upcomingAssignedPaymentsData == null ||
+                    upcomingAssignedPaymentsData.Count() == 0
+                )
+            {
+                return NotFound();
+            }
+
+            var assignedPaymentsToUserDto = new List<GetAssignedPaymentToUserDto>();
+            foreach (var assignedPaymentData in upcomingAssignedPaymentsData)
+            {
+                int idAssignedPayment = assignedPaymentData.IdPayment;
+                var sharedPaymentData = await _paymentService
+                    .GetSharedPaymentDataAsync(idAssignedPayment);
+                if (sharedPaymentData == null)
+                {
+                    continue;
+                }
+
+                int idSharedPayment = sharedPaymentData.IdSharedPayment;
+                var friendNameAndTag = await _budgetService.GetFriendSenderNameAndTagAsync(idSharedPayment);
+
+                var assignedPaymentDto = _mapper.Map<GetAssignedPaymentDto>(assignedPaymentData);
+                var assignedPaymentToUserDto = _mapper.Map<GetAssignedPaymentToUserDto>(assignedPaymentDto);
+                _mapper.Map(new GetPaymentFriendDto
+                {
+                    Name = friendNameAndTag.Item1,
+                    FriendTag = friendNameAndTag.Item2,
+                }, assignedPaymentToUserDto);
+
+                assignedPaymentsToUserDto.Add(assignedPaymentToUserDto);
+            }
+
+            if (assignedPaymentsToUserDto.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(assignedPaymentsToUserDto);
         }
     }
 }

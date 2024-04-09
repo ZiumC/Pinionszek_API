@@ -52,35 +52,6 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         }
 
         [Fact]
-        public async Task BudgetApiService_GetSharedPaymentDataAsync_ReturnsSharedPaymentOrNotfound()
-        {
-            //Arrange
-            var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
-
-            //Act
-            var sharedIdPayment_1 = await budgetApiService.GetSharedPaymentDataAsync(1);
-            var sharedIdPayment_4 = await budgetApiService.GetSharedPaymentDataAsync(4);
-            var sharedIdPayment_10 = await budgetApiService.GetSharedPaymentDataAsync(10);
-            var sharedNonExistingPayment = await budgetApiService.GetSharedPaymentDataAsync(100);
-
-            //Assert
-            sharedIdPayment_1.Should().NotBeNull();
-            sharedIdPayment_1?.IdPayment.Should().Be(1);
-            sharedIdPayment_1?.IdFriend.Should().Be(1);
-
-            sharedIdPayment_4.Should().NotBeNull();
-            sharedIdPayment_4?.IdPayment.Should().Be(4);
-            sharedIdPayment_4?.IdFriend.Should().Be(1);
-
-            sharedIdPayment_10.Should().NotBeNull();
-            sharedIdPayment_10?.IdPayment.Should().Be(10);
-            sharedIdPayment_10?.IdFriend.Should().Be(3);
-
-            sharedNonExistingPayment.Should().BeNull();
-        }
-
-        [Fact]
         public async Task BudgetApiService_GetFriendReceiveNameAndTagAsync_ReturnsStringOrNotfound()
         {
             //Arrange
@@ -144,66 +115,6 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 
             result_empty.Item1.Should().BeNull();
             result_empty.Item2.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task BudgetApiService_GetAssignedPaymentsAsync_ReturnsPaymentsOrNotfound()
-        {
-            //Arrange
-            var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
-
-            //Act
-            var assignedPaymentsFriendTag_1001 = await budgetApiService.GetAssignedPaymentsAsync(1001);
-            var assignedPaymentsFriendTag_1002 = await budgetApiService.GetAssignedPaymentsAsync(1002);
-            var assignedPaymentsFriendTag_1003 = await budgetApiService.GetAssignedPaymentsAsync(1003);
-            var assignedPaymentsFriendTag_1004 = await budgetApiService.GetAssignedPaymentsAsync(1004);
-
-            //Assert
-            assignedPaymentsFriendTag_1001.Should().NotBeNullOrEmpty();
-            assignedPaymentsFriendTag_1001.Should().BeOfType<List<Payment>>();
-            assignedPaymentsFriendTag_1001.Count().Should().Be(1);
-            assignedPaymentsFriendTag_1001
-                .Where(ap => ap.SharedPayment == null)
-                .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1001
-                .Where(ap => ap.DetailedCategory == null ||
-                    string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
-                    ap.DetailedCategory.IdGeneralCategory == 0 ||
-                    ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
-                    string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1001
-                .Where(ap => ap.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            assignedPaymentsFriendTag_1001
-                .Where(ap => string.IsNullOrEmpty(ap.Name))
-                .ToList().Count().Should().Be(0);
-
-            assignedPaymentsFriendTag_1002.Should().NotBeNullOrEmpty();
-            assignedPaymentsFriendTag_1002.Should().BeOfType<List<Payment>>();
-            assignedPaymentsFriendTag_1002.Count().Should().Be(2);
-            assignedPaymentsFriendTag_1002
-                .Where(ap => ap.SharedPayment == null)
-                .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1002
-                .Where(ap => ap.DetailedCategory == null ||
-                    string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
-                    ap.DetailedCategory.IdGeneralCategory == 0 ||
-                    ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
-                    string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1002
-                .Where(ap => ap.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            assignedPaymentsFriendTag_1002
-                .Where(ap => string.IsNullOrEmpty(ap.Name))
-                .ToList().Count().Should().Be(0);
-
-            assignedPaymentsFriendTag_1003.Should().BeNullOrEmpty();
-            assignedPaymentsFriendTag_1004.Should().BeNullOrEmpty();
         }
 
         [Fact]
