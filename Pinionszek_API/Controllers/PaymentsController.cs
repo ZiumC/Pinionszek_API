@@ -25,8 +25,6 @@ namespace Pinionszek_API.Controllers
             _budgetService = budgetService;
         }
 
-
-
         /// <summary>
         /// Get upcoming private payments by user ID and budget date 
         /// </summary>

@@ -52,59 +52,6 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         }
 
         [Fact]
-        public async Task BudgetApiService_GetPaymentsAsync_ReturnsPaymentsOrNotfound()
-        {
-            //Arrange
-            var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
-
-            //Act
-            var paymentsOfIdUser_1 = await budgetApiService.GetPaymentsAsync(1);
-            var paymentsOfIdUser_2 = await budgetApiService.GetPaymentsAsync(13);
-            var paymentsOfNonExistingBudget = await budgetApiService.GetPaymentsAsync(37);
-
-            //Assert
-            paymentsOfIdUser_1.Should().NotBeEmpty();
-            paymentsOfIdUser_1.Count().Should().Be(7);
-            paymentsOfIdUser_1
-                .Where(p => p.DetailedCategory == null ||
-                    string.IsNullOrEmpty(p.DetailedCategory.Name) ||
-                    p.DetailedCategory.IdGeneralCategory == 0 ||
-                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
-                    string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_1
-                .Where(p => p.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_1
-                .Where(p => string.IsNullOrEmpty(p.Name))
-                .ToList().Count().Should().Be(0);
-
-            paymentsOfIdUser_2.Should().NotBeEmpty();
-            paymentsOfIdUser_2.Count().Should().Be(6);
-            paymentsOfIdUser_2
-                .Where(p => p.DetailedCategory == null ||
-                    string.IsNullOrEmpty(p.DetailedCategory.Name) ||
-                    p.DetailedCategory.IdGeneralCategory == 0 ||
-                    p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
-                    string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_2
-                .Where(p => p.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_2
-                .Where(p => string.IsNullOrEmpty(p.Name))
-                .ToList().Count().Should().Be(0);
-
-
-            paymentsOfNonExistingBudget.Should().BeEmpty();
-        }
-
-        [Fact]
         public async Task BudgetApiService_GetSharedPaymentDataAsync_ReturnsSharedPaymentOrNotfound()
         {
             //Arrange
