@@ -14,6 +14,7 @@ using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Tests.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
 
             //Act
@@ -137,7 +139,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
             int budget_year = 2024;
 
             //Act
@@ -231,7 +234,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
 
             //Act
             var okRequest_1 = await budgetController.GetDefaultGeneralCategoriesAsync();

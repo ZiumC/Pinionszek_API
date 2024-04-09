@@ -10,6 +10,7 @@ using Pinionszek_API.Models.DTOs.GetDto;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Utils;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,13 +23,16 @@ namespace Pinionszek_API.Controllers
     public class BudgetsController : ControllerBase
     {
         private readonly IBudgetApiService _budgetService;
+        private readonly IPaymentApiService _paymentService;
         private readonly BudgetUtils _budgetUtils;
         private readonly IMapper _mapper;
 
-        public BudgetsController(IConfiguration _config, IBudgetApiService budgetService, IMapper mapper)
+        public BudgetsController(IConfiguration _config, IBudgetApiService budgetService,
+            IPaymentApiService paymentService, IMapper mapper)
         {
             _budgetUtils = new BudgetUtils(_config);
             _budgetService = budgetService;
+            _paymentService = paymentService;
             _mapper = mapper;
         }
 
@@ -70,7 +74,7 @@ namespace Pinionszek_API.Controllers
             GetBudgetSummaryDto budgetSummaryDto;
             try
             {
-                var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+                var budgetPaymentsData = await _paymentService.GetPaymentsAsync(budgetData.IdBudget);
                 decimal needs = _budgetUtils
                             .GetPaymentsSum(GeneralCatEnum.NEEDS, PaymentColEnum.CHARGE, budgetPaymentsData);
 
@@ -142,7 +146,7 @@ namespace Pinionszek_API.Controllers
             var budgetsSummaryDto = new List<GetBudgetSummaryDto>();
             foreach (var budgetData in budgetsByYearData)
             {
-                var budgetPaymentsData = await _budgetService.GetPaymentsAsync(budgetData.IdBudget);
+                var budgetPaymentsData = await _paymentService.GetPaymentsAsync(budgetData.IdBudget);
                 try
                 {
                     decimal needs = _budgetUtils

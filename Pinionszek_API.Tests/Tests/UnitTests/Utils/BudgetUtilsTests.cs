@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
+using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Tests.DbContexts;
 using Pinionszek_API.Utils;
 using System;
@@ -32,7 +33,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.Utils
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
+            var paymentApiService = new PaymentApiService(await dbContext);
             var budgetUtils = new BudgetUtils(_config);
             int idBudget_1 = 1;
             int idBudget_2 = 2;
@@ -40,13 +41,13 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.Utils
 
             //Act
             var budgetPaymentsIdBudget_1 =
-               await budgetApiService.GetPaymentsAsync(idBudget_1);
+               await paymentApiService.GetPaymentsAsync(idBudget_1);
 
             var budgetPaymentsIdBudget_2 =
-                await budgetApiService.GetPaymentsAsync(idBudget_2);
+                await paymentApiService.GetPaymentsAsync(idBudget_2);
 
             var budgetPaymentsIdBudget_13 =
-                await budgetApiService.GetPaymentsAsync(idBudget_13);
+                await paymentApiService.GetPaymentsAsync(idBudget_13);
 
             //Assert
             budgetUtils
