@@ -24,12 +24,12 @@ using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.IntegrationTests
 {
-    public class BudgetControllerTests
+    public class BudgetsControllerTests
     {
 
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        public BudgetControllerTests()
+        public BudgetsControllerTests()
         {
             var mockMapper = new MapperConfiguration(cfg =>
             {

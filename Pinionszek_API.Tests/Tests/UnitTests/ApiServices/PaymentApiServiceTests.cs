@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 {
-    public class PaymentsApiServiceTests
+    public class PaymentApiServiceTests
     {
         [Fact]
         public async Task PaymentsApiService_GetPaymentsAsync_ReturnsPaymentsOrNotfound()
@@ -71,13 +71,13 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
-            var paymentsApiService = new PaymentApiService(await dbContext);
+            var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var sharedIdPayment_1 = await paymentsApiService.GetSharedPaymentDataAsync(1);
-            var sharedIdPayment_4 = await paymentsApiService.GetSharedPaymentDataAsync(4);
-            var sharedIdPayment_10 = await paymentsApiService.GetSharedPaymentDataAsync(10);
-            var sharedNonExistingPayment = await paymentsApiService.GetSharedPaymentDataAsync(100);
+            var sharedIdPayment_1 = await paymentApiService.GetSharedPaymentDataAsync(1);
+            var sharedIdPayment_4 = await paymentApiService.GetSharedPaymentDataAsync(4);
+            var sharedIdPayment_10 = await paymentApiService.GetSharedPaymentDataAsync(10);
+            var sharedNonExistingPayment = await paymentApiService.GetSharedPaymentDataAsync(100);
 
             //Assert
             sharedIdPayment_1.Should().NotBeNull();
@@ -100,13 +100,13 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
-            var paymentsApiService = new PaymentApiService(await dbContext);
+            var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var assignedPaymentsFriendTag_1001 = await paymentsApiService.GetAssignedPaymentsAsync(1001);
-            var assignedPaymentsFriendTag_1002 = await paymentsApiService.GetAssignedPaymentsAsync(1002);
-            var assignedPaymentsFriendTag_1003 = await paymentsApiService.GetAssignedPaymentsAsync(1003);
-            var assignedPaymentsFriendTag_1004 = await paymentsApiService.GetAssignedPaymentsAsync(1004);
+            var assignedPaymentsFriendTag_1001 = await paymentApiService.GetAssignedPaymentsAsync(1001);
+            var assignedPaymentsFriendTag_1002 = await paymentApiService.GetAssignedPaymentsAsync(1002);
+            var assignedPaymentsFriendTag_1003 = await paymentApiService.GetAssignedPaymentsAsync(1003);
+            var assignedPaymentsFriendTag_1004 = await paymentApiService.GetAssignedPaymentsAsync(1004);
 
             //Assert
             assignedPaymentsFriendTag_1001.Should().NotBeNullOrEmpty();
@@ -160,15 +160,15 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         {
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
-            var paymentsApiService = new PaymentApiService(await dbContext);
+            var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var payment1 = await paymentsApiService.GetPaymentAsync(1, 1);
-            var payment2 = await paymentsApiService.GetPaymentAsync(7, 2);
-            var payment3 = await paymentsApiService.GetPaymentAsync(2, 1);
-            var payment4 = await paymentsApiService.GetPaymentAsync(4, 2);
-            var payment5 = await paymentsApiService.GetPaymentAsync(13, 1);
-            var payment6 = await paymentsApiService.GetPaymentAsync(4, 1);
+            var payment1 = await paymentApiService.GetPaymentAsync(1, 1);
+            var payment2 = await paymentApiService.GetPaymentAsync(7, 2);
+            var payment3 = await paymentApiService.GetPaymentAsync(2, 1);
+            var payment4 = await paymentApiService.GetPaymentAsync(4, 2);
+            var payment5 = await paymentApiService.GetPaymentAsync(13, 1);
+            var payment6 = await paymentApiService.GetPaymentAsync(4, 1);
 
             //Assert
             payment1.Should().NotBeNull();

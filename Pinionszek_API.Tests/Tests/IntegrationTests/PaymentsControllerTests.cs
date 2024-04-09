@@ -19,7 +19,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
     public class PaymentsControllerTests
     {
         private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
         public PaymentsControllerTests()
         {
             var mockMapper = new MapperConfiguration(cfg =>
@@ -29,14 +28,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new BudgetProfile());
             });
             _mapper = mockMapper.CreateMapper();
-
-            _config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(
-                 path: "appsettings.json",
-                 optional: false,
-                 reloadOnChange: true)
-           .Build();
         }
 
         [Fact]
@@ -215,8 +206,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
             var user_1 = 1;
             var user_2 = 2;
@@ -375,8 +366,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
             var friend_1 = 1001;
             var friend_2 = 1002;
@@ -543,8 +534,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             int firstPaymentId = 1;
             int lastPaymentId = 13;
             var user1requests = new List<OkObjectResult?>();
@@ -618,8 +609,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var budgetController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var budgetController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
             var user_1 = 1;
             var user_2 = 2;
@@ -779,8 +770,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
             var user_1 = 1;
             var user_2 = 2;
@@ -959,8 +950,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentsApiService = new PaymentApiService(await dbContext);
-            var paymentsController = new PaymentsController(paymentsApiService, budgetApiService, _mapper);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
             var budgetDate = DateTime.Parse("2024-01-01");
             var friend_1 = 1001;
             var friend_2 = 1002;
