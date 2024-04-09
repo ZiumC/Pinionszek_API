@@ -6,7 +6,6 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
     public interface IBudgetApiService
     {
         public Task<Budget?> GetBudgetDataAsync(int idUser, DateTime budgetYear);
-        public Task<IEnumerable<Payment>> GetPaymentsAsync(int idBudget);
         public Task<SharedPayment?> GetSharedPaymentDataAsync(int idPayment);
         public Task<(string?, int?)> GetFriendReceiveNameAndTagAsync(int idSharedPayment);
         public Task<(string?, int?)> GetFriendSenderNameAndTagAsync(int idSharedPayment);
