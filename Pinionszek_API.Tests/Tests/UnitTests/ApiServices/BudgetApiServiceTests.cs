@@ -29,6 +29,9 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetDate_1 = DateTime.Parse("2024-01-01");
+            var budgetDate_2 = DateTime.Parse("2023-12-29");
+            var budgetDate_3 = DateTime.Parse("2024-01-11");
 
             //Act
             var budget_1 = await budgetApiService.GetBudgetDataAsync(_user_1, _budgetDate);
@@ -41,17 +44,17 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             budget_1.Should().NotBeNull();
             budget_1?.BudgetStatus.Name.Should().Be("OPEND");
             budget_1?.IsCompleted.Should().BeFalse();
-            budget_1?.OpendDate.Should().Be(_budgetDate);
+            budget_1?.OpendDate.Should().Be(budgetDate_1);
 
             budget_2.Should().NotBeNull();
             budget_2?.BudgetStatus.Name.Should().Be("OPEND");
             budget_2?.IsCompleted.Should().BeFalse();
-            budget_2?.OpendDate.Should().Be(_budgetDate);
+            budget_2?.OpendDate.Should().Be(budgetDate_2);
 
             budget_3.Should().NotBeNull();
             budget_3?.BudgetStatus.Name.Should().Be("OPEND");
             budget_3?.IsCompleted.Should().BeFalse();
-            budget_3?.OpendDate.Should().Be(_budgetDate);
+            budget_3?.OpendDate.Should().Be(budgetDate_3);
 
             budget_4.Should().BeNull();
             budget_5.Should().BeNull();
