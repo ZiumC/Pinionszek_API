@@ -1,18 +1,18 @@
 ﻿using FluentAssertions;
 using Pinionszek_API.Models.DatabaseModel;
-using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Tests.DbContexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 {
     public class UserApiServiceTests
     {
+        private readonly int _user_1 = 1;
+        private readonly int _user_2 = 2;
+        private readonly int _user_3 = 3;
+        private readonly int _user_4 = 4;
+        private readonly int _user_5 = 100;
+        private readonly DateTime _registrationDate = DateTime.Parse("2019-01-01");
 
         [Fact]
         public async Task UserApiService_GetUserFriendsAsync_ReturnsFriendsOrNotfound()
@@ -24,7 +24,6 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var user_2 = new { IdUser = 2, UserTag = 1002 };
             var user_3 = new { IdUser = 3, UserTag = 1003 };
             var user_4 = new { IdUser = 4, UserTag = 1004 };
-
 
             //Act
             var userFriends_1 = await userApiService.GetUserFriendsAsync(user_1.IdUser);
@@ -68,18 +67,13 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var userApiService = new UserApiService(await dbContext);
-            int user_1 = 1;
-            int user_2 = 2;
-            int user_3 = 3;
-            int user_4 = 4;
-            int user_5 = 5;
 
             //Act
-            var userSettings_1 = await userApiService.GetUserSettingsAsync(user_1);
-            var userSettings_2 = await userApiService.GetUserSettingsAsync(user_2);
-            var userSettings_3 = await userApiService.GetUserSettingsAsync(user_3);
-            var userSettings_4 = await userApiService.GetUserSettingsAsync(user_4);
-            var userSettings_5 = await userApiService.GetUserSettingsAsync(user_5);
+            var userSettings_1 = await userApiService.GetUserSettingsAsync(_user_1);
+            var userSettings_2 = await userApiService.GetUserSettingsAsync(_user_2);
+            var userSettings_3 = await userApiService.GetUserSettingsAsync(_user_3);
+            var userSettings_4 = await userApiService.GetUserSettingsAsync(_user_4);
+            var userSettings_5 = await userApiService.GetUserSettingsAsync(_user_5);
 
             //Assert
             userSettings_1.Should().NotBeNull();
@@ -98,18 +92,13 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var userApiService = new UserApiService(await dbContext);
-            int user_1 = 1;
-            int user_2 = 2;
-            int user_3 = 3;
-            int user_4 = 4;
-            int user_5 = 5;
 
             //Act
-            var userData_1 = await userApiService.GetUserDataAsync(user_1);
-            var userData_2 = await userApiService.GetUserDataAsync(user_2);
-            var userData_3 = await userApiService.GetUserDataAsync(user_3);
-            var userData_4 = await userApiService.GetUserDataAsync(user_4);
-            var userData_5 = await userApiService.GetUserDataAsync(user_5);
+            var userData_1 = await userApiService.GetUserDataAsync(_user_1);
+            var userData_2 = await userApiService.GetUserDataAsync(_user_2);
+            var userData_3 = await userApiService.GetUserDataAsync(_user_3);
+            var userData_4 = await userApiService.GetUserDataAsync(_user_4);
+            var userData_5 = await userApiService.GetUserDataAsync(_user_5);
 
             //Assert
             userData_1.Should().NotBeNull();
@@ -119,7 +108,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             userData_1?.Login.Should().NotBeNullOrEmpty();
             userData_1?.Password.Should().NotBeNullOrEmpty();
             userData_1?.PasswordSalt.Should().NotBeNullOrEmpty();
-            userData_1?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+            userData_1?.RegisteredAt.Should().BeAfter(_registrationDate);
 
             userData_2.Should().NotBeNull();
             userData_2?.IdUser.Should().BeGreaterThan(0);
@@ -128,7 +117,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             userData_2?.Login.Should().NotBeNullOrEmpty();
             userData_2?.Password.Should().NotBeNullOrEmpty();
             userData_2?.PasswordSalt.Should().NotBeNullOrEmpty();
-            userData_2?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+            userData_2?.RegisteredAt.Should().BeAfter(_registrationDate);
 
             userData_3.Should().NotBeNull();
             userData_3?.IdUser.Should().BeGreaterThan(0);
@@ -137,7 +126,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             userData_3?.Login.Should().NotBeNullOrEmpty();
             userData_3?.Password.Should().NotBeNullOrEmpty();
             userData_3?.PasswordSalt.Should().NotBeNullOrEmpty();
-            userData_3?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+            userData_3?.RegisteredAt.Should().BeAfter(_registrationDate);
 
             userData_4.Should().NotBeNull();
             userData_4?.IdUser.Should().BeGreaterThan(0);
@@ -146,7 +135,7 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             userData_4?.Login.Should().NotBeNullOrEmpty();
             userData_4?.Password.Should().NotBeNullOrEmpty();
             userData_4?.PasswordSalt.Should().NotBeNullOrEmpty();
-            userData_4?.RegisteredAt.Should().BeAfter(DateTime.Parse("2019-01-01"));
+            userData_4?.RegisteredAt.Should().BeAfter(_registrationDate);
 
             userData_5.Should().BeNull();
         }
@@ -157,16 +146,12 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             //Arrange
             var dbContext = new InMemContext().GetDatabaseContext();
             var userApiService = new UserApiService(await dbContext);
-            int idUser_1 = 1;
-            int idUser_2 = 2;
-            int idUser_3 = 3;
-            int idUser_4 = 4;
 
             //Act
-            var userCategories1 = await userApiService.GetUserPaymentCategoriesAsync(idUser_1);
-            var userCategories2 = await userApiService.GetUserPaymentCategoriesAsync(idUser_2);
-            var userCategories3 = await userApiService.GetUserPaymentCategoriesAsync(idUser_3);
-            var userCategories4 = await userApiService.GetUserPaymentCategoriesAsync(idUser_4);
+            var userCategories1 = await userApiService.GetUserPaymentCategoriesAsync(_user_1);
+            var userCategories2 = await userApiService.GetUserPaymentCategoriesAsync(_user_2);
+            var userCategories3 = await userApiService.GetUserPaymentCategoriesAsync(_user_3);
+            var userCategories4 = await userApiService.GetUserPaymentCategoriesAsync(_user_4);
 
             //Assert
             userCategories1.Should().NotBeNullOrEmpty();
