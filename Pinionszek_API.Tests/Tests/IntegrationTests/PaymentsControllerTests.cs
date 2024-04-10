@@ -19,7 +19,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 {
     public class PaymentsControllerTests
     {
-        private readonly IMapper _mapper;
         private readonly int _user_1 = 1;
         private readonly int _user_2 = 2;
         private readonly int _user_3 = 3;
@@ -31,6 +30,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         private readonly int _friend_3 = 1003;
         private readonly int _friend_4 = 1004;
         private readonly DateTime _budgetDate;
+        private readonly IMapper _mapper;
 
         public PaymentsControllerTests()
         {

@@ -27,6 +27,12 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
     public class BudgetsControllerTests
     {
 
+        private readonly int _user_1 = 1;
+        private readonly int _user_2 = 2;
+        private readonly int _user_3 = 3;
+        private readonly int _user_4 = 4;
+        private readonly int _user_5 = 100;
+        private readonly DateTime _budgetDate;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         public BudgetsControllerTests()
@@ -46,6 +52,8 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                  optional: false,
                  reloadOnChange: true)
            .Build();
+
+            _budgetDate = DateTime.Parse("2024-01-01");
         }
 
         [Fact]
@@ -56,34 +64,28 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var budgetApiService = new BudgetApiService(await dbContext);
             var paymentApiService = new PaymentApiService(await dbContext);
             var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
-            var budgetDate = DateTime.Parse("2024-01-01");
+
 
             //Act
-            var okRequest_1 = await budgetController.GetBudgetSummaryAsync(budgetDate, 1);
-            var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var budgetResult_1 = okActionResult_1?.Value as GetBudgetSummaryDto;
+            var okRequest_1 = await budgetController.GetBudgetSummaryAsync(_budgetDate, _user_1);
+            var budgetResult_1 = (okRequest_1 as OkObjectResult)?.Value as GetBudgetSummaryDto;
 
-            var okRequest_2 = await budgetController.GetBudgetSummaryAsync(budgetDate, 2);
-            var okActionResult_2 = okRequest_2 as OkObjectResult;
-            var budgetResult_2 = okActionResult_2?.Value as GetBudgetSummaryDto;
+            var okRequest_2 = await budgetController.GetBudgetSummaryAsync(_budgetDate, _user_2);
+            var budgetResult_2 = (okRequest_2 as OkObjectResult)?.Value as GetBudgetSummaryDto;
 
-            var okRequest_3 = await budgetController.GetBudgetSummaryAsync(budgetDate, 3);
-            var okActionResult_3 = okRequest_3 as OkObjectResult;
-            var budgetResult_3 = okActionResult_3?.Value as GetBudgetSummaryDto;
+            var okRequest_3 = await budgetController.GetBudgetSummaryAsync(_budgetDate, _user_3);
+            var budgetResult_3 = (okRequest_3 as OkObjectResult)?.Value as GetBudgetSummaryDto;
 
-            var notFoundRequest_1 = await budgetController.GetBudgetSummaryAsync(budgetDate, 1001);
+            var notFoundRequest_1 = await budgetController.GetBudgetSummaryAsync(_budgetDate, _user_5);
 
-            var badRequest_1 = await budgetController.GetBudgetSummaryAsync(budgetDate, -1005);
-            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
-            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+            var badRequest_1 = await budgetController.GetBudgetSummaryAsync(_budgetDate, -_user_5);
+            var badRequestResult_1 = (badRequest_1 as BadRequestObjectResult)?.Value as string;
 
-            var badRequest_2 = await budgetController.GetBudgetSummaryAsync(new DateTime(), 1005);
-            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
-            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+            var badRequest_2 = await budgetController.GetBudgetSummaryAsync(new DateTime(), _user_5);
+            var badRequestResult_2 = (badRequest_2 as BadRequestObjectResult)?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
-            okActionResult_1.Should().NotBeNull();
             budgetResult_1.Should().NotBeNull();
             budgetResult_1?.Budget.Should().NotBeNull();
             budgetResult_1?.Budget.Status.Should().NotBeNullOrEmpty();
@@ -97,7 +99,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
-            okActionResult_2.Should().NotBeNull();
             budgetResult_2.Should().NotBeNull();
             budgetResult_2?.Budget.Should().NotBeNull();
             budgetResult_2?.Budget.Status.Should().NotBeNullOrEmpty();
@@ -110,7 +111,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             budgetResult_2?.Savings.Should().BeGreaterThanOrEqualTo(0);
 
             okRequest_3.Should().BeOfType<OkObjectResult>();
-            okActionResult_3.Should().NotBeNull();
             budgetResult_3.Should().NotBeNull();
             budgetResult_3?.Budget.Should().NotBeNull();
             budgetResult_3?.Budget.Status.Should().NotBeNullOrEmpty();
@@ -125,11 +125,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             notFoundRequest_1.Should().BeOfType<NotFoundResult>();
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
 
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is not specified").Should().BeTrue();
         }
 

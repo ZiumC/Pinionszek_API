@@ -28,7 +28,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
         private readonly int _user_4 = 4;
         private readonly int _user_5 = 100;
         private readonly int _defaultPageSize = 1;
-        private readonly DateTime _budgetDate;
 
         public UserControllerTests()
         {
@@ -46,7 +45,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new CategoryProfile());
             });
             _mapper = mockMapper.CreateMapper();
-            _budgetDate = DateTime.Parse("2024-01-01");
         }
 
         [Fact]
