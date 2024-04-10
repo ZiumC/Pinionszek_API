@@ -22,6 +22,13 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
     {
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
+        private readonly int _user_1 = 1;
+        private readonly int _user_2 = 2;
+        private readonly int _user_3 = 3;
+        private readonly int _user_4 = 4;
+        private readonly int _user_5 = 100;
+        private readonly int _defaultPageSize = 1;
+        private readonly DateTime _budgetDate;
 
         public UserControllerTests()
         {
@@ -39,6 +46,7 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 cfg.AddProfile(new CategoryProfile());
             });
             _mapper = mockMapper.CreateMapper();
+            _budgetDate = DateTime.Parse("2024-01-01");
         }
 
         [Fact]
@@ -48,49 +56,43 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var dbContext = new InMemContext().GetDatabaseContext();
             var userApiService = new UserApiService(await dbContext);
             var userController = new UserController(_config, userApiService, _mapper);
-            int user_1 = 1;
-            int user_2 = 2;
-            int user_3 = 3;
-            int user_4 = 4;
+            var pages = new { page0 = 0, page1 = 1, page2 = 2 };
+            var pageSize = 2;
 
             //Act
-            var okRequest_1 = await userController.GetUserFriendsAsync(user_1);
-            var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var friendsResult_1 = okActionResult_1?.Value as IEnumerable<GetUserFriendDto>;
+            var okRequest_1 = await userController.GetUserFriendsAsync(_user_1);
+            var friendsResult_1 = (okRequest_1 as OkObjectResult)?.Value as IEnumerable<GetUserFriendDto>;
 
-            var okRequest_2 = await userController.GetUserFriendsAsync(user_2);
-            var okActionResult_2 = okRequest_2 as OkObjectResult;
-            var friendsResult_2 = okActionResult_2?.Value as IEnumerable<GetUserFriendDto>;
+            var okRequest_2 = await userController.GetUserFriendsAsync(_user_2);
+            var friendsResult_2 = (okRequest_2 as OkObjectResult)?.Value as IEnumerable<GetUserFriendDto>;
 
-            var okRequest_3 = await userController.GetUserFriendsAsync(user_3);
+            var okRequest_3 = await userController.GetUserFriendsAsync(_user_3);
             var okActionResult_3 = okRequest_3 as OkObjectResult;
             var friendsResult_3 = okActionResult_3?.Value as IEnumerable<GetUserFriendDto>;
 
-            var okRequest_4_page_1 = await userController.GetUserFriendsAsync(user_1, 1, 2);
-            var okActionResult_4_page_1 = okRequest_4_page_1 as OkObjectResult;
-            var friendsResult_4_page_1 = okActionResult_4_page_1?.Value as IEnumerable<GetUserFriendDto>;
+            var okRequestPage_1 = await userController.GetUserFriendsAsync
+                (_user_1, pages.page1, pageSize);
+            var friendsResultPage_1 = (okRequestPage_1 as OkObjectResult)?.Value as IEnumerable<GetUserFriendDto>;
             
-            var okRequest_4_page_2 = await userController.GetUserFriendsAsync(user_1, 2, 2);
-            var okActionResult_4_page_2 = okRequest_4_page_2 as OkObjectResult;
-            var friendsResult_4_page_2 = okActionResult_4_page_2?.Value as IEnumerable<GetUserFriendDto>;
+            var okRequestPage_2 = await userController.GetUserFriendsAsync
+                (_user_1, pages.page2, pageSize);
+            var friendsResultPage_2 = (okRequestPage_2 as OkObjectResult)?.Value as IEnumerable<GetUserFriendDto>;
 
-            var notfound_1 = await userController.GetUserFriendsAsync(user_4);
+            var notfound_1 = await userController.GetUserFriendsAsync(_user_4);
 
-            var badRequest_1 = await userController.GetUserFriendsAsync(-user_4);
-            var badRequestActionResult_1 = badRequest_1 as BadRequestObjectResult;
-            var badRequestResult_1 = badRequestActionResult_1?.Value as string;
+            var badRequest_1 = await userController.GetUserFriendsAsync(-_user_4);
+            var badRequestResult_1 = (badRequest_1 as BadRequestObjectResult)?.Value as string;
 
-            var badRequest_2 = await userController.GetUserFriendsAsync(user_4, 0, 11);
-            var badRequestActionResult_2 = badRequest_2 as BadRequestObjectResult;
-            var badRequestResult_2 = badRequestActionResult_2?.Value as string;
+            var badRequest_2 = await userController.GetUserFriendsAsync
+                (_user_4, pages.page0, _defaultPageSize);
+            var badRequestResult_2 = (badRequest_2 as BadRequestObjectResult)?.Value as string;
 
-            var badRequest_3 = await userController.GetUserFriendsAsync(user_4, 1, -12);
-            var badRequestActionResult_3 = badRequest_3 as BadRequestObjectResult;
-            var badRequestResult_3 = badRequestActionResult_3?.Value as string;
+            var badRequest_3 = await userController.GetUserFriendsAsync
+                (_user_4, pages.page1, -_defaultPageSize);
+            var badRequestResult_3 = (badRequest_3 as BadRequestObjectResult)?.Value as string;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
-            okActionResult_1.Should().NotBeNull();
             friendsResult_1?.Count().Should().Be(3);
             friendsResult_1?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
@@ -100,7 +102,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 .Should().BeNullOrEmpty();
 
             okRequest_2.Should().BeOfType<OkObjectResult>();
-            okActionResult_2.Should().NotBeNull();
             friendsResult_2?.Count().Should().Be(2);
             friendsResult_2?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
@@ -119,38 +120,33 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
                 .Should().BeNullOrEmpty();
 
-            okRequest_4_page_1.Should().BeOfType<OkObjectResult>();
-            okActionResult_4_page_1.Should().NotBeNull();
-            friendsResult_4_page_1?.Count().Should().Be(2);
-            friendsResult_4_page_1?
+            okRequestPage_1.Should().BeOfType<OkObjectResult>();
+            friendsResultPage_1?.Count().Should().Be(2);
+            friendsResultPage_1?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
                 .Should().BeNullOrEmpty();
-            friendsResult_4_page_1?
+            friendsResultPage_1?
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
                 .Should().BeNullOrEmpty();
 
-            okRequest_4_page_2.Should().BeOfType<OkObjectResult>();
-            okActionResult_4_page_2.Should().NotBeNull();
-            friendsResult_4_page_2?.Count().Should().Be(1);
-            friendsResult_4_page_2?
+            okRequestPage_2.Should().BeOfType<OkObjectResult>();
+            friendsResultPage_2?.Count().Should().Be(1);
+            friendsResultPage_2?
                 .Where(fr => fr.IdFriend <= 0 || fr.FriendTag <= 0)
                 .Should().BeNullOrEmpty();
-            friendsResult_4_page_2?
+            friendsResultPage_2?
                 .Where(fr => string.IsNullOrEmpty(fr.Login))
                 .Should().BeNullOrEmpty();
 
             notfound_1.Should().BeOfType<NotFoundResult>();
 
             badRequest_1.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_1?.Value.Should().NotBeNull();
             badRequestResult_1?.Contains("is invalid").Should().BeTrue();
 
             badRequest_2.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_2?.Value.Should().NotBeNull();
             badRequestResult_2?.Contains("is invalid").Should().BeTrue();
 
             badRequest_3.Should().BeOfType<BadRequestObjectResult>();
-            badRequestActionResult_3?.Value.Should().NotBeNull();
             badRequestResult_3?.Contains("is invalid").Should().BeTrue();
         }
 
