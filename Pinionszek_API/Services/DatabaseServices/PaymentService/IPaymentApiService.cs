@@ -8,5 +8,6 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
         public Task<IEnumerable<Payment>> GetAssignedPaymentsAsync(int friendTag);
         public Task<SharedPayment?> GetSharedPaymentDataAsync(int idPayment);
         public Task<Payment?> GetPaymentAsync(int idPayment, int idUser);
+        public Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync();
     }
 }

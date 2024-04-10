@@ -180,5 +180,12 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
 
             return paymentUserQuery;
         }
+
+        public async Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync()
+        {
+            return await _dbContext.GeneralCategories
+                .Where(gc => gc.IsDefault)
+                .ToListAsync();
+        }
     }
 }

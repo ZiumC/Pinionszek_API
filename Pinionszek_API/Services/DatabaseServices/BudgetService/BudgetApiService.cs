@@ -103,12 +103,5 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
                     IdUser = b.IdUser
                 }).ToListAsync();
         }
-
-        public async Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync()
-        {
-            return await _dbContext.GeneralCategories
-                .Where(gc => gc.IsDefault)
-                .ToListAsync();
-        }
     }
 }

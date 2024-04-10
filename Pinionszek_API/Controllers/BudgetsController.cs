@@ -11,6 +11,7 @@ using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Utils;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,15 +25,17 @@ namespace Pinionszek_API.Controllers
     {
         private readonly IBudgetApiService _budgetService;
         private readonly IPaymentApiService _paymentService;
+        private readonly IUserApiService _userService;
         private readonly BudgetUtils _budgetUtils;
         private readonly IMapper _mapper;
 
         public BudgetsController(IConfiguration _config, IBudgetApiService budgetService,
-            IPaymentApiService paymentService, IMapper mapper)
+            IPaymentApiService paymentService, IUserApiService userService, IMapper mapper)
         {
             _budgetUtils = new BudgetUtils(_config);
             _budgetService = budgetService;
             _paymentService = paymentService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -64,7 +67,7 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
-            var userSettingsData = await _budgetService
+            var userSettingsData = await _userService
                 .GetUserSettingsAsync(idUser);
             if (userSettingsData == null)
             {
@@ -182,22 +185,6 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(budgetsSummaryDto);
-        }
-
-        /// <summary>
-        /// Get default general payment categories
-        /// </summary>
-        [HttpGet("payment-categories/default")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
-        public async Task<IActionResult> GetDefaultGeneralCategoriesAsync()
-        {
-            var defaultCategories = await _budgetService.GetDefaultGeneralCategoriesAsync();
-            if (defaultCategories == null || defaultCategories.Count() == 0)
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<IEnumerable<GetGeneralCategoryDto>>(defaultCategories));
         }
     }
 }

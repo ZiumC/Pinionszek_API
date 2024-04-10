@@ -301,7 +301,7 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         /// <param name="idUser">User ID</param>
         /// <param name="idPayment">Payment ID</param>
-        [HttpGet("payments/{idPayment}")]
+        [HttpGet("{idPayment}")]
         [ProducesResponseType(200, Type = typeof(GetPrivatePaymentDto))]
         public async Task<IActionResult> GetPaymentDetailsAsync([Required] int idUser, int idPayment)
         {
@@ -496,7 +496,7 @@ namespace Pinionszek_API.Controllers
         /// <param name="date">Payment year and month</param>
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
-        [HttpGet("payments/assigement")]
+        [HttpGet("assigement")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetAssignedPaymentToUserDto>))]
         public async Task<IActionResult> GetPaymentsSharedWithUserAsync
             ([Required] DateTime date, [Required] int userTag, int page = 1, int pageSize = 20)
@@ -568,6 +568,22 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(assignedPaymentsToUserDto);
+        }
+
+        /// <summary>
+        /// Get default general payment categories
+        /// </summary>
+        [HttpGet("categories/default")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetGeneralCategoryDto>))]
+        public async Task<IActionResult> GetDefaultGeneralCategoriesAsync()
+        {
+            var defaultCategories = await _paymentService.GetDefaultGeneralCategoriesAsync();
+            if (defaultCategories == null || defaultCategories.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<GetGeneralCategoryDto>>(defaultCategories));
         }
     }
 }
