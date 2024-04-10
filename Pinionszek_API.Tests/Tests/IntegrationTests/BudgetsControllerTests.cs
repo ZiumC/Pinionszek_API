@@ -1,27 +1,14 @@
 ﻿using AutoMapper;
-using Castle.Components.DictionaryAdapter.Xml;
-using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
-using Moq;
-using Newtonsoft.Json;
 using Pinionszek_API.Controllers;
-using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDto.Payments;
-using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Tests.DbContexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.IntegrationTests
 {

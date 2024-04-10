@@ -1,11 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Pinionszek_API.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.UnitTests.Utils
 {

@@ -1,15 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using Pinionszek_API.Models.DatabaseModel;
-using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Tests.DbContexts;
 using Pinionszek_API.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pinionszek_API.Tests.Tests.UnitTests.Utils
 {
