@@ -226,12 +226,10 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             //Act
             var okRequest_1 = await budgetController.GetDefaultGeneralCategoriesAsync();
-            var okActionResult_1 = okRequest_1 as OkObjectResult;
-            var generalCategoriessResult_1 = okActionResult_1?.Value as IEnumerable<GetGeneralCategoryDto>;
+            var generalCategoriessResult_1 = (okRequest_1 as OkObjectResult)?.Value as IEnumerable<GetGeneralCategoryDto>;
 
             //Assert
             okRequest_1.Should().BeOfType<OkObjectResult>();
-            okActionResult_1.Should().NotBeNull();
             generalCategoriessResult_1.Should().NotBeNullOrEmpty();
             generalCategoriessResult_1?.Count().Should().Be(3);
             generalCategoriessResult_1?

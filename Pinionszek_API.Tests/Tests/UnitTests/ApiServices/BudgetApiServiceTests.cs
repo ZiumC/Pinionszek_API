@@ -16,6 +16,12 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 {
     public class BudgetApiServiceTests
     {
+        private readonly DateTime _budgetDate = DateTime.Parse("2024-01-01");
+        private readonly int _user_1 = 1;
+        private readonly int _user_2 = 2;
+        private readonly int _user_3 = 3;
+        private readonly int _user_4 = 4;
+        private readonly int _user_5 = 100;
 
         [Fact]
         public async Task BudgetApiService_GetBudgetDataAsync_ReturnsBudgetOrNotfound()
@@ -25,30 +31,30 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var budgetOfIdUser_1 = await budgetApiService.GetBudgetDataAsync(1, DateTime.Parse("2024-01-01"));
-            var budgetOfIdUser_2 = await budgetApiService.GetBudgetDataAsync(2, DateTime.Parse("2024-01-01"));
-            var budgetOfIdUser_3 = await budgetApiService.GetBudgetDataAsync(3, DateTime.Parse("2024-01-01"));
-            var budgetOfIdUser_4 = await budgetApiService.GetBudgetDataAsync(4, DateTime.Parse("2024-01-01"));
-            var budgetOfInvalidUser = await budgetApiService.GetBudgetDataAsync(1000, DateTime.Parse("2024-01-01"));
+            var budget_1 = await budgetApiService.GetBudgetDataAsync(_user_1, _budgetDate);
+            var budget_2 = await budgetApiService.GetBudgetDataAsync(_user_2, _budgetDate);
+            var budget_3 = await budgetApiService.GetBudgetDataAsync(_user_3, _budgetDate);
+            var budget_4 = await budgetApiService.GetBudgetDataAsync(_user_4, _budgetDate);
+            var budget_5 = await budgetApiService.GetBudgetDataAsync(_user_5, _budgetDate);
 
             //Assert
-            budgetOfIdUser_1.Should().NotBeNull();
-            budgetOfIdUser_1?.BudgetStatus.Name.Should().Be("OPEND");
-            budgetOfIdUser_1?.IsCompleted.Should().BeFalse();
-            budgetOfIdUser_1?.OpendDate.Should().Be(DateTime.Parse("2024-01-01"));
+            budget_1.Should().NotBeNull();
+            budget_1?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_1?.IsCompleted.Should().BeFalse();
+            budget_1?.OpendDate.Should().Be(_budgetDate);
 
-            budgetOfIdUser_2.Should().NotBeNull();
-            budgetOfIdUser_2?.BudgetStatus.Name.Should().Be("OPEND");
-            budgetOfIdUser_2?.IsCompleted.Should().BeFalse();
-            budgetOfIdUser_2?.OpendDate.Should().Be(DateTime.Parse("2023-12-29"));
+            budget_2.Should().NotBeNull();
+            budget_2?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_2?.IsCompleted.Should().BeFalse();
+            budget_2?.OpendDate.Should().Be(_budgetDate);
 
-            budgetOfIdUser_3.Should().NotBeNull();
-            budgetOfIdUser_3?.BudgetStatus.Name.Should().Be("OPEND");
-            budgetOfIdUser_3?.IsCompleted.Should().BeFalse();
-            budgetOfIdUser_3?.OpendDate.Should().Be(DateTime.Parse("2024-01-11"));
+            budget_3.Should().NotBeNull();
+            budget_3?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_3?.IsCompleted.Should().BeFalse();
+            budget_3?.OpendDate.Should().Be(_budgetDate);
 
-            budgetOfIdUser_4.Should().BeNull();
-            budgetOfInvalidUser.Should().BeNull();
+            budget_4.Should().BeNull();
+            budget_5.Should().BeNull();
         }
 
         [Fact]
@@ -59,29 +65,29 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var resultOfIdSharedPayment_1 = await budgetApiService.GetFriendReceiveNameAndTagAsync(1);
-            var resultOfIdSharedPayment_2 = await budgetApiService.GetFriendReceiveNameAndTagAsync(2);
-            var resultOfIdSharedPayment_3 = await budgetApiService.GetFriendReceiveNameAndTagAsync(3);
-            var emptyResult = await budgetApiService.GetFriendReceiveNameAndTagAsync(1001);
+            var sharedPaymentResult_1 = await budgetApiService.GetFriendReceiveNameAndTagAsync(_user_1);
+            var sharedPaymentResult_2 = await budgetApiService.GetFriendReceiveNameAndTagAsync(_user_2);
+            var sharedPaymentResult_3 = await budgetApiService.GetFriendReceiveNameAndTagAsync(_user_3);
+            var sharedPaymentResult_4 = await budgetApiService.GetFriendReceiveNameAndTagAsync(_user_5);
 
             //Assert
-            resultOfIdSharedPayment_1.Should().NotBeNull();
-            resultOfIdSharedPayment_1.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_1.Item1.Should().Be("test2");
-            resultOfIdSharedPayment_1.Item2.Should().Be(1002);
+            sharedPaymentResult_1.Should().NotBeNull();
+            sharedPaymentResult_1.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_1.Item1.Should().Be("test2");
+            sharedPaymentResult_1.Item2.Should().Be(1002);
 
-            resultOfIdSharedPayment_2.Should().NotBeNull();
-            resultOfIdSharedPayment_2.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_2.Item1.Should().Be("test2");
-            resultOfIdSharedPayment_2.Item2.Should().Be(1002);
+            sharedPaymentResult_2.Should().NotBeNull();
+            sharedPaymentResult_2.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_2.Item1.Should().Be("test2");
+            sharedPaymentResult_2.Item2.Should().Be(1002);
 
-            resultOfIdSharedPayment_3.Should().NotBeNull();
-            resultOfIdSharedPayment_3.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_3.Item1.Should().Be("test1");
-            resultOfIdSharedPayment_3.Item2.Should().Be(1001);
+            sharedPaymentResult_3.Should().NotBeNull();
+            sharedPaymentResult_3.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_3.Item1.Should().Be("test1");
+            sharedPaymentResult_3.Item2.Should().Be(1001);
 
-            emptyResult.Item1.Should().BeNull();
-            emptyResult.Item2.Should().BeNull();
+            sharedPaymentResult_4.Item1.Should().BeNull();
+            sharedPaymentResult_4.Item2.Should().BeNull();
         }
 
         [Fact]
@@ -92,29 +98,29 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var resultOfIdSharedPayment_1 = await budgetApiService.GetFriendSenderNameAndTagAsync(1);
-            var resultOfIdSharedPayment_2 = await budgetApiService.GetFriendSenderNameAndTagAsync(2);
-            var resultOfIdSharedPayment_3 = await budgetApiService.GetFriendSenderNameAndTagAsync(3);
-            var result_empty = await budgetApiService.GetFriendSenderNameAndTagAsync(1001);
+            var sharedPaymentResult_1 = await budgetApiService.GetFriendSenderNameAndTagAsync(_user_1);
+            var sharedPaymentResult_2 = await budgetApiService.GetFriendSenderNameAndTagAsync(_user_2);
+            var sharedPaymentResult_3 = await budgetApiService.GetFriendSenderNameAndTagAsync(_user_3);
+            var sharedPaymentResult_4 = await budgetApiService.GetFriendSenderNameAndTagAsync(_user_5);
 
             //Assert
-            resultOfIdSharedPayment_1.Should().NotBeNull();
-            resultOfIdSharedPayment_1.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_1.Item1.Should().Be("test1");
-            resultOfIdSharedPayment_1.Item2.Should().Be(1001);
+            sharedPaymentResult_1.Should().NotBeNull();
+            sharedPaymentResult_1.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_1.Item1.Should().Be("test1");
+            sharedPaymentResult_1.Item2.Should().Be(1001);
 
-            resultOfIdSharedPayment_2.Should().NotBeNull();
-            resultOfIdSharedPayment_2.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_2.Item1.Should().Be("test1");
-            resultOfIdSharedPayment_2.Item2.Should().Be(1001);
+            sharedPaymentResult_2.Should().NotBeNull();
+            sharedPaymentResult_2.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_2.Item1.Should().Be("test1");
+            sharedPaymentResult_2.Item2.Should().Be(1001);
 
-            resultOfIdSharedPayment_3.Should().NotBeNull();
-            resultOfIdSharedPayment_3.Should().BeOfType<(string?, int?)>();
-            resultOfIdSharedPayment_3.Item1.Should().Be("test2");
-            resultOfIdSharedPayment_3.Item2.Should().Be(1002);
+            sharedPaymentResult_3.Should().NotBeNull();
+            sharedPaymentResult_3.Should().BeOfType<(string?, int?)>();
+            sharedPaymentResult_3.Item1.Should().Be("test2");
+            sharedPaymentResult_3.Item2.Should().Be(1002);
 
-            result_empty.Item1.Should().BeNull();
-            result_empty.Item2.Should().BeNull();
+            sharedPaymentResult_4.Item1.Should().BeNull();
+            sharedPaymentResult_4.Item2.Should().BeNull();
         }
 
         [Fact]
@@ -125,18 +131,18 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var userSettingsOfIdUser_1 = await budgetApiService.GetUserSettingsAsync(1);
-            var userSettingsOfIdUser_2 = await budgetApiService.GetUserSettingsAsync(2);
-            var userSettingsOfIdUser_3 = await budgetApiService.GetUserSettingsAsync(3);
-            var userSettingsOfIdUser_4 = await budgetApiService.GetUserSettingsAsync(4);
-            var userSettingsOfNonExistingUser = await budgetApiService.GetUserSettingsAsync(10001);
+            var userSettings_1 = await budgetApiService.GetUserSettingsAsync(_user_1);
+            var userSettings_2 = await budgetApiService.GetUserSettingsAsync(_user_2);
+            var userSettings_3 = await budgetApiService.GetUserSettingsAsync(_user_3);
+            var userSettings_4 = await budgetApiService.GetUserSettingsAsync(_user_4);
+            var userSettings_5 = await budgetApiService.GetUserSettingsAsync(_user_5);
 
             //Assert
-            userSettingsOfIdUser_1.Should().NotBeNull();
-            userSettingsOfIdUser_2.Should().NotBeNull();
-            userSettingsOfIdUser_3.Should().NotBeNull();
-            userSettingsOfIdUser_4.Should().NotBeNull();
-            userSettingsOfNonExistingUser.Should().BeNull();
+            userSettings_1.Should().NotBeNull();
+            userSettings_2.Should().NotBeNull();
+            userSettings_3.Should().NotBeNull();
+            userSettings_4.Should().NotBeNull();
+            userSettings_5.Should().BeNull();
 
         }
 
@@ -148,47 +154,47 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var budgetApiService = new BudgetApiService(await dbContext);
 
             //Act
-            var budgetOfIdUser_1 = await budgetApiService.GetBudgetsAsync(1);
-            var budgetOfIdUser_2 = await budgetApiService.GetBudgetsAsync(2);
-            var budgetOfIdUser_3 = await budgetApiService.GetBudgetsAsync(3);
-            var budgetOfIdUser_4 = await budgetApiService.GetBudgetsAsync(4);
-            var budgetOfNonExistingUser = await budgetApiService.GetBudgetsAsync(10001);
+            var budget_1 = await budgetApiService.GetBudgetsAsync(_user_1);
+            var budget_2 = await budgetApiService.GetBudgetsAsync(_user_2);
+            var budget_3 = await budgetApiService.GetBudgetsAsync(_user_3);
+            var budget_4 = await budgetApiService.GetBudgetsAsync(_user_4);
+            var budget_5 = await budgetApiService.GetBudgetsAsync(_user_5);
 
             //Assert
-            budgetOfIdUser_1.Should().NotBeNull();
-            budgetOfIdUser_1.Count().Should().Be(12);
-            budgetOfIdUser_1
+            budget_1.Should().NotBeNull();
+            budget_1.Count().Should().Be(12);
+            budget_1
                 .Where(b => b.BudgetStatus == null ||
                     string.IsNullOrEmpty(b.BudgetStatus.Name))
                 .Should().BeNullOrEmpty();
-            budgetOfIdUser_1
+            budget_1
                 .Where(b => b.Payments != null)
                 .Should().BeNullOrEmpty();
 
 
-            budgetOfIdUser_2.Should().NotBeNull();
-            budgetOfIdUser_2.Count().Should().Be(12);
-            budgetOfIdUser_2
+            budget_2.Should().NotBeNull();
+            budget_2.Count().Should().Be(12);
+            budget_2
                 .Where(b => b.BudgetStatus == null ||
                     string.IsNullOrEmpty(b.BudgetStatus.Name))
                 .Should().BeNullOrEmpty();
-            budgetOfIdUser_2
+            budget_2
                 .Where(b => b.Payments != null)
                 .Should().BeNullOrEmpty();
 
-            budgetOfIdUser_3.Should().NotBeNull();
-            budgetOfIdUser_3.Count().Should().Be(12);
-            budgetOfIdUser_3
+            budget_3.Should().NotBeNull();
+            budget_3.Count().Should().Be(12);
+            budget_3
                 .Where(b => b.BudgetStatus == null ||
                     string.IsNullOrEmpty(b.BudgetStatus.Name))
                 .Should().BeNullOrEmpty();
-            budgetOfIdUser_3
+            budget_3
                 .Where(b => b.Payments != null)
                 .Should().BeNullOrEmpty();
 
 
-            budgetOfIdUser_4.Should().BeNullOrEmpty();
-            budgetOfNonExistingUser.Should().BeNullOrEmpty();
+            budget_4.Should().BeNullOrEmpty();
+            budget_5.Should().BeNullOrEmpty();
         }
 
         [Fact]
