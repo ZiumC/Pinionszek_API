@@ -13,6 +13,24 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
 {
     public class PaymentApiServiceTests
     {
+        private readonly int _idBudget_1 = 1;
+        private readonly int _idBudget_13 = 13;
+        private readonly int _idBudget_37 = 37;
+        private readonly int _idSharedPayment_1 = 1;
+        private readonly int _idSharedPayment_4 = 4;
+        private readonly int _idSharedPayment_10 = 10;
+        private readonly int _idSharedPayment_100 = 100;
+        private readonly int _idPayment_1 = 1;
+        private readonly int _idPayment_2 = 2;
+        private readonly int _idPayment_4 = 4;
+        private readonly int _idPayment_7 = 7;
+        private readonly int _idPayment_13 = 13;
+        private readonly int _user_1 = 1;
+        private readonly int _user_2 = 2;
+        private readonly int _friend_1 = 1001;
+        private readonly int _friend_2 = 1002;
+        private readonly int _friend_3 = 1003;
+        private readonly int _friend_4 = 1004;
         [Fact]
         public async Task PaymentsApiService_GetPaymentsAsync_ReturnsPaymentsOrNotfound()
         {
@@ -21,49 +39,44 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var paymentsOfIdUser_1 = await paymentApiService.GetPaymentsAsync(1);
-            var paymentsOfIdUser_2 = await paymentApiService.GetPaymentsAsync(13);
-            var paymentsOfNonExistingBudget = await paymentApiService.GetPaymentsAsync(37);
+            var paymentsResult_1 = await paymentApiService.GetPaymentsAsync(_idBudget_1);
+            var paymentsResult_2 = await paymentApiService.GetPaymentsAsync(_idBudget_13);
+            var paymentsResult_3 = await paymentApiService.GetPaymentsAsync(_idBudget_37);
 
             //Assert
-            paymentsOfIdUser_1.Should().NotBeEmpty();
-            paymentsOfIdUser_1.Count().Should().Be(7);
-            paymentsOfIdUser_1
+            paymentsResult_1.Should().NotBeEmpty();
+            paymentsResult_1.Count().Should().Be(7);
+            paymentsResult_1
                 .Where(p => p.DetailedCategory == null ||
                     string.IsNullOrEmpty(p.DetailedCategory.Name) ||
                     p.DetailedCategory.IdGeneralCategory == 0 ||
                     p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_1
+                .ToList().Count().Should().Be(0);
+            paymentsResult_1
                 .Where(p => p.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_1
+                .ToList().Count().Should().Be(0);
+            paymentsResult_1
                 .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
-            paymentsOfIdUser_2.Should().NotBeEmpty();
-            paymentsOfIdUser_2.Count().Should().Be(6);
-            paymentsOfIdUser_2
+            paymentsResult_2.Should().NotBeEmpty();
+            paymentsResult_2.Count().Should().Be(6);
+            paymentsResult_2
                 .Where(p => p.DetailedCategory == null ||
                     string.IsNullOrEmpty(p.DetailedCategory.Name) ||
                     p.DetailedCategory.IdGeneralCategory == 0 ||
                     p.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(p.DetailedCategory?.GeneralCategory.Name))
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_2
+                .ToList().Count().Should().Be(0);
+            paymentsResult_2
                 .Where(p => p.IdPaymentStatus == 0)
-                .ToList().Count()
-                .Should().Be(0);
-            paymentsOfIdUser_2
+                .ToList().Count().Should().Be(0);
+            paymentsResult_2
                 .Where(p => string.IsNullOrEmpty(p.Name))
                 .ToList().Count().Should().Be(0);
 
-
-            paymentsOfNonExistingBudget.Should().BeEmpty();
+            paymentsResult_3.Should().BeEmpty();
         }
 
         [Fact]
@@ -74,25 +87,29 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var sharedIdPayment_1 = await paymentApiService.GetSharedPaymentDataAsync(1);
-            var sharedIdPayment_4 = await paymentApiService.GetSharedPaymentDataAsync(4);
-            var sharedIdPayment_10 = await paymentApiService.GetSharedPaymentDataAsync(10);
-            var sharedNonExistingPayment = await paymentApiService.GetSharedPaymentDataAsync(100);
+            var sharedPaymentResult_1 = await paymentApiService.GetSharedPaymentDataAsync
+                (_idSharedPayment_1);
+            var sharedPaymentResult_2 = await paymentApiService.GetSharedPaymentDataAsync
+                (_idSharedPayment_4);
+            var sharedPaymentResult_3 = await paymentApiService.GetSharedPaymentDataAsync
+                (_idSharedPayment_10);
+            var sharedPaymentResult_4 = await paymentApiService.GetSharedPaymentDataAsync
+                (_idSharedPayment_100);
 
             //Assert
-            sharedIdPayment_1.Should().NotBeNull();
-            sharedIdPayment_1?.IdPayment.Should().Be(1);
-            sharedIdPayment_1?.IdFriend.Should().Be(1);
+            sharedPaymentResult_1.Should().NotBeNull();
+            sharedPaymentResult_1?.IdPayment.Should().Be(1);
+            sharedPaymentResult_1?.IdFriend.Should().Be(1);
 
-            sharedIdPayment_4.Should().NotBeNull();
-            sharedIdPayment_4?.IdPayment.Should().Be(4);
-            sharedIdPayment_4?.IdFriend.Should().Be(1);
+            sharedPaymentResult_2.Should().NotBeNull();
+            sharedPaymentResult_2?.IdPayment.Should().Be(4);
+            sharedPaymentResult_2?.IdFriend.Should().Be(1);
 
-            sharedIdPayment_10.Should().NotBeNull();
-            sharedIdPayment_10?.IdPayment.Should().Be(10);
-            sharedIdPayment_10?.IdFriend.Should().Be(3);
+            sharedPaymentResult_3.Should().NotBeNull();
+            sharedPaymentResult_3?.IdPayment.Should().Be(10);
+            sharedPaymentResult_3?.IdFriend.Should().Be(3);
 
-            sharedNonExistingPayment.Should().BeNull();
+            sharedPaymentResult_4.Should().BeNull();
         }
 
         [Fact]
@@ -103,56 +120,56 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var assignedPaymentsFriendTag_1001 = await paymentApiService.GetAssignedPaymentsAsync(1001);
-            var assignedPaymentsFriendTag_1002 = await paymentApiService.GetAssignedPaymentsAsync(1002);
-            var assignedPaymentsFriendTag_1003 = await paymentApiService.GetAssignedPaymentsAsync(1003);
-            var assignedPaymentsFriendTag_1004 = await paymentApiService.GetAssignedPaymentsAsync(1004);
+            var friendsPaymentResult_1 = await paymentApiService.GetAssignedPaymentsAsync(_friend_1);
+            var friendsPaymentResult_2 = await paymentApiService.GetAssignedPaymentsAsync(_friend_2);
+            var friendsPaymentResult_3 = await paymentApiService.GetAssignedPaymentsAsync(_friend_3);
+            var friendsPaymentResult_4 = await paymentApiService.GetAssignedPaymentsAsync(_friend_4);
 
             //Assert
-            assignedPaymentsFriendTag_1001.Should().NotBeNullOrEmpty();
-            assignedPaymentsFriendTag_1001.Should().BeOfType<List<Payment>>();
-            assignedPaymentsFriendTag_1001.Count().Should().Be(1);
-            assignedPaymentsFriendTag_1001
+            friendsPaymentResult_1.Should().NotBeNullOrEmpty();
+            friendsPaymentResult_1.Should().BeOfType<List<Payment>>();
+            friendsPaymentResult_1.Count().Should().Be(1);
+            friendsPaymentResult_1
                 .Where(ap => ap.SharedPayment == null)
                 .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1001
+            friendsPaymentResult_1
                 .Where(ap => ap.DetailedCategory == null ||
                     string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
                     ap.DetailedCategory.IdGeneralCategory == 0 ||
                     ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1001
+            friendsPaymentResult_1
                 .Where(ap => ap.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            assignedPaymentsFriendTag_1001
+            friendsPaymentResult_1
                 .Where(ap => string.IsNullOrEmpty(ap.Name))
                 .ToList().Count().Should().Be(0);
 
-            assignedPaymentsFriendTag_1002.Should().NotBeNullOrEmpty();
-            assignedPaymentsFriendTag_1002.Should().BeOfType<List<Payment>>();
-            assignedPaymentsFriendTag_1002.Count().Should().Be(2);
-            assignedPaymentsFriendTag_1002
+            friendsPaymentResult_2.Should().NotBeNullOrEmpty();
+            friendsPaymentResult_2.Should().BeOfType<List<Payment>>();
+            friendsPaymentResult_2.Count().Should().Be(2);
+            friendsPaymentResult_2
                 .Where(ap => ap.SharedPayment == null)
                 .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1002
+            friendsPaymentResult_2
                 .Where(ap => ap.DetailedCategory == null ||
                     string.IsNullOrEmpty(ap.DetailedCategory.Name) ||
                     ap.DetailedCategory.IdGeneralCategory == 0 ||
                     ap.DetailedCategory.GeneralCategory.IdGeneralCategory == 0 ||
                     string.IsNullOrEmpty(ap.DetailedCategory?.GeneralCategory.Name))
                 .ToList().Count().Should().Be(0);
-            assignedPaymentsFriendTag_1002
+            friendsPaymentResult_2
                 .Where(ap => ap.IdPaymentStatus == 0)
                 .ToList().Count()
                 .Should().Be(0);
-            assignedPaymentsFriendTag_1002
+            friendsPaymentResult_2
                 .Where(ap => string.IsNullOrEmpty(ap.Name))
                 .ToList().Count().Should().Be(0);
 
-            assignedPaymentsFriendTag_1003.Should().BeNullOrEmpty();
-            assignedPaymentsFriendTag_1004.Should().BeNullOrEmpty();
+            friendsPaymentResult_3.Should().BeNullOrEmpty();
+            friendsPaymentResult_4.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -163,12 +180,12 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             var paymentApiService = new PaymentApiService(await dbContext);
 
             //Act
-            var payment1 = await paymentApiService.GetPaymentAsync(1, 1);
-            var payment2 = await paymentApiService.GetPaymentAsync(7, 2);
-            var payment3 = await paymentApiService.GetPaymentAsync(2, 1);
-            var payment4 = await paymentApiService.GetPaymentAsync(4, 2);
-            var payment5 = await paymentApiService.GetPaymentAsync(13, 1);
-            var payment6 = await paymentApiService.GetPaymentAsync(4, 1);
+            var payment1 = await paymentApiService.GetPaymentAsync(_idPayment_1, _user_1);
+            var payment2 = await paymentApiService.GetPaymentAsync(_idPayment_7, _user_2);
+            var payment3 = await paymentApiService.GetPaymentAsync(_idPayment_2, _user_1);
+            var payment4 = await paymentApiService.GetPaymentAsync(_idPayment_4, _user_2);
+            var payment5 = await paymentApiService.GetPaymentAsync(_idPayment_13, _user_1);
+            var payment6 = await paymentApiService.GetPaymentAsync(_idPayment_4, _user_1);
 
             //Assert
             payment1.Should().NotBeNull();
