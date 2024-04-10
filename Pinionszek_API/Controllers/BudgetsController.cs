@@ -1,19 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using Pinionszek_API.DbContexts;
-using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDto.Payments;
-using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Utils;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers

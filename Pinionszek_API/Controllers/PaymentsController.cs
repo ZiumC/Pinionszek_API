@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;

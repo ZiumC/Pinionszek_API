@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pinionszek_API.Models.DTOs.GetDto;
-using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Utils;
-using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
