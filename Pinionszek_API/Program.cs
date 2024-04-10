@@ -24,11 +24,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("Budgets", new OpenApiInfo
     {
         Title = "Pinionszek API",
-        Version = "v1",
-        Description = "GET endpoints for REST API"
+        Version = "v2.0",
+        Description = "All endpoints for BudgetsController"
+    });
+
+    c.SwaggerDoc("Payments", new OpenApiInfo
+    {
+        Title = "Pinionszek API",
+        Version = "v2.0",
+        Description = "All endpoints for PaymentsController"
+    });
+
+    c.SwaggerDoc("User", new OpenApiInfo
+    {
+        Title = "Pinionszek API",
+        Version = "v1.2",
+        Description = "All endpoints for UserController"
     });
 
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
@@ -50,7 +64,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint($"/swagger/v1/swagger.json", "REST Api v1");
+        c.SwaggerEndpoint($"/swagger/Budgets/swagger.json", "BudgetsController");
+        c.SwaggerEndpoint($"/swagger/Payments/swagger.json", "PaymentsController");
+        c.SwaggerEndpoint($"/swagger/User/swagger.json", "UserController");
     });
 }
 

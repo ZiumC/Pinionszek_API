@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
+    [ApiExplorerSettings(GroupName = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
