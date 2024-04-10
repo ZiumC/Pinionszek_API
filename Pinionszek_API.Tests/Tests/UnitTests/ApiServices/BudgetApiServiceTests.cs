@@ -199,23 +199,5 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
             budget_4.Should().BeNullOrEmpty();
             budget_5.Should().BeNullOrEmpty();
         }
-
-        [Fact]
-        public async Task BudgetApiService_GetDefaultGeneralCategoriesAsync_ReturnsCategoriesOrNotfound()
-        {
-            //Arrange
-            var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
-
-            //Act
-            var defaultCategories = await budgetApiService.GetDefaultGeneralCategoriesAsync();
-
-            //Assert
-            defaultCategories.Should().NotBeNullOrEmpty();
-            defaultCategories.Count().Should().Be(3);
-            defaultCategories
-                .Where(dc => string.IsNullOrEmpty(dc.Name))
-                .Should().BeNullOrEmpty();
-        }
     }
 }

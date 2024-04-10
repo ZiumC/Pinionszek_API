@@ -15,6 +15,7 @@ using Pinionszek_API.Models.DTOs.GetDto.User;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Tests.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
             var paymentApiService = new PaymentApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
+            var userApiService = new UserApiService(await dbContext);
+            var budgetController = new BudgetsController
+                (_config, budgetApiService, paymentApiService, userApiService, _mapper);
 
 
             //Act
@@ -139,7 +142,9 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
             var dbContext = new InMemContext().GetDatabaseContext();
             var budgetApiService = new BudgetApiService(await dbContext);
             var paymentApiService = new PaymentApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
+            var userApiService = new UserApiService(await dbContext);
+            var budgetController = new BudgetsController
+                (_config, budgetApiService, paymentApiService, userApiService, _mapper);
             var budgetYears = new { invalid1 = -1, invalid2 = 99999 };
 
             //Act
@@ -213,34 +218,6 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_3.Should().BeOfType<BadRequestObjectResult>();
             badRequestResult_3?.Contains("is invalid").Should().BeTrue();
-        }
-
-        [Fact]
-        public async Task BudgetController_GetDefaultGeneralCategoriesAsync_ReturnsCategoriesOrNotfound()
-        {
-            //Arrange
-            var dbContext = new InMemContext().GetDatabaseContext();
-            var budgetApiService = new BudgetApiService(await dbContext);
-            var paymentApiService = new PaymentApiService(await dbContext);
-            var budgetController = new BudgetsController(_config, budgetApiService, paymentApiService, _mapper);
-
-            //Act
-            var okRequest_1 = await budgetController.GetDefaultGeneralCategoriesAsync();
-            var generalCategoriessResult_1 = (okRequest_1 as OkObjectResult)?.Value as IEnumerable<GetGeneralCategoryDto>;
-
-            //Assert
-            okRequest_1.Should().BeOfType<OkObjectResult>();
-            generalCategoriessResult_1.Should().NotBeNullOrEmpty();
-            generalCategoriessResult_1?.Count().Should().Be(3);
-            generalCategoriessResult_1?
-                .Where(gcr => string.IsNullOrEmpty(gcr.Name))
-                .Should().BeNullOrEmpty();
-            generalCategoriessResult_1?
-                .Where(gcr => gcr.IdGeneralCategory <= 0)
-                .Should().BeNullOrEmpty();
-            generalCategoriessResult_1?
-                .Where(gcr => gcr.IsDefault)
-                .Count().Should().Be(3);
         }
     }
 }

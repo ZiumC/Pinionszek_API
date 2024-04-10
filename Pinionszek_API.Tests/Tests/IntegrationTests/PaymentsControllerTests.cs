@@ -8,6 +8,7 @@ using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Profiles;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using Pinionszek_API.Tests.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -940,6 +941,34 @@ namespace Pinionszek_API.Tests.Tests.IntegrationTests
 
             badRequest_4.Should().BeOfType<BadRequestObjectResult>();
             badRequestResult_4?.Contains("is invalid").Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task PaymentsController_GetDefaultGeneralCategoriesAsync_ReturnsCategoriesOrNotfound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var paymentApiService = new PaymentApiService(await dbContext);
+            var paymentsController = new PaymentsController(paymentApiService, budgetApiService, _mapper);
+
+            //Act
+            var okRequest_1 = await paymentsController.GetDefaultGeneralCategoriesAsync();
+            var generalCategoriessResult_1 = (okRequest_1 as OkObjectResult)?.Value as IEnumerable<GetGeneralCategoryDto>;
+
+            //Assert
+            okRequest_1.Should().BeOfType<OkObjectResult>();
+            generalCategoriessResult_1.Should().NotBeNullOrEmpty();
+            generalCategoriessResult_1?.Count().Should().Be(3);
+            generalCategoriessResult_1?
+                .Where(gcr => string.IsNullOrEmpty(gcr.Name))
+                .Should().BeNullOrEmpty();
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IdGeneralCategory <= 0)
+                .Should().BeNullOrEmpty();
+            generalCategoriessResult_1?
+                .Where(gcr => gcr.IsDefault)
+                .Count().Should().Be(3);
         }
     }
 }
