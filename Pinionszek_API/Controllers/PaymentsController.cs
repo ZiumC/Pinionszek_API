@@ -608,7 +608,17 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
-
+            if (paymentDto.NextPaymentsMonths != null)
+            {
+                foreach (var nextPaymentDate in paymentDto.NextPaymentsMonths) 
+                {
+                    if (nextPaymentDate <= DateTime.Now)
+                    {
+                        ModelState.AddModelError("errors", "One or more dates are past than today");
+                        return BadRequest(ModelState);
+                    }
+                }
+            }
 
             return Ok();
         }

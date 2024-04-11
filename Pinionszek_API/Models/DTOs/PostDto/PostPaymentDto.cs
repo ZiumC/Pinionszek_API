@@ -29,6 +29,6 @@ namespace Pinionszek_API.Models.DTOs.PostDto
 
         public int FriendTag { get; set; }
 
-        public List<DateTime> Months { get; set; }
+        public List<DateTime>? NextPaymentsMonths { get; set; }
     }
 }
