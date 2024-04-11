@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.PostDto;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
@@ -594,6 +596,20 @@ namespace Pinionszek_API.Controllers
         public async Task<IActionResult> PostPaymentAsync
             (PostPaymentDto paymentDto, [Required] int idUser, [Required] int idBudget)
         {
+            if (idUser <= 0)
+            {
+                ModelState.AddModelError("error", "User id is invalid");
+                return BadRequest(ModelState);
+            }
+
+            if (idBudget <= 0)
+            {
+                ModelState.AddModelError("error", "Budget id is invalid");
+                return BadRequest(ModelState);
+            }
+
+
+
             return Ok();
         }
     }
