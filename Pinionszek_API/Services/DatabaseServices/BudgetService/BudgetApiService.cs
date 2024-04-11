@@ -14,16 +14,40 @@ namespace Pinionszek_API.Services.DatabaseServices.BudgetService
             _dbContext = dbContext;
         }
 
-        public async Task<Budget?> GetBudgetDataAsync(int idUser, DateTime budgetYear)
+        public async Task<Budget?> GetBudgetDataAsync(int idUser, DateTime budgetDate)
         {
-            int month = budgetYear.Month;
-            int year = budgetYear.Year;
+            int month = budgetDate.Month;
+            int year = budgetDate.Year;
 
             var budget =
                 await (from b in _dbContext.Budgets
                        where b.IdUser == idUser &&
                             b.BudgetYear.Month == month &&
                             b.BudgetYear.Year == year
+
+                       join bs in _dbContext.BudgetStatuses
+                       on b.IdBudgetStatus equals bs.IdBudgetStatus
+
+                       select new Budget
+                       {
+                           IdBudget = b.IdBudget,
+                           IsCompleted = b.IsCompleted,
+                           OpendDate = b.OpendDate,
+                           Revenue = b.Revenue,
+                           Surplus = b.Surplus,
+                           BudgetYear = b.BudgetYear,
+                           BudgetStatus = bs,
+                       }).FirstOrDefaultAsync();
+
+            return budget;
+        }
+
+        public async Task<Budget?> GetBudgetDataAsync(int idUser, int idBudget)
+        {
+            var budget =
+                await (from b in _dbContext.Budgets
+                       where b.IdUser == idUser &&
+                            b.IdBudget == idBudget
 
                        join bs in _dbContext.BudgetStatuses
                        on b.IdBudgetStatus equals bs.IdBudgetStatus

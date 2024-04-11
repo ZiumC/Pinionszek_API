@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
+using Pinionszek_API.Models.DTOs.PostDto;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace Pinionszek_API.Controllers
         private readonly IPaymentApiService _paymentService;
         private readonly IBudgetApiService _budgetService;
 
-        public PaymentsController(IPaymentApiService paymentService, IBudgetApiService budgetService, 
+        public PaymentsController(IPaymentApiService paymentService, IBudgetApiService budgetService,
             IMapper mapper)
         {
             _mapper = mapper;
@@ -583,6 +584,17 @@ namespace Pinionszek_API.Controllers
             }
 
             return Ok(_mapper.Map<IEnumerable<GetGeneralCategoryDto>>(defaultCategories));
+        }
+
+        /// <summary>
+        /// Post new payment to budget 
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(201)]
+        public async Task<IActionResult> PostPaymentAsync
+            (PostPaymentDto paymentDto, [Required] int idUser, [Required] int idBudget)
+        {
+            return Ok();
         }
     }
 }
