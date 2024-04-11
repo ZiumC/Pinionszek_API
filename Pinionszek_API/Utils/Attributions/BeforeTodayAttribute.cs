@@ -6,12 +6,12 @@ namespace Pinionszek_API.Utils.Attributions
     {
         public override bool IsValid(object value)
         {
-            if (value == null)
+            if (value == null) 
             {
                 return true;
             }
             DateTime dateValue = Convert.ToDateTime(value);
-            return dateValue >= DateTime.Now;
+            return dateValue >= DateTime.Now; 
         }
     }
 }
