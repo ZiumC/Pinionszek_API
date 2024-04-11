@@ -51,6 +51,50 @@ namespace Pinionszek_API.Tests.Tests.UnitTests.ApiServices
         }
 
         [Fact]
+        public async Task BudgetApiService_GetBudgetDataAsync_ReturnsBudgetOrNotFound()
+        {
+            //Arrange
+            var dbContext = new InMemContext().GetDatabaseContext();
+            var budgetApiService = new BudgetApiService(await dbContext);
+            var budgetDate_1 = DateTime.Parse("2024-01-01");
+            var budgetDate_2 = DateTime.Parse("2023-12-29");
+            var budgetDate_3 = DateTime.Parse("2024-01-11");
+            int idBudget_1 = 1;
+            int idBudget_13 = 13;
+            int idBudget_25 = 25;
+
+            //Act
+            var budget_1 = await budgetApiService.GetBudgetDataAsync(_user_1, idBudget_1);
+            var budget_2 = await budgetApiService.GetBudgetDataAsync(_user_2, idBudget_13);
+            var budget_3 = await budgetApiService.GetBudgetDataAsync(_user_3, idBudget_25);
+            var budget_4 = await budgetApiService.GetBudgetDataAsync(_user_4, idBudget_1);
+            var budget_5 = await budgetApiService.GetBudgetDataAsync(_user_1, idBudget_13);
+            var budget_6 = await budgetApiService.GetBudgetDataAsync(_user_3, idBudget_13);
+            var budget_7 = await budgetApiService.GetBudgetDataAsync(_user_2, idBudget_25);
+
+            //Assert
+            budget_1.Should().NotBeNull();
+            budget_1?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_1?.IsCompleted.Should().BeFalse();
+            budget_1?.OpendDate.Should().Be(budgetDate_1);
+
+            budget_2.Should().NotBeNull();
+            budget_2?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_2?.IsCompleted.Should().BeFalse();
+            budget_2?.OpendDate.Should().Be(budgetDate_2);
+
+            budget_3.Should().NotBeNull();
+            budget_3?.BudgetStatus.Name.Should().Be("OPEND");
+            budget_3?.IsCompleted.Should().BeFalse();
+            budget_3?.OpendDate.Should().Be(budgetDate_3);
+
+            budget_4.Should().BeNull();
+            budget_5.Should().BeNull();
+            budget_6.Should().BeNull();
+            budget_7.Should().BeNull();
+        }
+
+        [Fact]
         public async Task BudgetApiService_GetFriendReceiveNameAndTagAsync_ReturnsStringOrNotfound()
         {
             //Arrange
