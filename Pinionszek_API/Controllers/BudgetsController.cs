@@ -42,13 +42,13 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
@@ -114,13 +114,13 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (year < 1 || year > 9999)
             {
-                ModelState.AddModelError("error", "Budget year is invalid");
+                ModelState.AddModelError("errors", "Budget year is invalid");
                 return BadRequest(ModelState);
             }
 

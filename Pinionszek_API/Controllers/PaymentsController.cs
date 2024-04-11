@@ -41,25 +41,25 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -122,25 +122,25 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -218,25 +218,25 @@ namespace Pinionszek_API.Controllers
         {
             if (userTag <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -309,13 +309,13 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (idPayment <= 0)
             {
-                ModelState.AddModelError("error", "Payment ID is invalid");
+                ModelState.AddModelError("errors", "Payment ID is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -344,25 +344,25 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -416,25 +416,25 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -505,25 +505,25 @@ namespace Pinionszek_API.Controllers
         {
             if (userTag <= 0)
             {
-                ModelState.AddModelError("error", "User tag is invalid");
+                ModelState.AddModelError("errors", "User tag is invalid");
                 return BadRequest(ModelState);
             }
 
             if (date == DateTime.MinValue)
             {
-                ModelState.AddModelError("error", "Budget date is not specified");
+                ModelState.AddModelError("errors", "Budget date is not specified");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -598,13 +598,13 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User id is invalid");
+                ModelState.AddModelError("errors", "User id is invalid");
                 return BadRequest(ModelState);
             }
 
             if (idBudget <= 0)
             {
-                ModelState.AddModelError("error", "Budget id is invalid");
+                ModelState.AddModelError("errors", "Budget id is invalid");
                 return BadRequest(ModelState);
             }
 

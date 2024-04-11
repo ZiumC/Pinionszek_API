@@ -35,19 +35,19 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -74,7 +74,7 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -97,7 +97,7 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -126,19 +126,19 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (page <= 0)
             {
-                ModelState.AddModelError("error", "Page number is invalid");
+                ModelState.AddModelError("errors", "Page number is invalid");
                 return BadRequest(ModelState);
             }
 
             if (pageSize <= 0)
             {
-                ModelState.AddModelError("error", "Page size is invalid");
+                ModelState.AddModelError("errors", "Page size is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -167,13 +167,13 @@ namespace Pinionszek_API.Controllers
         {
             if (idUser <= 0)
             {
-                ModelState.AddModelError("error", "User ID is invalid");
+                ModelState.AddModelError("errors", "User ID is invalid");
                 return BadRequest(ModelState);
             }
 
             if (idDetailedCategory <= 0)
             {
-                ModelState.AddModelError("error", "Detailed category ID is invalid");
+                ModelState.AddModelError("errors", "Detailed category ID is invalid");
                 return BadRequest(ModelState);
             }
 
