@@ -189,16 +189,15 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
                 .ToListAsync();
         }
 
-        public async Task<bool> CreatePayment(Payment payment)
+        public async Task<bool> CreatePayment(Payment payment, int idBudget, int friendTag)
         {
             using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 try
                 {
-
                     //ID of not payed payment status is 2!!! 
-                    _dbContext.Payments.Add(new Payment 
-                    { 
+                    var newPaymentEntity = _dbContext.Payments.Add(new Payment
+                    {
                         Name = payment.Name,
                         Charge = payment.Charge,
                         Refund = payment.Refund,
@@ -206,12 +205,27 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
                         PaymentDate = payment.PaymentDate,
                         PaidOn = payment.PaidOn,
                         PaymentAddedOn = DateTime.Now,
-                        IdBudget = payment.IdBudget,
+                        IdBudget = idBudget,
                         IdDetailedCategory = payment.IdDetailedCategory,
                         IdPaymentStatus = 2,
                     });
 
                     await _dbContext.SaveChangesAsync();
+
+                    if (friendTag > 0)
+                    {
+                        var userFriendQuery = await _dbContext.Friends
+                            .Where(f => f.FriendTag == friendTag)
+                            .FirstAsync();
+
+                        _dbContext.SharedPayments.Add(new SharedPayment
+                        {
+                            IdPayment = newPaymentEntity.Entity.IdPayment,
+                            IdFriend = userFriendQuery.IdFriend
+                        });
+
+                        await _dbContext.SaveChangesAsync();
+                    }
 
                     await transaction.CommitAsync();
 

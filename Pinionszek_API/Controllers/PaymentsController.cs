@@ -615,6 +615,12 @@ namespace Pinionszek_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (paymentDto.IdDetailedCategory <= 0)
+            {
+                ModelState.AddModelError("errors", "Payment id category is invalid");
+                return BadRequest(ModelState);
+            }
+
             if (paymentDto.NextPaymentsMonths != null)
             {
                 foreach (var nextPaymentDate in paymentDto.NextPaymentsMonths)
@@ -627,12 +633,6 @@ namespace Pinionszek_API.Controllers
                 }
             }
 
-            if (paymentDto.IdDetailedCategory <= 0)
-            {
-                ModelState.AddModelError("errors", "Payment id category is invalid");
-                return BadRequest(ModelState);
-            }
-
             var userBudget = await _budgetService.GetBudgetDataAsync(idUser, idBudget);
             if (userBudget == null)
             {
@@ -641,14 +641,30 @@ namespace Pinionszek_API.Controllers
 
             var userDetailedCatetogy = await _userService.GetUserPaymentCategoryAsync
                 (idUser, paymentDto.IdDetailedCategory);
-            if (userDetailedCatetogy == null) 
+            if (userDetailedCatetogy == null)
             {
                 return NotFound();
             }
 
+            if (paymentDto.FriendTag > 0)
+            {
+                var userFriends = await _userService.GetUserFriendsAsync(idUser);
+                if (userFriends == null || userFriends.Count() == 0)
+                {
+                    return NotFound();
+                }
+
+                var userFriend = userFriends
+                    .Where(uf => uf.FriendTag == paymentDto.FriendTag)
+                    .FirstOrDefault();
+                if (userFriend == null)
+                {
+                    return NotFound();
+                }
+            }
             var paymentToCreate = _mapper.Map<Payment>(paymentDto);
 
-            var isAdded = await _paymentService.CreatePayment(paymentToCreate);
+            var isAdded = await _paymentService.CreatePayment(paymentToCreate, idBudget, paymentDto.FriendTag);
             if (!isAdded)
             {
                 ModelState.AddModelError("errors", "Unable to create new resource");

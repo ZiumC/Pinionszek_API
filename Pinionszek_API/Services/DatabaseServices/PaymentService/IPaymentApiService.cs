@@ -10,7 +10,7 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
         public Task<SharedPayment?> GetSharedPaymentDataAsync(int idPayment);
         public Task<Payment?> GetPaymentAsync(int idPayment, int idUser);
         public Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync();
-        public Task<bool> CreatePayment(Payment payment);
+        public Task<bool> CreatePayment(Payment payment, int idBudget, int friendTag);
         //public Task<PaymentStatus?> GetPaymentStatusAsync(PaymentStatusEnum status);
     }
 }
