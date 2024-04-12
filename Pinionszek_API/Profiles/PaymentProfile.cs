@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
+using Pinionszek_API.Models.DTOs.PostDto;
 
 namespace Pinionszek_API.Profiles
 {
@@ -30,6 +31,8 @@ namespace Pinionszek_API.Profiles
 
             CreateMap<GetPaymentFriendDto, GetAssignedPaymentToUserDto>()
                 .ForMember(dest => dest.SourceFriend, opt => opt.MapFrom(src => src));
+
+            CreateMap<PostPaymentDto, Payment>();
         }
     }
 }

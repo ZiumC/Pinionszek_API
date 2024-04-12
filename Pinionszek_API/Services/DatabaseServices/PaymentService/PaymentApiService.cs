@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pinionszek_API.DbContexts;
 using Pinionszek_API.Models.DatabaseModel;
+using Pinionszek_API.Models.DTOs.PostDto;
 
 namespace Pinionszek_API.Services.DatabaseServices.PaymentService
 {
@@ -186,6 +187,49 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
             return await _dbContext.GeneralCategories
                 .Where(gc => gc.IsDefault)
                 .ToListAsync();
+        }
+
+        public async Task<bool> CreatePayment(Payment payment, int idUser, int idBudget)
+        {
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var userBudgetQuery = await _dbContext.Budgets
+                        .Where(b => b.IdUser == idUser && b.IdBudget == idBudget)
+                        .FirstAsync();
+
+                    //ID of not payed payment status is 2!!! 
+                    var paymentEntity = _dbContext.Payments.Add(new Payment 
+                    { 
+                        Name = payment.Name,
+                        Charge = payment.Charge,
+                        Refund = payment.Refund,
+                        Message = payment.Message,
+                        PaymentDate = payment.PaymentDate,
+                        PaidOn = payment.PaidOn,
+                        PaymentAddedOn = DateTime.Now,
+                        IdBudget = idBudget,
+                        IdDetailedCategory = payment.IdDetailedCategory,
+                        IdPaymentStatus = 2,
+                    });
+
+                    await _dbContext.SaveChangesAsync();
+
+                    if ()
+
+                    await transaction.CommitAsync();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+            }
         }
     }
 }

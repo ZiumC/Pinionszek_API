@@ -1,4 +1,5 @@
 ﻿using Pinionszek_API.Models.DatabaseModel;
+using Pinionszek_API.Models.DTOs.PostDto;
 
 namespace Pinionszek_API.Services.DatabaseServices.PaymentService
 {
@@ -9,5 +10,7 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
         public Task<SharedPayment?> GetSharedPaymentDataAsync(int idPayment);
         public Task<Payment?> GetPaymentAsync(int idPayment, int idUser);
         public Task<IEnumerable<GeneralCategory>> GetDefaultGeneralCategoriesAsync();
+        public Task<bool> CreatePayment(Payment payment, int idUser, int idBudget);
+        //public Task<PaymentStatus?> GetPaymentStatusAsync(PaymentStatusEnum status);
     }
 }

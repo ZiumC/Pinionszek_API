@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
+using Pinionszek_API.Models.DatabaseModel;
 using Pinionszek_API.Models.DTOs.GetDto.Payments;
 using Pinionszek_API.Models.DTOs.PostDto;
 using Pinionszek_API.Services.DatabaseServices.BudgetService;
 using Pinionszek_API.Services.DatabaseServices.PaymentService;
+using Pinionszek_API.Services.DatabaseServices.UserService;
 using System.ComponentModel.DataAnnotations;
 
 namespace Pinionszek_API.Controllers
@@ -593,6 +595,9 @@ namespace Pinionszek_API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> PostPaymentAsync
             (PostPaymentDto paymentDto, [Required] int idUser, [Required] int idBudget)
         {
@@ -610,7 +615,7 @@ namespace Pinionszek_API.Controllers
 
             if (paymentDto.NextPaymentsMonths != null)
             {
-                foreach (var nextPaymentDate in paymentDto.NextPaymentsMonths) 
+                foreach (var nextPaymentDate in paymentDto.NextPaymentsMonths)
                 {
                     if (nextPaymentDate <= DateTime.Now)
                     {
@@ -620,7 +625,29 @@ namespace Pinionszek_API.Controllers
                 }
             }
 
-            return Ok();
+            if (paymentDto.FriendTag < 0)
+            {
+                ModelState.AddModelError("errors", "Friend tag is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var userBudget = await _budgetService.GetBudgetDataAsync(idUser, idBudget);
+            if (userBudget == null)
+            {
+                return NotFound();
+            }
+
+            var paymentToCreate = _mapper.Map<Payment>(paymentDto);
+
+            var isAdded = await _paymentService.CreatePayment
+                (paymentToCreate, idUser, idBudget);
+            if (!isAdded)
+            {
+                ModelState.AddModelError("errors", "Unable to create new resource");
+                return StatusCode(500, ModelState);
+            }
+
+            return StatusCode(201);
         }
     }
 }
