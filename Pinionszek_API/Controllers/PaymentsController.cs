@@ -20,13 +20,15 @@ namespace Pinionszek_API.Controllers
         private readonly IMapper _mapper;
         private readonly IPaymentApiService _paymentService;
         private readonly IBudgetApiService _budgetService;
+        private readonly IUserApiService _userService;
 
         public PaymentsController(IPaymentApiService paymentService, IBudgetApiService budgetService,
-            IMapper mapper)
+            IUserApiService userService, IMapper mapper)
         {
             _mapper = mapper;
             _paymentService = paymentService;
             _budgetService = budgetService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -591,7 +593,7 @@ namespace Pinionszek_API.Controllers
         }
 
         /// <summary>
-        /// Post new payment to budget 
+        /// Post new payment to user's budget 
         /// </summary>
         [HttpPost]
         [ProducesResponseType(201)]
@@ -625,9 +627,9 @@ namespace Pinionszek_API.Controllers
                 }
             }
 
-            if (paymentDto.FriendTag < 0)
+            if (paymentDto.IdDetailedCategory <= 0)
             {
-                ModelState.AddModelError("errors", "Friend tag is invalid");
+                ModelState.AddModelError("errors", "Payment id category is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -637,10 +639,16 @@ namespace Pinionszek_API.Controllers
                 return NotFound();
             }
 
+            var userDetailedCatetogy = await _userService.GetUserPaymentCategoryAsync
+                (idUser, paymentDto.IdDetailedCategory);
+            if (userDetailedCatetogy == null) 
+            {
+                return NotFound();
+            }
+
             var paymentToCreate = _mapper.Map<Payment>(paymentDto);
 
-            var isAdded = await _paymentService.CreatePayment
-                (paymentToCreate, idUser, idBudget);
+            var isAdded = await _paymentService.CreatePayment(paymentToCreate);
             if (!isAdded)
             {
                 ModelState.AddModelError("errors", "Unable to create new resource");

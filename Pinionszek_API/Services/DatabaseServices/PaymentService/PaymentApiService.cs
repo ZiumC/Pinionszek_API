@@ -189,18 +189,15 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
                 .ToListAsync();
         }
 
-        public async Task<bool> CreatePayment(Payment payment, int idUser, int idBudget)
+        public async Task<bool> CreatePayment(Payment payment)
         {
             using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var userBudgetQuery = await _dbContext.Budgets
-                        .Where(b => b.IdUser == idUser && b.IdBudget == idBudget)
-                        .FirstAsync();
 
                     //ID of not payed payment status is 2!!! 
-                    var paymentEntity = _dbContext.Payments.Add(new Payment 
+                    _dbContext.Payments.Add(new Payment 
                     { 
                         Name = payment.Name,
                         Charge = payment.Charge,
@@ -209,14 +206,12 @@ namespace Pinionszek_API.Services.DatabaseServices.PaymentService
                         PaymentDate = payment.PaymentDate,
                         PaidOn = payment.PaidOn,
                         PaymentAddedOn = DateTime.Now,
-                        IdBudget = idBudget,
+                        IdBudget = payment.IdBudget,
                         IdDetailedCategory = payment.IdDetailedCategory,
                         IdPaymentStatus = 2,
                     });
 
                     await _dbContext.SaveChangesAsync();
-
-                    if ()
 
                     await transaction.CommitAsync();
 
